@@ -1,0 +1,79 @@
+Base path: C:/Program Files (x86)/Unity/Editor/Data
+Pipe name: \\.\pipe\UnityShaderCompiler-3-5412
+Cmd: getPlatforms
+Cmd: compileSnippet
+  api=8 type=0 insize=5176 outsize=6078 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=5176 outsize=951 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_ON DIRLIGHTMAP_ON ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=5176 outsize=1605 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_OFF DIRLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=8 type=0 insize=5176 outsize=6590 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_OFF DIRLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=5176 outsize=1049 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_ON DIRLIGHTMAP_ON ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=5176 outsize=2169 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF VERTEXLIGHT_ON ok=1
+Cmd: compileSnippet
+  api=8 type=0 insize=5176 outsize=8824 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF VERTEXLIGHT_ON ok=1
+Cmd: compileSnippet
+  api=8 type=1 insize=5176 outsize=4355 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=1 type=1 insize=5176 outsize=1352 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_ON DIRLIGHTMAP_ON ok=1
+Cmd: compileSnippet
+  api=8 type=1 insize=5176 outsize=5688 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_ON DIRLIGHTMAP_ON ok=1
+Cmd: compileSnippet
+  api=1 type=1 insize=5176 outsize=513 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_ON DIRLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=8 type=1 insize=5176 outsize=2828 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_ON DIRLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=8 type=0 insize=2786 outsize=5460 kw=POINT ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2786 outsize=1422 kw=SPOT ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2786 outsize=1385 kw=POINT_COOKIE ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=2786 outsize=1305 kw=DIRECTIONAL_COOKIE ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=2786 outsize=3630 kw=DIRECTIONAL_COOKIE ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2786 outsize=1177 kw=POINT ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=2786 outsize=2655 kw=DIRECTIONAL ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=2786 outsize=3565 kw=SPOT ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=2786 outsize=1083 kw=DIRECTIONAL_COOKIE ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=2786 outsize=2915 kw=DIRECTIONAL_COOKIE ok=1
+Cmd: compileSnippet
+  api=8 type=0 insize=2699 outsize=4372 kw= ok=1
+Cmd: compileSnippet
+  api=8 type=1 insize=2699 outsize=2877 kw= ok=1
+Cmd: compileSnippet
+  api=8 type=0 insize=4625 outsize=4372 kw=LIGHTMAP_OFF DIRLIGHTMAP_OFF HDR_LIGHT_PREPASS_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=4625 outsize=1055 kw=LIGHTMAP_ON DIRLIGHTMAP_ON HDR_LIGHT_PREPASS_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=4625 outsize=976 kw=LIGHTMAP_OFF DIRLIGHTMAP_OFF HDR_LIGHT_PREPASS_ON ok=1
+Cmd: compileSnippet
+  api=8 type=0 insize=4625 outsize=4372 kw=LIGHTMAP_OFF DIRLIGHTMAP_OFF HDR_LIGHT_PREPASS_ON ok=1
+Cmd: compileSnippet
+  api=1 type=0 insize=4625 outsize=672 kw=LIGHTMAP_ON DIRLIGHTMAP_ON HDR_LIGHT_PREPASS_ON ok=1
+Cmd: compileSnippet
+  api=8 type=0 insize=4625 outsize=4201 kw=LIGHTMAP_ON DIRLIGHTMAP_ON HDR_LIGHT_PREPASS_ON ok=1
+Cmd: compileSnippet
+  api=8 type=1 insize=4625 outsize=2552 kw=LIGHTMAP_OFF DIRLIGHTMAP_OFF HDR_LIGHT_PREPASS_OFF ok=1
+Cmd: compileSnippet
+  api=8 type=1 insize=4625 outsize=3925 kw=LIGHTMAP_ON DIRLIGHTMAP_OFF HDR_LIGHT_PREPASS_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=4625 outsize=443 kw=LIGHTMAP_OFF DIRLIGHTMAP_OFF HDR_LIGHT_PREPASS_ON ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=4625 outsize=1615 kw=LIGHTMAP_OFF DIRLIGHTMAP_OFF HDR_LIGHT_PREPASS_ON ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=4625 outsize=1494 kw=LIGHTMAP_ON DIRLIGHTMAP_ON HDR_LIGHT_PREPASS_ON ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=4625 outsize=4077 kw=LIGHTMAP_ON DIRLIGHTMAP_ON HDR_LIGHT_PREPASS_ON ok=1
+Unhandled exception: Readfile from pipe failed. GLE=파이프가 끝났습니다.
+
+
+Quitting shader compiler process
