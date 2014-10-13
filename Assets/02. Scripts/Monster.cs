@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Monster : MonoBehaviour {
-
+    public int id = 0;
 	public float moveSpeed = 0.1f;
 	public float maxDistance = 1000.0f;
 	private Transform endPointTransform;
@@ -13,7 +13,7 @@ public class Monster : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		//navAgent = gameObject.GetComponent<NavMeshAgent>();
+		navAgent = gameObject.GetComponent<NavMeshAgent>();
 
 		endPointTransform = GameObject.Find ("EndPoint").GetComponent<Transform> ();
 

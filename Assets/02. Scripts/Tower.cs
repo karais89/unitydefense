@@ -2,13 +2,13 @@
 using System.Collections;
 
 public class Tower : MonoBehaviour {
-	
-	// public GameObject bulletPrefab;
+    public int id = 0;
 	public GameObject firePos;
 	// public GameObject attackRange;
 	public float attackRange = 3.0f;
 	public float fireTerm = 1.0f;
-	private GameObject targetMonster = null;
+	public GameObject targetMonster = null;
+    private int bulletCount = 0;
 	
 	// Use this for initialization
 	void Awake () {
@@ -43,16 +43,19 @@ public class Tower : MonoBehaviour {
 			
 			CheckTargetRange();
 			
-			GetClosestEnemy();
+			GetClosestMonster();
 			
 			if(targetMonster != null)
 			{
+                bulletCount++;
 				Debug.Log ( "create bullet" );
-				
-				GameObject bullet = (GameObject) Instantiate( Resources.LoadAssetAtPath ("Assets/03. Prefabs/bullet.prefab", typeof(GameObject)), firePos.transform.position, Quaternion.identity );			
+
+                GameObject bullet = (GameObject)Instantiate(Resources.LoadAssetAtPath("Assets/03. Prefabs/bullet.prefab", typeof(GameObject)), firePos.transform.position, Quaternion.identity);			
 				bullet.transform.Rotate( 90, 0, 0 );
+                bullet.GetComponent<Bullet>().id = bulletCount;
+                bullet.GetComponent<Bullet>().nearMonster = targetMonster;
 				
-				
+				// 총알을 타워의 차일드로 추가
 				bullet.transform.parent = this.transform;
 			}
 		}
@@ -72,11 +75,11 @@ public class Tower : MonoBehaviour {
 		
 	}
 	
-	void GetClosestEnemy()
+	public GameObject GetClosestMonster()
 	{
 		if ( targetMonster != null )
 		{
-			return;
+			return targetMonster;
 		}
 		
 		foreach( GameObject monster in GameManager.monsterList )
@@ -86,5 +89,8 @@ public class Tower : MonoBehaviour {
 				targetMonster = monster;
 			}
 		}
+        return targetMonster;
 	}
+
+    
 }
