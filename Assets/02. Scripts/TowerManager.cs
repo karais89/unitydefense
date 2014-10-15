@@ -41,6 +41,24 @@ public class TowerManager : MonoBehaviour {
 			targetPosition.y = 0.0f;
 			newTower.transform.Translate( targetPosition, Space.World );
 
+            //
+            // 타일 단위로 생성할 타워 위치
+            /*
+             * var gridSize : Vector3 = new Vector3(1,1,1);
+var movementDirection : Vector3 = new Vector3(0,0,1);
+
+function Start () {
+ InvokeRepeating("UpdatePosition", 1.0, 1.0);
+}
+
+function UpdatePosition () {
+ var newPos : Vector3 = transform.position+movementDirection;
+ newPos = Vector3(Mathf.Round(newPos.x/gridSize.x)*gridSize.x,
+ Mathf.Round(newPos.y/gridSize.y)*gridSize.y,
+ Mathf.Round(newPos.z/gridSize.z)*gridSize.z);
+ transform.position = newPos;
+}
+
 			/*
 			// 마우스 커서가 가리키는 타일에 하이라이트 색상 변경
 			Ray ray1 = Camera.mainCamera.ScreenPointToRay( Input.mousePosition );
@@ -56,7 +74,7 @@ public class TowerManager : MonoBehaviour {
 			*/
 
 
-			// 마우스 클릭한 지점에 타워 생성
+            // 마우스 클릭한 지점에 타워 생성
             if (Input.GetMouseButtonDown (0)) 
 			{
 				

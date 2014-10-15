@@ -13,6 +13,11 @@ public class GameManager : MonoBehaviour {
 	public static List<GameObject> monsterList = new List<GameObject>();
 	public static List<GameObject> bulletList = new List<GameObject>();
 	private System.Random rand = new System.Random();
+    public int gold = 0;
+    public GUIText goldText;
+    public int score = 0;
+    public GUIText scoreText;
+
 
 	// Use this for initialization
 	void Awake () {
@@ -23,6 +28,9 @@ public class GameManager : MonoBehaviour {
 
 		// waypoint에 일정 시간 간격으로 캐릭터 생성
 		StartCoroutine( this.CreateMonster () );
+
+        goldText.text = "Gold: " + gold;
+        scoreText.text = "Score: " + score;
 	
 	}
 
@@ -45,5 +53,17 @@ public class GameManager : MonoBehaviour {
 	
 
 	}
+
+    void OnGUI()
+    {
+        if ( GUI.Button(new Rect(10, Screen.height-30, 60, 30), "Resume" ) )
+        {
+
+        }
+        if (GUI.Button(new Rect(80, Screen.height-30, 60, 30), "X2"))
+        {
+
+        }
+    }
 
 }
