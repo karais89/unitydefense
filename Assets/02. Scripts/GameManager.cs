@@ -51,6 +51,9 @@ public class GameManager : MonoBehaviour {
             GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);
             newMonster.GetComponent<Monster>().id = monsterCount;
 
+            // 생성된 몬스터들은 Enemy를 부모르 둔다
+            newMonster.transform.parent = GameObject.Find("Enemy").transform;
+
             monsterList.Add(newMonster);
 		}
 	}

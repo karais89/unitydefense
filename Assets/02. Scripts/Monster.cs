@@ -13,6 +13,7 @@ public class Monster : MonoBehaviour {
 	private NavMeshAgent navAgent;
     public const int earnGold = 3;
     public const int earnScore = 10;
+    public GameObject bloodEffectPrefab;
 
 	// Use this for initialization
 	void Awake () {
@@ -54,6 +55,14 @@ public class Monster : MonoBehaviour {
                     {
                         // void Blend(string animation, float targetWeight = 1.0F, float fadeLength = 0.3F);
                         // animation.Blend("Die", 1.0f, 0.3f);
+
+                        Vector3 initialPos = transform.position;
+                        initialPos.z = 0;
+                        transform.position = initialPos;
+
+                        gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
+                        monsterState = MonsterState.walk;
+                        animation.Play("Walk");
                     }
                 }
                 break;
@@ -67,6 +76,29 @@ public class Monster : MonoBehaviour {
 		
 	}
 
+    void ActionState()
+    {
+        switch ( monsterState )
+        {
+            case MonsterState.walk:
+                {
+
+                }
+                break;
+
+            case MonsterState.die:
+                {
+
+                }
+                break;
+
+            default:
+                break;
+
+                    
+        }
+    }
+
 	void OnCollisionEnter( Collision coll )
 	{
        
@@ -74,6 +106,8 @@ public class Monster : MonoBehaviour {
 		if ( coll.collider.tag == "BULLET" )
 		{
             HP -= Bullet.damage;
+
+            CreateBloodEffect(coll.transform.position);
 
             if ( HP <= 0 )
             {
@@ -86,6 +120,7 @@ public class Monster : MonoBehaviour {
                 // 죽는 애니메이션 재생
                 animation.Play("Die");
 
+                gameObject.GetComponentInChildren<CapsuleCollider>().enabled = false;
                 // gameObject.SetActive(false);
                 // DestroyImmediate(this.gameObject);
             }
@@ -97,4 +132,13 @@ public class Monster : MonoBehaviour {
 			// coll.gameObject.SetActive( false );
 		}
 	}
+
+    void CreateBloodEffect( Vector3 position )
+    {
+        GameObject blood = (GameObject)Instantiate(bloodEffectPrefab, position, Quaternion.identity);
+        Destroy(blood, 2.0f);
+
+    }
 }
+
+
