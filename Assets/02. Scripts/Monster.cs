@@ -9,7 +9,10 @@ public class Monster : MonoBehaviour {
 	public enum MonsterState { walk, gothit, die };
 	public MonsterState monsterState = MonsterState.walk;
 	public int HP { get; set; }
+    public const int HP_Max = 30;
 	private NavMeshAgent navAgent;
+    public const int earnGold = 3;
+    public const int earnScore = 10;
 
 	// Use this for initialization
 	void Awake () {
@@ -20,7 +23,7 @@ public class Monster : MonoBehaviour {
 		// 걷는 애니메이션 바로 시작
 		animation.Play( "Walk" );
 
-
+        HP = HP_Max;
 	}
 
 	void Start()
@@ -34,21 +37,59 @@ public class Monster : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        switch ( monsterState )
+        {
+            case MonsterState.walk:
+                {
+                    if (transform.position.z < endPointTransform.position.z)
+                    {
+                        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+                    }
+                }
+                break;
 
-		if ( transform.position.z < endPointTransform.position.z )
-		{
-			transform.Translate ( Vector3.forward * moveSpeed * Time.deltaTime, Space.Self );
-		}
+            case MonsterState.die:
+                {
+                    if ( animation.isPlaying == false )
+                    {
+                        // void Blend(string animation, float targetWeight = 1.0F, float fadeLength = 0.3F);
+                        // animation.Blend("Die", 1.0f, 0.3f);
+                    }
+                }
+                break;
+
+            default:
+                {
+
+                }
+                break;
+        }
+		
 	}
 
 	void OnCollisionEnter( Collision coll )
 	{
+       
+
 		if ( coll.collider.tag == "BULLET" )
 		{
-			HP -= Bullet.damage;
+            HP -= Bullet.damage;
 
-			// gameObject.GetComponentInChildren<Background>();
+            if ( HP <= 0 )
+            {
+                Debug.Log("monster died~");
 
+                monsterState = MonsterState.die;
+                GameObject.Find("GameManager").GetComponent<GameManager>().score += earnScore;
+                GameObject.Find("GameManager").GetComponent<GameManager>().gold += earnGold;
+
+                // 죽는 애니메이션 재생
+                animation.Play("Die");
+
+                // gameObject.SetActive(false);
+                // DestroyImmediate(this.gameObject);
+            }
+			
 			// TODO
 			// 총알 오브젝트를 삭제하지 않고 타워에서 재사용
 

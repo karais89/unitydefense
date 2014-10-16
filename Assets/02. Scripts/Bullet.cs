@@ -31,15 +31,20 @@ public class Bullet : MonoBehaviour {
         
         // Vector3 direction = transform.position - nearMonster.transform.position;
         // transform.rotation = Quaternion.LookRotation( direction );
+
 	}
 	    
     // Update is called once per frame
 	void Update () {
 		if(nearMonster != null){
 			
+            // FIXIT
+            // 총알 날아가는 방향이 이상함..
+            
             transform.LookAt(nearMonster.transform.position);//타겟을 쳐다보게함
            
 			transform.Translate (Vector3.forward  * speed * Time.deltaTime );//앞으로전진 
+            
 		}
 	}
 }

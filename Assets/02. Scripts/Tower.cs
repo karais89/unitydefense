@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class Tower : MonoBehaviour {
     public int id = 0;
 	public GameObject firePos;
@@ -9,12 +10,16 @@ public class Tower : MonoBehaviour {
 	public float fireTerm = 1.0f;
 	public GameObject targetMonster = null;
     private int bulletCount = 0;
-	
+    public const int earnScore = 20;
+    public const int buyGold = 30;
+    public const int sellGold = 10;
+
 	// Use this for initialization
 	void Awake () {
 		
 		// InvokeRepeating("GetClosestEnemy", 0, 1.0f);
 		
+        // TODO
 		// 공격 범위 표시
 		// attackRange = gameObject.GetComponent( "AttackRange" ) as GameObject;
 		// attackRange = gameObject.GetComponentInChildren<AttackRange>;
@@ -48,12 +53,15 @@ public class Tower : MonoBehaviour {
 			if(targetMonster != null)
 			{
                 bulletCount++;
-				Debug.Log ( "create bullet" );
+				// Debug.Log ( "create bullet" );
 
                 GameObject bullet = (GameObject)Instantiate(Resources.LoadAssetAtPath("Assets/03. Prefabs/bullet.prefab", typeof(GameObject)), firePos.transform.position, Quaternion.identity);			
 				bullet.transform.Rotate( 90, 0, 0 );
                 bullet.GetComponent<Bullet>().id = bulletCount;
                 bullet.GetComponent<Bullet>().nearMonster = targetMonster;
+
+                // Vector3 targetDir = targetMonster.transform.position - transform.position;
+                // bullet.rigidbody.velocity = transform.TransformDirection(targetDir * 1.0f);
 				
 				// 총알을 타워의 차일드로 추가
 				bullet.transform.parent = this.transform;
@@ -67,6 +75,10 @@ public class Tower : MonoBehaviour {
 		{
 			return;		
 		}
+        //if ( targetMonster == MonsterState.walk )
+        {
+
+        }
 		
 		if ( Vector3.Distance( targetMonster.transform.position, transform.position ) >= attackRange )
 		{

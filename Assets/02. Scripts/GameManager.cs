@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject monsterPrefab;
 	public float createTime = 2.0f;
-	private int count = 0;
+	private int monsterCount = 0;
 	private Transform[] spawnTransform = new Transform[5];
 	public static bool isGameOver = false;
 	public static List<GameObject> monsterList = new List<GameObject>();
@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
     public GUIText goldText;
     public int score = 0;
     public GUIText scoreText;
+    private bool isGamePaused = false;
+    private bool isGameFaster = false;
 
 
 	// Use this for initialization
@@ -40,27 +42,67 @@ public class GameManager : MonoBehaviour {
 		{
 			yield return new WaitForSeconds( createTime );
 
-			Debug.Log ( "create new monster " + count );
-			count++;
+            monsterCount++;
+
+			Debug.Log ( "create new monster id = " + monsterCount );
+			
 
 			int random = rand.Next(0, 4);
-			monsterList.Add( (GameObject)Instantiate( monsterPrefab, spawnTransform[random].position, Quaternion.identity ) );
+            GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);
+            newMonster.GetComponent<Monster>().id = monsterCount;
+
+            monsterList.Add(newMonster);
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
 
+        goldText.text = "Gold: " + gold;
+        scoreText.text = "Score: " + score;
 	}
 
     void OnGUI()
     {
-        if ( GUI.Button(new Rect(10, Screen.height-30, 60, 30), "Resume" ) )
+        // 일시 정지 버튼
+        if ( GUI.Button(new Rect(10, Screen.height-30, 60, 30), "Pause" ) )
         {
-
+            if ( isGamePaused == false )
+            {
+                isGamePaused = true;
+                Time.timeScale = 0.0f;
+            }
+            else if ( isGamePaused == true )
+            {
+                isGamePaused = false;
+                if ( isGameFaster == false )
+                {
+                    Time.timeScale = 1.0f;
+                }
+                else if ( isGameFaster == true )
+                {
+                    Time.timeScale = 2.0f;
+                }                
+            }            
         }
+
+        // 게임 두배 속도 버튼
         if (GUI.Button(new Rect(80, Screen.height-30, 60, 30), "X2"))
+        {
+            if (isGameFaster == false )
+            {
+                Time.timeScale = 2.0f;
+                isGameFaster = true;
+            }
+            else if (isGameFaster == true)
+            {
+                Time.timeScale = 1.0f;
+                isGameFaster = false;
+            }
+        }
+
+        // 설정 버튼
+        if (GUI.Button(new Rect(Screen.width-60, 10, 60, 30), "Setting"))
         {
 
         }

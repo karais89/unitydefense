@@ -8,8 +8,9 @@ public class TowerManager : MonoBehaviour {
 	public bool isTileBuildMode = false;
 	public Color highlightColor;
 	private Color normalColor;
-	private GameObject newTower;
+	private GameObject newTowerToBuild;
 	private Transform newTowerTransform;
+    
 
 	// Use this for initialization
 	void Awake () {
@@ -36,32 +37,35 @@ public class TowerManager : MonoBehaviour {
 
 		if ( isTileBuildMode == true )
         {
+            // FIXIT
 			// 마우스 커서를 따라 생성할 타워를 위치시킨다
 			Vector3 targetPosition = Camera.main.ScreenToWorldPoint( Input.mousePosition );
 			targetPosition.y = 0.0f;
-			newTower.transform.Translate( targetPosition, Space.World );
+			newTowerToBuild.transform.Translate( targetPosition, Space.World );
 
-            //
+            // TODO
             // 타일 단위로 생성할 타워 위치
             /*
+             * 
              * var gridSize : Vector3 = new Vector3(1,1,1);
-var movementDirection : Vector3 = new Vector3(0,0,1);
+            var movementDirection : Vector3 = new Vector3(0,0,1);
 
-function Start () {
- InvokeRepeating("UpdatePosition", 1.0, 1.0);
-}
+            function Start () {
+             InvokeRepeating("UpdatePosition", 1.0, 1.0);
+            }
 
-function UpdatePosition () {
- var newPos : Vector3 = transform.position+movementDirection;
- newPos = Vector3(Mathf.Round(newPos.x/gridSize.x)*gridSize.x,
- Mathf.Round(newPos.y/gridSize.y)*gridSize.y,
- Mathf.Round(newPos.z/gridSize.z)*gridSize.z);
- transform.position = newPos;
-}
+            function UpdatePosition () {
+             var newPos : Vector3 = transform.position+movementDirection;
+             newPos = Vector3(Mathf.Round(newPos.x/gridSize.x)*gridSize.x,
+             Mathf.Round(newPos.y/gridSize.y)*gridSize.y,
+             Mathf.Round(newPos.z/gridSize.z)*gridSize.z);
+             transform.position = newPos;
+            }
+            */
 
-			/*
+            // FIXIT
 			// 마우스 커서가 가리키는 타일에 하이라이트 색상 변경
-			Ray ray1 = Camera.mainCamera.ScreenPointToRay( Input.mousePosition );
+			/*Ray ray1 = Camera.mainCamera.ScreenPointToRay( Input.mousePosition );
 			RaycastHit hitInfo1;
 			
 			if( Physics.Raycast( ray1, out hitInfo1, 100.0f ) ) {
@@ -72,6 +76,9 @@ function UpdatePosition () {
 				hitInfo1.collider.renderer.material.color = normalColor;
 			}
 			*/
+
+            // TODO
+            // 마우스 클릭한 지점의 바닥 타일 이차원 배열에서 가져오기
 
 
             // 마우스 클릭한 지점에 타워 생성
@@ -85,7 +92,9 @@ function UpdatePosition () {
 				{
 					Debug.Log ( "create new tower" );
 
-					Instantiate( tower, hitInfo.collider.transform.position, Quaternion.identity );
+					GameObject newTower = (GameObject) Instantiate( tower, hitInfo.collider.transform.position, Quaternion.identity );
+
+                    // GameObject.Find("GameManager").GetComponent<GameManager>().score += newTower.GetComponent<Tower>().earnScore;
 				}
 
 			}
@@ -102,10 +111,10 @@ function UpdatePosition () {
 		if (GUI.Button (new Rect (Screen.width - buttonWidth, Screen.height - buttonHeight, buttonWidth, buttonHeight), "타워1")) {
 			isTileBuildMode = true;
 
-			newTower = (GameObject) Instantiate( tower, Vector3.zero, Quaternion.identity );
+			newTowerToBuild = (GameObject) Instantiate( tower, Vector3.zero, Quaternion.identity );
 			Color newColor = Color.green;
 			newColor.a = 0.1f;
-			newTower.renderer.material.color = newColor;
+			newTowerToBuild.renderer.material.color = newColor;
 		}
 		
 	}

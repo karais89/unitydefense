@@ -9,6 +9,7 @@ public class TileMap : MonoBehaviour {
 	private int mapWidth = 0;
 	private int mapHeight = 0;
 	public GameObject testTile;
+    public GameObject[,] tileArray = new GameObject[64, 64];
 
 	void Awake() {
 
@@ -24,7 +25,10 @@ public class TileMap : MonoBehaviour {
 			{
 				Vector3 pos = new Vector3( x, 0, y );
 				Quaternion rotation = Quaternion.Euler(90, 0, 0);
-				Instantiate ( testTile, pos, rotation);
+				GameObject newTile = (GameObject) Instantiate ( testTile, pos, rotation);
+                tileArray[x, y] = newTile;
+                // Map 게임오브젝트를 부모로 둔다
+                newTile.transform.parent = GameObject.Find("Map").transform;                
 			}
 		}
 	}
