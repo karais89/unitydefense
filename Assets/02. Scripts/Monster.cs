@@ -63,6 +63,7 @@ public class Monster : MonoBehaviour {
                         gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
                         monsterState = MonsterState.walk;
                         animation.Play("Walk");
+                        HP = HP_Max;
                     }
                 }
                 break;
@@ -99,7 +100,8 @@ public class Monster : MonoBehaviour {
         }
     }
 
-	void OnCollisionEnter( Collision coll )
+	// void OnCollisionEnter( Collision coll )
+    void OnTriggerEnter( Collider coll )
 	{
        
 

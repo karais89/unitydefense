@@ -40,7 +40,9 @@ public class TowerManager : MonoBehaviour {
             // FIXIT
 			// 마우스 커서를 따라 생성할 타워를 위치시킨다
 			Vector3 targetPosition = Camera.main.ScreenToWorldPoint( Input.mousePosition );
-			targetPosition.y = 0.0f;
+			
+            targetPosition.z = targetPosition.y;
+            targetPosition.y = 0.0f;
 			newTowerToBuild.transform.Translate( targetPosition, Space.World );
 
             // TODO

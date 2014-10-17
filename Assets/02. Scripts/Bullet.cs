@@ -40,11 +40,16 @@ public class Bullet : MonoBehaviour {
 			
             // FIXIT
             // 총알 날아가는 방향이 이상함..
-            /*
+            
             transform.LookAt(nearMonster.transform.position);//타겟을 쳐다보게함
            
 			transform.Translate (Vector3.forward  * speed * Time.deltaTime );//앞으로전진 
-            */
+            
 		}
 	}
+
+    void OnTriggerEnter( Collider coll )
+    {
+
+    }
 }
