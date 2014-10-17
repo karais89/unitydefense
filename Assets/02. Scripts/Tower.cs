@@ -65,6 +65,10 @@ public class Tower : MonoBehaviour {
 				
 				// 총알을 타워의 차일드로 추가
 				bullet.transform.parent = this.transform;
+
+                Vector3 force = targetMonster.transform.position - transform.position;
+                // bullet.rigidbody.AddForceAtPosition(force.normalized * 3.0f, targetMonster.transform.position);
+                bullet.rigidbody.AddForce(targetMonster.transform.position);
 			}
 		}
 	}
