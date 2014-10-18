@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TowerManager : MonoBehaviour {
 	public int sizeX = 64;
@@ -9,13 +10,15 @@ public class TowerManager : MonoBehaviour {
 	public Color highlightColor;
 	private Color normalColor;
 	private GameObject newTowerToBuild;
-	private Transform newTowerTransform;
-    
+    private RaycastHit rayCastHit;
+    public static List<GameObject> towerList = new List<GameObject>();
+    private int towerCount = 0;
+    private bool isVisibleMenu = false;
 
 	// Use this for initialization
 	void Awake () {
 	
-		normalColor = GameObject.FindWithTag ( "TILE" ).GetComponent<Renderer>().material.color;
+		// normalColor = GameObject.FindWithTag ( "TILE" ).GetComponent<Renderer>().material.color;
 
 		/*
 		// 다수의 타워 생성
@@ -29,6 +32,16 @@ public class TowerManager : MonoBehaviour {
 		}
 		*/
 
+        // 건설할 타워를 미리 생성해두고 비활성화 시켜둔다
+        newTowerToBuild = (GameObject)Instantiate(tower, Vector3.zero, Quaternion.identity);
+        Color newColor = Color.green;
+        newColor.a = 0.1f;
+        newTowerToBuild.renderer.material.color = newColor;
+
+        // 건설할 타워를 타워 관리자의 차일드로 추가
+        newTowerToBuild.transform.parent = this.transform;
+
+        newTowerToBuild.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -92,15 +105,48 @@ public class TowerManager : MonoBehaviour {
 
 				if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
 				{
-					Debug.Log ( "create new tower" );
+                    // rayCastHit = hitInfo;
 
-					GameObject newTower = (GameObject) Instantiate( tower, hitInfo.collider.transform.position, Quaternion.identity );
+                    // 타일을 선택한 경우에만 타워 생성
+                    if ( hitInfo.transform.tag == "TILE" )
+                    {
+                        Debug.Log("create new tower");
 
-                    // GameObject.Find("GameManager").GetComponent<GameManager>().score += newTower.GetComponent<Tower>().earnScore;
+                        GameObject newTower = (GameObject)Instantiate(tower, hitInfo.collider.transform.position, Quaternion.identity);
+                        newTower.GetComponent<Tower>().id = towerCount;
+                        towerCount++;
+
+                        // 타워를 타워 관리자의 차일드로 추가
+                        newTower.transform.parent = this.transform;
+
+                        towerList.Add(newTower);
+
+                        GameObject.Find("GameManager").GetComponent<GameManager>().score += newTower.GetComponent<Tower>().GetEarnScore();
+
+                        isTileBuildMode = false;
+                    }
 				}
-
 			}
 		}
+
+        else if ( isTileBuildMode == false )
+        {
+            // 타워를 선택하면 메뉴가 열린다
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray1 = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitInfo1;
+                if (Physics.Raycast(ray1, out hitInfo1, 100.0f))
+                {
+                    if ( hitInfo1.transform.tag == "TOWER" )
+                    {
+                        rayCastHit = hitInfo1;
+
+                        isVisibleMenu = true;
+                    }
+                }
+            }
+        }
 
 
 	}
@@ -110,15 +156,50 @@ public class TowerManager : MonoBehaviour {
 		int buttonWidth = 100;
 		int buttonHeight = 30;
 		
-		if (GUI.Button (new Rect (Screen.width - buttonWidth, Screen.height - buttonHeight, buttonWidth, buttonHeight), "타워1")) {
+        // 타워 건설 버튼
+		if (GUI.Button (new Rect (Screen.width - buttonWidth, Screen.height - buttonHeight, buttonWidth, buttonHeight), "Tower1 gold 30")) {
 			isTileBuildMode = true;
 
-			newTowerToBuild = (GameObject) Instantiate( tower, Vector3.zero, Quaternion.identity );
-			Color newColor = Color.green;
-			newColor.a = 0.1f;
-			newTowerToBuild.renderer.material.color = newColor;
+            newTowerToBuild.SetActive(true);
+
+            // 골드 차감
+            int buyGold = GameObject.Find("Tower(Clone)").GetComponent<Tower>().GetBuyGold();
+            GameObject.Find("GameManager").GetComponent<GameManager>().gold -= buyGold;
 		}
+
 		
+        if ( isVisibleMenu == true )
+        {
+            // TODO
+            // 화면 중앙에 보이는 것은 임의
+            int centerX = Screen.width / 2;
+            int centerY = Screen.height / 2;
+
+            // 타워 팔기 버튼
+            if (GUI.Button(new Rect(centerX, centerY, buttonWidth, buttonHeight), "Sell Tower"))
+            {
+                isVisibleMenu = false;
+
+                // 골드 증가
+                int sellGold = GameObject.Find("Tower(Clone)").GetComponent<Tower>().GetBuyGold();
+                GameObject.Find("GameManager").GetComponent<GameManager>().gold += sellGold;
+
+                // Destroy(rayCastHit.collider.gameObject);
+                rayCastHit.collider.gameObject.SetActive(false);
+            }
+            // 타워 업그레이드 버튼
+            if (GUI.Button(new Rect(centerX, centerY+buttonHeight, buttonWidth, buttonHeight), "Upgrade Tower"))
+            {
+                isVisibleMenu = false;
+
+                // 레벨 1 증가
+                GameObject.Find("Tower(Clone)").GetComponent<Tower>().level += 1;
+
+                // TODO
+                // 
+            }
+        }
+        
 	}
 
 }

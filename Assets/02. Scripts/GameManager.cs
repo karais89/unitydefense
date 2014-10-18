@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
 	public static List<GameObject> monsterList = new List<GameObject>();
 	public static List<GameObject> bulletList = new List<GameObject>();
 	private System.Random rand = new System.Random();
+    public int initialGold = 120;
     public int gold = 0;
     public GUIText goldText;
     public int score = 0;
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour {
 
 		// waypoint에 일정 시간 간격으로 캐릭터 생성
 		StartCoroutine( this.CreateMonster () );
-
+        gold = initialGold;
         goldText.text = "Gold: " + gold;
         scoreText.text = "Score: " + score;
 	

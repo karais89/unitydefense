@@ -10,10 +10,23 @@ public class Tower : MonoBehaviour {
 	public float fireTerm = 1.0f;
 	public GameObject targetMonster = null;
     private int bulletCount = 0;
-    public const int earnScore = 20;
-    public const int buyGold = 30;
-    public const int sellGold = 10;
+    public static int earnScore = 20;
+    public static int buyGold = 30;
+    public static int sellGold = 10;
+    public int level = 1;
 
+    public int GetEarnScore()
+    {
+        return earnScore;
+    }
+    public int GetBuyGold()
+    {
+        return buyGold;
+    }
+    public int GetSellGold()
+    {
+        return sellGold;
+    }
 	// Use this for initialization
 	void Awake () {
 		
