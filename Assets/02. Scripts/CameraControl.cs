@@ -17,6 +17,7 @@ public class CameraControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // 디버그 용으로 마우스 커서가 가리키는 지점에 레이를 녹색 선으로 표시
 		Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
 
 		Debug.DrawRay( ray.origin, ray.direction * 100.0f, Color.green );

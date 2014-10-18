@@ -99,14 +99,11 @@ public class TowerManager : MonoBehaviour {
             // 마우스 클릭한 지점에 타워 생성
             if (Input.GetMouseButtonDown (0)) 
 			{
-				
 				Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
 				RaycastHit hitInfo;
 
 				if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
 				{
-                    // rayCastHit = hitInfo;
-
                     // 타일을 선택한 경우에만 타워 생성
                     if ( hitInfo.transform.tag == "TILE" )
                     {
@@ -194,6 +191,7 @@ public class TowerManager : MonoBehaviour {
 
                 // 레벨 1 증가
                 GameObject.Find("Tower(Clone)").GetComponent<Tower>().level += 1;
+                rayCastHit.collider.gameObject.GetComponent<Tower>().Upgrade();
 
                 // TODO
                 // 

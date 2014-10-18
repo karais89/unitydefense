@@ -10,10 +10,11 @@ public class Tower : MonoBehaviour {
 	public float fireTerm = 1.0f;
 	public GameObject targetMonster = null;
     private int bulletCount = 0;
-    public static int earnScore = 20;
-    public static int buyGold = 30;
-    public static int sellGold = 10;
+    public int earnScore = 20;
+    public int buyGold = 30;
+    public int sellGold = 10;
     public int level = 1;
+    public int bulletDamage = 10;
 
     public int GetEarnScore()
     {
@@ -26,6 +27,10 @@ public class Tower : MonoBehaviour {
     public int GetSellGold()
     {
         return sellGold;
+    }
+    public int GetBulletDamage()
+    {
+        return bulletDamage;
     }
 	// Use this for initialization
 	void Awake () {
@@ -121,5 +126,15 @@ public class Tower : MonoBehaviour {
         return targetMonster;
 	}
 
-    
+    public void Upgrade()
+    {
+        // 임시로 총알 데미지를 두배로 올림
+        bulletDamage *= 2;
+        sellGold *= 2;
+        earnScore *= 2;
+        attackRange += 1.0f;
+
+        // 임시로 시각적으로 보여주기 위해 크기를 늘린다
+        transform.localScale += new Vector3( 0.1f, 0.1f, 0.1f );
+    }
 }

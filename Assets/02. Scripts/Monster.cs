@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Monster : MonoBehaviour {
     public int id = 0;
-	public float moveSpeed = 0.1f;
+	public float moveSpeed = 0.3f;
 	public float maxDistance = 1000.0f;
 	private Transform endPointTransform;
 	public enum MonsterState { walk, gothit, die };
@@ -14,6 +14,7 @@ public class Monster : MonoBehaviour {
     public const int earnGold = 3;
     public const int earnScore = 10;
     public GameObject bloodEffectPrefab;
+    public GUIText goldText = null;
 
 	// Use this for initialization
 	void Awake () {
@@ -107,7 +108,8 @@ public class Monster : MonoBehaviour {
 
 		if ( coll.collider.tag == "BULLET" )
 		{
-            HP -= Bullet.damage;
+            // HP -= Bullet.damage;
+            HP -= GameObject.Find("Tower(Clone)").GetComponent<Tower>().bulletDamage;
 
             CreateBloodEffect(coll.transform.position);
 
@@ -125,6 +127,14 @@ public class Monster : MonoBehaviour {
                 gameObject.GetComponentInChildren<CapsuleCollider>().enabled = false;
                 // gameObject.SetActive(false);
                 // DestroyImmediate(this.gameObject);
+
+                // FIXIT
+                // 골드 텍스트 이펙트
+                // gameObject.GetComponent("GoldText").StartDisplay();
+                // Transform goldTransform = transform.Find("GoldText");
+                // goldTransform.gameObject.GetComponent<Gold>().StartDisplay();
+
+                // goldText.gameObject.GetComponent<Gold>().StartDisplay();
             }
 			
 			// TODO
@@ -138,6 +148,7 @@ public class Monster : MonoBehaviour {
     void CreateBloodEffect( Vector3 position )
     {
         GameObject blood = (GameObject)Instantiate(bloodEffectPrefab, position, Quaternion.identity);
+        blood.transform.parent = this.transform;
         Destroy(blood, 2.0f);
 
     }
