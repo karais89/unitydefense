@@ -15,6 +15,8 @@ public class Tower : MonoBehaviour {
     public int sellGold = 10;
     public int level = 1;
     public int bulletDamage = 10;
+    private GameObjectPool pool = new GameObjectPool();
+    private GameObject bullet = null;
 
     public int GetEarnScore()
     {
@@ -47,10 +49,20 @@ public class Tower : MonoBehaviour {
 		float alpha = 0.5f;
 		attackRange.renderer.material.color.a = alpha;
 		*/
+
+        bullet = (GameObject)Resources.Load("Prefabs/bullet", typeof(GameObject));
+
+        pool.Create(bullet, 10);
+        pool.SetParent(this.transform);
 		
 		StartCoroutine("CreateBullet");
 		
 	}
+
+    void OnApplicationQuit()
+    {
+        pool.Dispose();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -73,17 +85,19 @@ public class Tower : MonoBehaviour {
                 bulletCount++;
 				// Debug.Log ( "create bullet" );
 
-                GameObject bullet = (GameObject)Instantiate(Resources.LoadAssetAtPath("Assets/03. Prefabs/bullet.prefab", typeof(GameObject)), firePos.transform.position, Quaternion.identity);			
+                GameObject newBullet = pool.NewItem();
+                newBullet.transform.position = firePos.transform.position;
+                newBullet.transform.rotation = Quaternion.identity;
 				// bullet.transform.Rotate( 90, 0, 0 );
                 // bullet.transform.Rotate(  targetMonster.transform.position - firePos.transform.position );
-                bullet.GetComponent<Bullet>().id = bulletCount;
-                bullet.GetComponent<Bullet>().nearMonster = targetMonster;
+                newBullet.GetComponent<Bullet>().id = bulletCount;
+                newBullet.GetComponent<Bullet>().nearMonster = targetMonster;
 
                 // Vector3 targetDir = targetMonster.transform.position - transform.position;
                 // bullet.rigidbody.velocity = transform.TransformDirection(targetDir * 1.0f);
 				
 				// 총알을 타워의 차일드로 추가
-				bullet.transform.parent = this.transform;
+                // newBullet.transform.parent = this.transform;
 
                 // Vector3 force = targetMonster.transform.position - transform.position;
                 // bullet.rigidbody.AddForce(targetMonster.transform.position);

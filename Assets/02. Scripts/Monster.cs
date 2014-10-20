@@ -139,8 +139,9 @@ public class Monster : MonoBehaviour {
 			
 			// TODO
 			// 총알 오브젝트를 삭제하지 않고 타워에서 재사용
+            coll.gameObject.SetActive(false);
 
-			Destroy ( coll.gameObject );
+			// Destroy ( coll.gameObject );
 			// coll.gameObject.SetActive( false );
 		}
 	}
