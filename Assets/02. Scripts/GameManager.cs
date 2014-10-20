@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
     public GUIText scoreText;
     private bool isGamePaused = false;
     private bool isGameFaster = false;
+    private bool isVisibleSettingMenu = false;
 
 
 	// Use this for initialization
@@ -106,10 +107,30 @@ public class GameManager : MonoBehaviour {
         }
 
         // 설정 버튼
-        if (GUI.Button(new Rect(Screen.width-60, 10, 60, 30), "Setting"))
+        if (GUI.Button(new Rect(Screen.width-90, 10, 90, 30), "Setting"))
         {
-
+            if (isVisibleSettingMenu == false )
+            {
+                isVisibleSettingMenu = true;
+            }
+            else if (isVisibleSettingMenu == true)
+            {
+                isVisibleSettingMenu = false;
+            }
         }
+
+        // 메인 메뉴 씬으로 이동 버튼
+        if ( isVisibleSettingMenu == true )
+        {
+            if (GUI.Button(new Rect(Screen.width - 90, 40, 90, 30), "Main Menu"))
+            {
+                Application.LoadLevel(0);
+            }
+
+            // TODO
+            // 사운드 조정 버튼
+        }        
+
     }
 
 }
