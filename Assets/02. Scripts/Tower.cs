@@ -17,6 +17,7 @@ public class Tower : MonoBehaviour {
     public int bulletDamage = 10;
     private GameObjectPool pool = new GameObjectPool();
     private GameObject bullet = null;
+    
 
     public int GetEarnScore()
     {
@@ -111,16 +112,16 @@ public class Tower : MonoBehaviour {
 		{
 			return;		
 		}
-        //if ( targetMonster == MonsterState.walk )
+        if ( targetMonster.GetComponent<Monster>().monsterState == Monster.MonsterState.die )
         {
-
+            targetMonster = null;
+            return;
         }
 		
 		if ( Vector3.Distance( targetMonster.transform.position, transform.position ) >= attackRange )
 		{
 			targetMonster = null;
 		}
-		
 	}
 	
 	public GameObject GetClosestMonster()
@@ -134,6 +135,10 @@ public class Tower : MonoBehaviour {
 		{
 			if ( Vector3.Distance( monster.transform.position, transform.position ) < attackRange )
 			{
+                if ( monster.GetComponent<Monster>().monsterState == Monster.MonsterState.die )
+                {
+                    continue;
+                }
 				targetMonster = monster;
 			}
 		}

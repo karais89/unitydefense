@@ -50,7 +50,7 @@ public class TileMap : MonoBehaviour {
 		Gizmos.color = Color.green;
 		for (int i = 1; i < sizeX; i++)
 		{
-			Gizmos.DrawLine(new Vector3(i * tileWidth -0.5f, 0, 0), new Vector3(i * tileWidth, 0, mapHeight));
+			Gizmos.DrawLine(new Vector3(i * tileWidth, 0, 0), new Vector3(i * tileWidth, 0, mapHeight));
 		}
 		
 		for (int i = 1; i < sizeY; i++)

@@ -12,6 +12,11 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
     private GameObject originalObject;
     private int maxCount;
 
+    public List<GameObject> GetList()
+    {
+        return list;
+    }
+
     public IEnumerator GetEnumerator()
     {
         foreach(GameObject item in list)

@@ -5,22 +5,33 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 	// public GameObject waypoint;
 
-	public GameObject monsterPrefab;
+	private GameObject monsterPrefab = null;
 	public float createTime = 2.0f;
 	private int monsterCount = 0;
 	private Transform[] spawnTransform = new Transform[5];
 	public static bool isGameOver = false;
 	public static List<GameObject> monsterList = new List<GameObject>();
-	public static List<GameObject> bulletList = new List<GameObject>();
+	// public static List<GameObject> bulletList = new List<GameObject>();
 	private System.Random rand = new System.Random();
     public int initialGold = 120;
     public int gold = 0;
-    public GUIText goldText;
+    public GUIText goldText = null;
     public int score = 0;
-    public GUIText scoreText;
+    public GUIText scoreText = null;
+    public GUIText waveText = null;
     private bool isGamePaused = false;
     private bool isGameFaster = false;
     private bool isVisibleSettingMenu = false;
+    private GameObjectPool pool = new GameObjectPool();
+    private int currentWave = 0;
+    public int maxWave = 30;
+    public int monsterNumPerWave = 32;
+    private bool isWaveEnded = false;
+
+    public GameObjectPool GetPool()
+    {
+        return pool;
+    }
 
 
 	// Use this for initialization
@@ -35,7 +46,11 @@ public class GameManager : MonoBehaviour {
         gold = initialGold;
         goldText.text = "Gold: " + gold;
         scoreText.text = "Score: " + score;
-	
+
+        monsterPrefab = (GameObject)Resources.Load("Prefabs/Troll", typeof(GameObject));
+
+        pool.Create(monsterPrefab, monsterNumPerWave);
+        pool.SetParent(GameObject.Find("Enemy").transform);
 	}
 
 	IEnumerator CreateMonster()
@@ -46,15 +61,26 @@ public class GameManager : MonoBehaviour {
 
             monsterCount++;
 
+            if ( monsterCount > monsterNumPerWave )
+            {
+                monsterCount = 0;
+                isWaveEnded = true;
+                currentWave++;
+                yield return null;
+            }
+
 			Debug.Log ( "create new monster id = " + monsterCount );
 			
 
 			int random = rand.Next(0, 4);
-            GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);
+            // GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);
+            GameObject newMonster = pool.NewItem();
+            newMonster.transform.position = spawnTransform[random].position;
+            newMonster.transform.rotation = Quaternion.identity;
             newMonster.GetComponent<Monster>().id = monsterCount;
 
             // 생성된 몬스터들은 Enemy를 부모르 둔다
-            newMonster.transform.parent = GameObject.Find("Enemy").transform;
+            // newMonster.transform.parent = GameObject.Find("Enemy").transform;
 
             monsterList.Add(newMonster);
 		}
@@ -65,6 +91,8 @@ public class GameManager : MonoBehaviour {
 
         goldText.text = "Gold: " + gold;
         scoreText.text = "Score: " + score;
+        waveText.text = "Wave " + currentWave + " / " + maxWave;
+
 	}
 
     void OnGUI()

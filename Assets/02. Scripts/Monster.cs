@@ -23,10 +23,27 @@ public class Monster : MonoBehaviour {
 		endPointTransform = GameObject.Find ("EndPoint").GetComponent<Transform> ();
 
 		// 걷는 애니메이션 바로 시작
-		animation.Play( "Walk" );
+		// animation.Play( "Walk" );
+
+        // HP = HP_Max;
+	}
+
+    void OnEnable()
+    {
+        // 최초 위치로 이동
+        Vector3 initialPos = transform.position;
+        initialPos.z = 0;
+        transform.position = initialPos;
+
+        // gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
+
+        monsterState = MonsterState.walk;
+
+        // 걷는 애니메이션 바로 시작
+        animation.Play("Walk");
 
         HP = HP_Max;
-	}
+    }
 
 	void Start()
 	{
@@ -54,9 +71,10 @@ public class Monster : MonoBehaviour {
                 {
                     if ( animation.isPlaying == false )
                     {
-                        // void Blend(string animation, float targetWeight = 1.0F, float fadeLength = 0.3F);
-                        // animation.Blend("Die", 1.0f, 0.3f);
+                        GameObjectPool pool = GameObject.Find("GameManager").GetComponent<GameManager>().GetPool();
+                        pool.RemoveItem(this.gameObject);
 
+                        /*
                         Vector3 initialPos = transform.position;
                         initialPos.z = 0;
                         transform.position = initialPos;
@@ -65,6 +83,7 @@ public class Monster : MonoBehaviour {
                         monsterState = MonsterState.walk;
                         animation.Play("Walk");
                         HP = HP_Max;
+                        */
                     }
                 }
                 break;
@@ -103,10 +122,7 @@ public class Monster : MonoBehaviour {
 
 	// void OnCollisionEnter( Collision coll )
     void OnTriggerEnter( Collider coll )
-	{
-       
-
-		if ( coll.collider.tag == "BULLET" )
+	{if ( coll.collider.tag == "BULLET" )
 		{
             // HP -= Bullet.damage;
             HP -= GameObject.Find("Tower(Clone)").GetComponent<Tower>().bulletDamage;
@@ -124,10 +140,8 @@ public class Monster : MonoBehaviour {
                 // 죽는 애니메이션 재생
                 animation.Play("Die");
 
-                gameObject.GetComponentInChildren<CapsuleCollider>().enabled = false;
-                // gameObject.SetActive(false);
-                // DestroyImmediate(this.gameObject);
-
+                // gameObject.GetComponentInChildren<CapsuleCollider>().enabled = false;
+                
                 // FIXIT
                 // 골드 텍스트 이펙트
                 // gameObject.GetComponent("GoldText").StartDisplay();
@@ -137,12 +151,9 @@ public class Monster : MonoBehaviour {
                 // goldText.gameObject.GetComponent<Gold>().StartDisplay();
             }
 			
-			// TODO
 			// 총알 오브젝트를 삭제하지 않고 타워에서 재사용
             coll.gameObject.SetActive(false);
 
-			// Destroy ( coll.gameObject );
-			// coll.gameObject.SetActive( false );
 		}
 	}
 

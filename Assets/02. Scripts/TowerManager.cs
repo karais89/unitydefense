@@ -196,6 +196,11 @@ public class TowerManager : MonoBehaviour {
                 // TODO
                 // 
             }
+            // 메뉴 취소 버튼
+            if (GUI.Button(new Rect(centerX, centerY + buttonHeight * 2, buttonWidth, buttonHeight), "Cancel"))
+            {
+                isVisibleMenu = false;
+            }
         }
         
 	}
