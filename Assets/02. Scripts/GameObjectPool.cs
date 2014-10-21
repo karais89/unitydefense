@@ -24,24 +24,8 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
             yield return item;
         }
     }
-
-    // 게임 오브젝트를 지정한 개수만큼 생성해서 리스트에 추가
-    /*
-    public GameObjectPool(GameObject original, int initialCount, int maxCount)
-    {
-        this.originalObject = original;
-        this.maxCount = maxCount;
-
-        for ( int i = 0; i < initialCount && i < maxCount; i++ )
-        {
-            GameObject newItem = GameObject.Instantiate(originalObject) as GameObject;
-            newItem.SetActive(false);
-            list.Add(newItem);
-        }
-    }
-    */
-
-    // 메모리 풀 생성
+    
+    // 지정한 개수만큼 게임 오브젝트를 생성해서 메모리 풀 생성
     public bool Create(GameObject original, int maxCount)
     {
         this.originalObject = original;
