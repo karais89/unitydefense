@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using LitJson;
+using System.Text;
 
 public class MapEditor : MonoBehaviour {
 
@@ -51,6 +52,7 @@ public class MapEditor : MonoBehaviour {
         tilePrefabArray[1] = (GameObject)Resources.Load("Prefabs/PavementTile02", typeof(GameObject));
 
 		// 다수의 디폴트 타일 생성
+        
 		for (int y = 0; y < sizeY; y++) 
 		{
 			for (int x = 0; x < sizeX; x++) 
@@ -63,19 +65,122 @@ public class MapEditor : MonoBehaviour {
 
                 tileArray[x, y] = newTile;
 
+                newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
                 newTile.GetComponent<Tile>().indexX = x;
                 newTile.GetComponent<Tile>().indexY = y;
-                newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
+                newTile.GetComponent<Tile>().prefabName = "PavementTile02";
 			}
 		}
+        
 
-        LoadJSON();
+        // LoadMapJSON();
 	}
 
-    void LoadJSON()
+    void LoadMapJSON()
     {
         LitJson.JsonData data = LitJson.JsonMapper.ToObject(jsonData.text);
-        Debug.Log(data);
+
+        for ( int i = 0; i < data["Tile"].Count; i++ )
+        {
+            // JSON 파일에 담긴 데이터들을 가져온다
+            int x = (int) data["Tile"][i]["indexX"];
+            int y = (int) data["Tile"][i]["indexY"];
+
+            Tile.TileType type;
+            if (data["Tile"][i]["type"].ToString().Equals( "empty" ) == true)
+            {
+                type = Tile.TileType.empty;
+            }
+            else if (data["Tile"][i]["type"].ToString().Equals("walkable") == true)
+            {
+                type = Tile.TileType.walkable;
+            }
+            else if (data["Tile"][i]["type"].ToString().Equals("obstacle") == true)
+            {
+                type = Tile.TileType.obstacle;
+            }
+            else
+            {
+                type = Tile.TileType.empty;
+            }
+
+            GameObject prefab = null;
+            if (data["Tile"][i]["prefabName"].ToString().Equals("PavementTile01") == true)
+            {
+                prefab = tilePrefabArray[0];
+            }
+            else if (data["Tile"][i]["prefabName"].ToString().Equals("PavementTile02") == true)
+            {
+                prefab = tilePrefabArray[1];
+            }
+            else 
+            {
+                prefab = tilePrefabArray[1];
+            }
+
+            // 가져온 정보를 바탕으로 타일을 생성한다
+            Vector3 pos = new Vector3(x, 0, y);
+            Quaternion rotation = Quaternion.Euler(90, 0, 0);
+            GameObject newTile = (GameObject)Instantiate(prefab, pos, rotation);
+
+            newTile.transform.parent = GameObject.Find("Map").transform;
+
+            tileArray[x, y] = newTile;
+
+            newTile.GetComponent<Tile>().indexX = x;
+            newTile.GetComponent<Tile>().indexY = y;
+            newTile.GetComponent<Tile>().type = type;
+        }
+    }
+
+    void WriteMapJSON()
+    {
+    	StringBuilder sb = new StringBuilder();
+    	LitJson.JsonWriter writer = new LitJson.JsonWriter(sb);
+
+        writer.WriteArrayStart();
+        for (int y = 0; y < sizeY; y++)
+        {
+            for (int x = 0; x < sizeX; x++)
+            {
+            	GameObject tile = tileArray[ x, y ];
+            	string typeString = null;
+                Tile.TileType type = tile.GetComponent<Tile>().type;
+                int indexX = tile.GetComponent<Tile>().indexX;
+                int indexY = tile.GetComponent<Tile>().indexY;
+                if ( type == Tile.TileType.empty )
+                {
+                    typeString = "emtpy";
+                }
+                else if ( type == Tile.TileType.walkable )
+                {
+                	typeString = "walkable";
+                }
+                else if ( type == Tile.TileType.obstacle )
+                {
+                	typeString = "obstacle";
+                }
+                else
+                {
+                	typeString = "emtpy";
+                }
+                string prefabString = tile.GetComponent<Tile>().prefabName;
+                
+            	writer.WriteObjectStart();
+            	writer.WritePropertyName("type");
+                writer.Write(typeString);                
+                writer.WritePropertyName("indexX");
+                writer.Write(indexX);
+                writer.WritePropertyName("indexY");
+                writer.Write(indexY);
+                writer.WritePropertyName("prefabName");
+                writer.Write(prefabString);
+                writer.WriteObjectEnd();
+            }
+        }
+
+        // Debug.Log(sb.ToString());
+        System.IO.File.WriteAllText(@"C:\Project\unitydefense\Assets\Resources\map01.json", sb.ToString());
     }
 	
 	// Update is called once per frame
@@ -173,6 +278,12 @@ public class MapEditor : MonoBehaviour {
 
 	void OnGUI()
 	{
+        // 맵 데이터 저장 버튼
+        if (GUI.Button(new Rect(Screen.width-100, Screen.height-30, 100, 30), "Save JSON") )
+        {
+            WriteMapJSON();
+        }
+
 		// 타일 버튼
 		if (GUI.Button(new Rect(10, 10, 60, 60), tileButtonTexture0))
 		{
