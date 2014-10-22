@@ -17,6 +17,14 @@ public class MapEditor : MonoBehaviour {
 	public GameObject defaultTile;
 	private GameObject selectedTile;
     private GameObject[] tilePrefabArray = new GameObject[20];
+    private GameObject[] treePrefabArray = new GameObject[12];
+    private GameObject[] rockPrefabArray = new GameObject[6];
+    private string[] treePrefabNameArray = new string[12];
+    private string[] rockPrefabNameArray = new string[6];
+    private string selectedTreeName = null;
+    private string selectedRockName = null;
+
+
     // private GameObjectPool tilePool = new GameObjectPool();
 
 
@@ -29,6 +37,18 @@ public class MapEditor : MonoBehaviour {
 	public Texture tileButtonTexture6;
 	public Texture tileButtonTexture7;
 	public Texture tileButtonTexture8;
+    public Texture tileButtonTexture9;
+    public Texture tileButtonTexture10;
+    public Texture tileButtonTexture11;
+    public Texture tileButtonTexture12;
+    public Texture tileButtonTexture13;
+    public Texture tileButtonTexture14;
+    public Texture tileButtonTexture15;
+    public Texture tileButtonTexture16;
+    public Texture tileButtonTexture17;
+    public Texture tileButtonTexture18;
+    public Texture tileButtonTexture19;
+    
 
 	private GameObject selectedTree;
 	private GameObject selectedRock;
@@ -48,11 +68,50 @@ public class MapEditor : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 
-        tilePrefabArray[0] = (GameObject)Resources.Load("Prefabs/PavementTile01", typeof(GameObject));
-        tilePrefabArray[1] = (GameObject)Resources.Load("Prefabs/PavementTile02", typeof(GameObject));
+        // 프리팹 미리 불러들인다
+        for (int i = 0; i < 20; i++)
+        {
+            string prefabName = "Prefabs/PavementTile" + (i + 1);
+            tilePrefabArray[i] = (GameObject)Resources.Load(prefabName, typeof(GameObject));
+            // Debug.Log("Loading prefab: " + prefabName);
+        }
+
+        treePrefabArray[0] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Leafy_01", typeof(GameObject));
+        treePrefabArray[1] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Leafy_02", typeof(GameObject));
+        treePrefabArray[2] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Leafy_03", typeof(GameObject));
+        treePrefabArray[3] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Leafy_04", typeof(GameObject));
+        treePrefabArray[4] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Leafy_05", typeof(GameObject));
+        treePrefabArray[5] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Short_01", typeof(GameObject));
+        treePrefabArray[6] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Short_02", typeof(GameObject));
+        treePrefabArray[7] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Short_03", typeof(GameObject));
+        treePrefabArray[8] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Tall_01", typeof(GameObject));
+        treePrefabArray[9] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Tall_02", typeof(GameObject));
+        treePrefabArray[10] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Tall_03", typeof(GameObject));
+        treePrefabArray[11] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Cactus_Tall_04", typeof(GameObject));
+
+        rockPrefabArray[0] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Cone", typeof(GameObject));
+        rockPrefabArray[1] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Heavy", typeof(GameObject));
+        rockPrefabArray[2] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Large", typeof(GameObject));
+        rockPrefabArray[3] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Medium", typeof(GameObject));
+        rockPrefabArray[4] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Small_01", typeof(GameObject));
+        rockPrefabArray[5] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Small_02", typeof(GameObject));
+
+        treePrefabNameArray[0] = "Cactus_Leafy_01";
+        treePrefabNameArray[1] = "Cactus_Leafy_02";
+        treePrefabNameArray[2] = "Cactus_Leafy_03";
+        treePrefabNameArray[3] = "Cactus_Leafy_04";
+        treePrefabNameArray[4] = "Cactus_Leafy_05";
+        treePrefabNameArray[5] = "Cactus_Short_01";
+        treePrefabNameArray[6] = "Cactus_Short_02";
+        treePrefabNameArray[7] = "Cactus_Short_03";
+        treePrefabNameArray[8] = "Cactus_Tall_01";
+        treePrefabNameArray[9] = "Cactus_Tall_02";
+        treePrefabNameArray[10] = "Cactus_Tall_03";
+        treePrefabNameArray[11] = "Cactus_Tall_04";
+
 
 		// 다수의 디폴트 타일 생성
-        
+        /*
 		for (int y = 0; y < sizeY; y++) 
 		{
 			for (int x = 0; x < sizeX; x++) 
@@ -68,34 +127,34 @@ public class MapEditor : MonoBehaviour {
                 newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
                 newTile.GetComponent<Tile>().indexX = x;
                 newTile.GetComponent<Tile>().indexY = y;
-                newTile.GetComponent<Tile>().prefabName = "PavementTile02";
+                newTile.GetComponent<Tile>().prefabName = "PavementTile2";
 			}
 		}
-        
+        */
 
-        // LoadMapJSON();
+        LoadMapJSON();
 	}
 
     void LoadMapJSON()
     {
         LitJson.JsonData data = LitJson.JsonMapper.ToObject(jsonData.text);
 
-        for ( int i = 0; i < data["Tile"].Count; i++ )
+        for ( int i = 0; i < data.Count; i++ )
         {
             // JSON 파일에 담긴 데이터들을 가져온다
-            int x = (int) data["Tile"][i]["indexX"];
-            int y = (int) data["Tile"][i]["indexY"];
+            int x = (int) data[i]["indexX"];
+            int y = (int) data[i]["indexY"];
 
             Tile.TileType type;
-            if (data["Tile"][i]["type"].ToString().Equals( "empty" ) == true)
+            if (data[i]["type"].ToString().Equals( "empty" ) == true)
             {
                 type = Tile.TileType.empty;
             }
-            else if (data["Tile"][i]["type"].ToString().Equals("walkable") == true)
+            else if (data[i]["type"].ToString().Equals("walkable") == true)
             {
                 type = Tile.TileType.walkable;
             }
-            else if (data["Tile"][i]["type"].ToString().Equals("obstacle") == true)
+            else if (data[i]["type"].ToString().Equals("obstacle") == true)
             {
                 type = Tile.TileType.obstacle;
             }
@@ -105,17 +164,15 @@ public class MapEditor : MonoBehaviour {
             }
 
             GameObject prefab = null;
-            if (data["Tile"][i]["prefabName"].ToString().Equals("PavementTile01") == true)
+            string prefabName = null;
+            for (int j = 0; j < 20; j++ )
             {
-                prefab = tilePrefabArray[0];
-            }
-            else if (data["Tile"][i]["prefabName"].ToString().Equals("PavementTile02") == true)
-            {
-                prefab = tilePrefabArray[1];
-            }
-            else 
-            {
-                prefab = tilePrefabArray[1];
+                if (data[i]["prefabName"].ToString().Equals("PavementTile"+(j+1)) == true)
+                {
+                    prefab = tilePrefabArray[j];
+                    prefabName = "PavementTile"+(j+1);
+                    break;
+                }
             }
 
             // 가져온 정보를 바탕으로 타일을 생성한다
@@ -130,6 +187,35 @@ public class MapEditor : MonoBehaviour {
             newTile.GetComponent<Tile>().indexX = x;
             newTile.GetComponent<Tile>().indexY = y;
             newTile.GetComponent<Tile>().type = type;
+            newTile.GetComponent<Tile>().prefabName = prefabName;
+
+            // 나무나 돌이 있다면 타일 위에 생성한다.
+            GameObject tree = null;
+            string treeName = null;
+            bool isEmpty = false;
+            for ( int j = 0; j < 12; j++ )
+            {
+                if (data[i]["obstacleName"].ToString().Equals("") == true)
+                {
+                    isEmpty = true;
+                    break;
+                }
+
+                if (data[i]["obstacleName"].ToString().Equals(treePrefabNameArray[ j ]) == true)
+                { 
+                    tree = treePrefabArray[ j ];
+                    treeName = treePrefabNameArray[ j ];
+                    isEmpty = false;
+                    break;
+                }
+            }
+
+            if (isEmpty == false)
+            {
+                GameObject newTree = (GameObject)Instantiate(tree, pos, Quaternion.identity);
+                newTree.transform.parent = GameObject.Find("Map").transform;
+            }
+            
         }
     }
 
@@ -165,6 +251,7 @@ public class MapEditor : MonoBehaviour {
                 	typeString = "emtpy";
                 }
                 string prefabString = tile.GetComponent<Tile>().prefabName;
+                string obstacleName = tile.GetComponent<Tile>().obstacleName;
                 
             	writer.WriteObjectStart();
             	writer.WritePropertyName("type");
@@ -175,11 +262,16 @@ public class MapEditor : MonoBehaviour {
                 writer.Write(indexY);
                 writer.WritePropertyName("prefabName");
                 writer.Write(prefabString);
+                writer.WritePropertyName("obstacleName");
+                writer.Write(obstacleName);
                 writer.WriteObjectEnd();
             }
         }
+        writer.WriteArrayEnd();
 
         // Debug.Log(sb.ToString());
+        // TODO
+        // 절대경로가 아닌 상대경로로 지정
         System.IO.File.WriteAllText(@"C:\Project\unitydefense\Assets\Resources\map01.json", sb.ToString());
     }
 	
@@ -195,23 +287,35 @@ public class MapEditor : MonoBehaviour {
 				
 				if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
 				{
-                    // 선택된 타일을 먼저 삭제하고 새로운 타일을 그 자리에 생성
-                    int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
-                    int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
+                    if ( hitInfo.collider.tag == "TILE" )
+                    {
+                        // 선택된 타일을 먼저 삭제하고 새로운 타일을 그 자리에 생성
+                        int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
+                        int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
 
-					Destroy ( hitInfo.collider.gameObject );
-                    tileArray[x, y] = null;
+                        Destroy(hitInfo.collider.gameObject);
+                        tileArray[x, y] = null;
 
-					Debug.Log ( "create new tile" );
+                        Debug.Log("create new tile");
 
-					Quaternion rotation = Quaternion.Euler(90, 0, 0);
-					GameObject newTile = (GameObject) Instantiate( selectedTile, hitInfo.collider.transform.position, rotation );
-                    newTile.transform.parent = GameObject.Find("Map").transform;
-                    tileArray[x, y] = newTile;
+                        Quaternion rotation = Quaternion.Euler(90, 0, 0);
+                        GameObject newTile = (GameObject)Instantiate(selectedTile, hitInfo.collider.transform.position, rotation);
+                        newTile.transform.parent = GameObject.Find("Map").transform;
+                        tileArray[x, y] = newTile;
 
-                    newTile.GetComponent<Tile>().indexX = x;
-                    newTile.GetComponent<Tile>().indexY = y;
-                    newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
+                        newTile.GetComponent<Tile>().indexX = x;
+                        newTile.GetComponent<Tile>().indexY = y;
+                        newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
+
+                        for (int i = 0; i < 20; i++)
+                        {
+                            if (selectedTile == tilePrefabArray[i])
+                            {
+                                newTile.GetComponent<Tile>().prefabName = "PavementTile" + (i + 1);
+                                break;
+                            }
+                        }   
+                    }                    
 				}				
 			}
 		}
@@ -226,9 +330,15 @@ public class MapEditor : MonoBehaviour {
 				
 				if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
 				{
-					Debug.Log ( "create new tree" );
+                    if ( hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle == false )
+                    {
+                        Debug.Log("create new tree");
 
-					Instantiate( selectedTree, hitInfo.collider.transform.position, Quaternion.identity );
+                        Instantiate(selectedTree, hitInfo.collider.transform.position, Quaternion.identity);
+
+                        hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
+                        hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = selectedTreeName;
+                    }                    
 				}
 			}
 		}
@@ -243,9 +353,14 @@ public class MapEditor : MonoBehaviour {
 				
 				if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
 				{
-					Debug.Log ( "create new rock" );
+                    if (hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle == false)
+                    {
+                        Debug.Log("create new rock");
 
-					Instantiate( selectedRock, hitInfo.collider.transform.position, Quaternion.identity );
+                        Instantiate(selectedRock, hitInfo.collider.transform.position, Quaternion.identity);
+
+                        hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
+                    }
 				}
 			}
 		}
@@ -278,8 +393,14 @@ public class MapEditor : MonoBehaviour {
 
 	void OnGUI()
 	{
+        // 맵 데이터 불러오기 버튼
+        if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 30, 100, 30), "Load Map"))
+        {
+            LoadMapJSON();
+        }
+
         // 맵 데이터 저장 버튼
-        if (GUI.Button(new Rect(Screen.width-100, Screen.height-30, 100, 30), "Save JSON") )
+        if (GUI.Button(new Rect(Screen.width-100, Screen.height-30, 100, 30), "Save Map") )
         {
             WriteMapJSON();
         }
@@ -307,7 +428,7 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
 
-            selectedTile = null;
+            selectedTile = tilePrefabArray[2];
 		}
 		if (GUI.Button(new Rect(190, 10, 60, 60), tileButtonTexture3))
 		{
@@ -315,7 +436,7 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
 
-            selectedTile = null;
+            selectedTile = tilePrefabArray[3];
 		}
 		if (GUI.Button(new Rect(250, 10, 60, 60), tileButtonTexture4))
 		{
@@ -323,7 +444,7 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
 
-            selectedTile = null;
+            selectedTile = tilePrefabArray[4];
 		}
 		if (GUI.Button(new Rect(310, 10, 60, 60), tileButtonTexture5))
 		{
@@ -331,7 +452,7 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
 
-            selectedTile = null;
+            selectedTile = tilePrefabArray[5];
 		}
 		if (GUI.Button(new Rect(370, 10, 60, 60), tileButtonTexture6))
 		{
@@ -339,7 +460,7 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
 
-            selectedTile = null;
+            selectedTile = tilePrefabArray[6];
 		}
 		if (GUI.Button(new Rect(430, 10, 60, 60), tileButtonTexture7))
 		{
@@ -347,7 +468,7 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
 
-            selectedTile = null;
+            selectedTile = tilePrefabArray[7];
 		}
 		if (GUI.Button(new Rect(490, 10, 60, 60), tileButtonTexture8))
 		{
@@ -355,8 +476,96 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
 
-            selectedTile = null;
+            selectedTile = tilePrefabArray[8];
 		}
+        if (GUI.Button(new Rect(550, 10, 60, 60), tileButtonTexture9))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[9];
+        }
+        if (GUI.Button(new Rect(610, 10, 60, 60), tileButtonTexture10))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[10];
+        }
+        if (GUI.Button(new Rect(670, 10, 60, 60), tileButtonTexture11))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[11];
+        }
+        if (GUI.Button(new Rect(730, 10, 60, 60), tileButtonTexture12))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[12];
+        }
+        if (GUI.Button(new Rect(790, 10, 60, 60), tileButtonTexture13))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[13];
+        }
+        if (GUI.Button(new Rect(850, 10, 60, 60), tileButtonTexture14))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[14];
+        }
+        if (GUI.Button(new Rect(910, 10, 60, 60), tileButtonTexture15))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[15];
+        }
+        if (GUI.Button(new Rect(970, 10, 60, 60), tileButtonTexture16))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[16];
+        }
+        if (GUI.Button(new Rect(1030, 10, 60, 60), tileButtonTexture17))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[17];
+        }
+        if (GUI.Button(new Rect(1090, 10, 60, 60), tileButtonTexture18))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[18];
+        }
+        if (GUI.Button(new Rect(1150, 10, 60, 60), tileButtonTexture19))
+        {
+            isTileBuildMode = true;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+
+            selectedTile = tilePrefabArray[19];
+        }
 
 		// 나무 버튼
 		if (GUI.Button(new Rect(10, 70, 60, 60), "나무 1"))
@@ -364,84 +573,108 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Leafy_01.prefab", typeof(GameObject) );
+
+			selectedTree = treePrefabArray[0];
+            selectedTreeName = treePrefabNameArray[0];
 		}
 		if (GUI.Button(new Rect(70, 70, 60, 60), "나무 2"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Leafy_02.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[1];
+            selectedTreeName = treePrefabNameArray[1];
 		}
 		if (GUI.Button(new Rect(130, 70, 60, 60), "나무 3"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Leafy_03.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[2];
+            selectedTreeName = treePrefabNameArray[2];
 		}
 		if (GUI.Button(new Rect(190, 70, 60, 60), "나무 4"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Leafy_04.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[3];
+            selectedTreeName = treePrefabNameArray[3];
 		}
 		if (GUI.Button(new Rect(250, 70, 60, 60), "나무 5"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Leafy_05.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[4];
+            selectedTreeName = treePrefabNameArray[4];
         }
 		if (GUI.Button(new Rect(310, 70, 60, 60), "나무 6"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Short_01.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[5];
+            selectedTreeName = treePrefabNameArray[5];
         }
 		if (GUI.Button(new Rect(370, 70, 60, 60), "나무 7"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Short_02.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[6];
+            selectedTreeName = treePrefabNameArray[6];
         }
 		if (GUI.Button(new Rect(430, 70, 60, 60), "나무 8"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Short_03.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[7];
+            selectedTreeName = treePrefabNameArray[7];
         }
 		if (GUI.Button(new Rect(490, 70, 60, 60), "나무 9"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Tall_01.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[8];
+            selectedTreeName = treePrefabNameArray[8];
         }
 		if (GUI.Button(new Rect(550, 70, 60, 60), "나무 10"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Tall_02.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[9];
+            selectedTreeName = treePrefabNameArray[9];
         }
 		if (GUI.Button(new Rect(610, 70, 60, 60), "나무 11"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Tall_03.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[10];
+            selectedTreeName = treePrefabNameArray[10];
         }
 		if (GUI.Button(new Rect(670, 70, 60, 60), "나무 12"))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
-			selectedTree = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Cactus_Tall_04.prefab", typeof(GameObject) );
+
+            selectedTree = treePrefabArray[11];
+            selectedTreeName = treePrefabNameArray[11];
         }
         
 		// 바위 버튼
@@ -450,42 +683,48 @@ public class MapEditor : MonoBehaviour {
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
-			selectedRock = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Rock_Cone.prefab", typeof(GameObject) );
+
+            selectedRock = rockPrefabArray[0];
 		}
 		if (GUI.Button(new Rect(70, 130, 60, 60), "바위 2"))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
-			selectedRock = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Rock_Heavy.prefab", typeof(GameObject) );
+
+            selectedRock = rockPrefabArray[1];
 		}
 		if (GUI.Button(new Rect(130, 130, 60, 60), "바위 3"))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
-			selectedRock = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Rock_Large.prefab", typeof(GameObject) );
+
+            selectedRock = rockPrefabArray[2];
 		}
 		if (GUI.Button(new Rect(190, 130, 60, 60), "바위 4"))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
-			selectedRock = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Rock_Medium.prefab", typeof(GameObject) );
+
+            selectedRock = rockPrefabArray[3];
 		}
 		if (GUI.Button(new Rect(250, 130, 60, 60), "바위 5"))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
-			selectedRock = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Rock_Small_01.prefab", typeof(GameObject) );
+
+            selectedRock = rockPrefabArray[4];
 		}
 		if (GUI.Button(new Rect(310, 130, 60, 60), "바위 6"))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
-			selectedRock = (GameObject) Resources.LoadAssetAtPath ( "Assets/05. Models/CactusPack/Prefabs/Rock_Small_02.prefab", typeof(GameObject) );
+
+            selectedRock = rockPrefabArray[5];
 		}
 
     }

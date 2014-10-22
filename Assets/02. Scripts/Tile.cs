@@ -10,6 +10,8 @@ public class Tile : MonoBehaviour {
     public int indexX = 0;
     public int indexY = 0;
     public string prefabName = null;
+    public bool hasObstacle = false;
+    public string obstacleName = null;
 
 	// Use this for initialization
 	void Awake () {
@@ -19,17 +21,5 @@ public class Tile : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-		// 마우스 커서가 가리키는 타일에 하이라이트 색상 변경
-		/*
-		Ray ray = Camera.mainCamera.ScreenPointToRay( Input.mousePosition );
-		RaycastHit hitInfo;
-		
-		if( collider.Raycast( ray, out hitInfo, Mathf.Infinity ) ) {
-			renderer.material.color = highlightColor;
-		}
-		else {
-			renderer.material.color = normalColor;
-		}
-		*/
 	}
 }
