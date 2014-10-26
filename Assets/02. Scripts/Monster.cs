@@ -6,26 +6,37 @@ public class Monster : MonoBehaviour {
 	public float moveSpeed = 0.3f;
 	public float maxDistance = 1000.0f;
 	private Transform endPointTransform;
-	public enum MonsterState { walk, gothit, die };
+	public enum MonsterState { idle, walk, attack, gothit, die };
 	public MonsterState monsterState = MonsterState.walk;
-	public int HP { get; set; }
-    public const int HP_Max = 30;
-	private NavMeshAgent navAgent;
+
+    [HideInInspector]
+    public float HP = 0.0f;
+
+    public const float HP_Max = 30.0f;
+    private Vector3 pointHP = Vector3.zero;
+    private Rect rectHP;
+    public Texture HP_EmptyTexture;
+    public Texture HP_FullTexture;
+
+	// private NavMeshAgent navAgent;
     public const int earnGold = 3;
     public const int earnScore = 10;
     public GameObject bloodEffectPrefab;
     public GUIText goldText = null;
+    [HideInInspector]
+    public Vector3 targetPosition = Vector3.zero;
 
 	// Use this for initialization
 	void Awake () {
-		navAgent = gameObject.GetComponent<NavMeshAgent>();
+		// navAgent = gameObject.GetComponent<NavMeshAgent>();
 
 		endPointTransform = GameObject.Find ("EndPoint").GetComponent<Transform> ();
+        targetPosition = GameObject.Find("HeroTower").GetComponent<Transform>().position;
 
 		// 걷는 애니메이션 바로 시작
 		// animation.Play( "Walk" );
 
-        // HP = HP_Max;
+        HP = HP_Max;
 	}
 
     void OnEnable()
@@ -62,8 +73,28 @@ public class Monster : MonoBehaviour {
                 {
                     if (transform.position.z < endPointTransform.position.z)
                     {
-                        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+                        // 일직선 이동
+                        // transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+
+                        // hero tower를 타겟으로 이동
+                        float distance = (transform.position - LookAtTo(targetPosition)).magnitude;
+                        if ( distance >= 1.0f )
+                        {
+                            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+                        }
+                        else
+                        {
+                            animation.Play("Attack_01");
+                            monsterState = MonsterState.attack;
+                        }
+                        
                     }
+                }
+                break;
+
+            case MonsterState.attack:
+                {
+
                 }
                 break;
 
@@ -120,6 +151,16 @@ public class Monster : MonoBehaviour {
         }
     }
 
+    Vector3 LookAtTo( Vector3 pos )
+    {
+        Vector3 look = Vector3.zero;
+        look.x = pos.x;
+        look.y = transform.position.y;
+        look.z = pos.z;
+        transform.LookAt(look);
+        return look;
+    }
+
 	// void OnCollisionEnter( Collision coll )
     void OnTriggerEnter( Collider coll )
 	{if ( coll.collider.tag == "BULLET" )
@@ -163,6 +204,25 @@ public class Monster : MonoBehaviour {
         blood.transform.parent = this.transform;
         Destroy(blood, 2.0f);
 
+    }
+
+    void OnGUI()
+    {
+        // GUI 몬스터 HP
+        Vector3 pointTransform = Vector3.zero;
+        pointTransform.x = transform.position.x;
+        pointTransform.y = transform.position.y + 1.5f;
+        pointTransform.z = transform.position.z;        
+        pointHP = Camera.main.WorldToScreenPoint(pointTransform);
+        rectHP.width = 100;
+        rectHP.height = 10;
+        rectHP.x = pointHP.x - (rectHP.width / 2);
+        rectHP.y = Screen.height - pointHP.y - (rectHP.height / 2);
+
+        GUI.DrawTexture(rectHP, HP_EmptyTexture);
+        GUI.BeginGroup(rectHP, "");
+        GUI.DrawTexture(new Rect(0, 0, 100 * (HP / HP_Max), rectHP.height), HP_FullTexture);
+        GUI.EndGroup();
     }
 }
 

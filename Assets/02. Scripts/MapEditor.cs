@@ -26,43 +26,17 @@ public class MapEditor : MonoBehaviour {
 
 
     // private GameObjectPool tilePool = new GameObjectPool();
-    public Texture[] rockButtonTexture = new Texture[6];
-    public Texture[] treeButtonTexture = new Texture[12];
-
-	public Texture tileButtonTexture0;
-	public Texture tileButtonTexture1;
-	public Texture tileButtonTexture2;
-	public Texture tileButtonTexture3;
-	public Texture tileButtonTexture4;
-	public Texture tileButtonTexture5;
-	public Texture tileButtonTexture6;
-	public Texture tileButtonTexture7;
-	public Texture tileButtonTexture8;
-    public Texture tileButtonTexture9;
-    public Texture tileButtonTexture10;
-    public Texture tileButtonTexture11;
-    public Texture tileButtonTexture12;
-    public Texture tileButtonTexture13;
-    public Texture tileButtonTexture14;
-    public Texture tileButtonTexture15;
-    public Texture tileButtonTexture16;
-    public Texture tileButtonTexture17;
-    public Texture tileButtonTexture18;
-    public Texture tileButtonTexture19;
-    
-
+    public Texture[] rockButtonTextures = new Texture[6];
+    public Texture[] treeButtonTextures = new Texture[12];
+    public Texture[] tileButtonTextures = new Texture[20];
+   
 	private GameObject selectedTree;
 	private GameObject selectedRock;
-	/*
-	public Texture treeButtonTexture0;
-	public Texture treeButtonTexture1;
-	public Texture treeButtonTexture2;
-	public Texture treeButtonTexture3;
-	*/
-
+	
 	private bool isTileBuildMode = false;
 	private bool isTreeBuildMode = false;
 	private bool isRockBuildMode = false;
+    private bool isEraseMode = false;
 
     public GameObject[,] tileArray = new GameObject[64, 64];
 
@@ -141,6 +115,8 @@ public class MapEditor : MonoBehaviour {
                 newTile.GetComponent<Tile>().indexX = x;
                 newTile.GetComponent<Tile>().indexY = y;
                 newTile.GetComponent<Tile>().prefabName = "PavementTile2";
+                newTile.GetComponent<Tile>().hasObstacle = false;
+                newTile.GetComponent<Tile>().obstacleName = "";
             }
         }
     }
@@ -219,7 +195,7 @@ public class MapEditor : MonoBehaviour {
                         obstacleName = treePrefabNameArray[j];
                         isEmpty = false;
 
-                        Debug.Log("match obstacle name: " + treePrefabNameArray[j]);
+                        // Debug.Log("match obstacle name: " + treePrefabNameArray[j]);
                         break;
                     }
                 }
@@ -235,7 +211,7 @@ public class MapEditor : MonoBehaviour {
                         obstacleName = rockPrefabNameArray[k];
                         isEmpty = false;
 
-                        Debug.Log("match obstacle name: " + rockPrefabNameArray[k]);
+                        // Debug.Log("match obstacle name: " + rockPrefabNameArray[k]);
                         break;
                     }
                 }
@@ -329,7 +305,7 @@ public class MapEditor : MonoBehaviour {
 		if ( isTileBuildMode == true )
 		{
 			// 마우스 클릭한 지점에 타일 생성
-			if (Input.GetMouseButtonDown (0)) 
+			if (Input.GetMouseButtonDown(0)) 
 			{
 				Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
 				RaycastHit hitInfo;
@@ -372,7 +348,7 @@ public class MapEditor : MonoBehaviour {
 		if ( isTreeBuildMode == true )
 		{
 			// 마우스 클릭한 지점에 나무 생성
-			if (Input.GetMouseButtonDown (0)) 
+			if (Input.GetMouseButtonDown(0)) 
 			{
 				Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
 				RaycastHit hitInfo;
@@ -397,7 +373,7 @@ public class MapEditor : MonoBehaviour {
 		if ( isRockBuildMode == true )
 		{
 			// 마우스 클릭한 지점에 바위 생성
-			if (Input.GetMouseButtonDown (0)) 
+			if (Input.GetMouseButtonDown(0)) 
 			{
 				Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
 				RaycastHit hitInfo;
@@ -418,6 +394,45 @@ public class MapEditor : MonoBehaviour {
 				}
 			}
 		}
+
+        if (isEraseMode == true)
+        {
+            // 마우스 클릭한 지점의 오브젝트 삭제
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitInfo;
+
+                if (Physics.Raycast(ray, out hitInfo, 100.0f))
+                {
+                    if ( hitInfo.collider.tag == "TREE" || hitInfo.collider.tag == "ROCK" )
+                    {
+                        Destroy(hitInfo.collider.gameObject);
+                    }
+                    else if ( hitInfo.collider.tag == "TILE" )
+                    {
+                        int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
+                        int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
+
+                        Destroy(hitInfo.collider.gameObject);
+
+                        Quaternion rotation = Quaternion.Euler(90, 0, 0);
+                        GameObject newTile = (GameObject)Instantiate(tilePrefabArray[1], hitInfo.collider.transform.position, rotation);
+
+                        newTile.transform.parent = GameObject.Find("Map").transform;
+
+                        tileArray[x, y] = newTile;
+
+                        newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
+                        newTile.GetComponent<Tile>().indexX = x;
+                        newTile.GetComponent<Tile>().indexY = y;
+                        newTile.GetComponent<Tile>().prefabName = "PavementTile2";
+                        newTile.GetComponent<Tile>().hasObstacle = false;
+                        newTile.GetComponent<Tile>().obstacleName = "";
+                    }
+                }
+            }
+        }
 	}
 
     void OnDrawGizmos()
@@ -457,6 +472,7 @@ public class MapEditor : MonoBehaviour {
         // 맵 데이터 불러오기 버튼
         if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 30, 100, 30), "Load Map"))
         {
+            ClearMap();
             LoadMapJSON();
         }
 
@@ -466,8 +482,25 @@ public class MapEditor : MonoBehaviour {
             WriteMapJSON();
         }
 
+        // 지우기 버튼
+        if (GUI.Button(new Rect(10, Screen.height - 30, 100, 30), "Erase"))
+        {
+            if ( isEraseMode == false )
+            {
+                isEraseMode = true;
+            }
+            else if ( isEraseMode == true )
+            {
+                isEraseMode = false;
+            }
+
+            isTileBuildMode = false;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+        }
+
 		// 타일 버튼
-		if (GUI.Button(new Rect(10, 10, 60, 60), tileButtonTexture0))
+		if (GUI.Button(new Rect(10, 10, 60, 60), tileButtonTextures[0]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -475,7 +508,7 @@ public class MapEditor : MonoBehaviour {
 			
             selectedTile = tilePrefabArray[0];
 		}
-		if (GUI.Button(new Rect(70, 10, 60, 60), tileButtonTexture1))
+        if (GUI.Button(new Rect(70, 10, 60, 60), tileButtonTextures[1]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -483,7 +516,7 @@ public class MapEditor : MonoBehaviour {
 			
             selectedTile = tilePrefabArray[1];
 		}
-		if (GUI.Button(new Rect(130, 10, 60, 60), tileButtonTexture2))
+        if (GUI.Button(new Rect(130, 10, 60, 60), tileButtonTextures[2]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -491,7 +524,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[2];
 		}
-		if (GUI.Button(new Rect(190, 10, 60, 60), tileButtonTexture3))
+        if (GUI.Button(new Rect(190, 10, 60, 60), tileButtonTextures[3]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -499,7 +532,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[3];
 		}
-		if (GUI.Button(new Rect(250, 10, 60, 60), tileButtonTexture4))
+        if (GUI.Button(new Rect(250, 10, 60, 60), tileButtonTextures[4]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -507,7 +540,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[4];
 		}
-		if (GUI.Button(new Rect(310, 10, 60, 60), tileButtonTexture5))
+        if (GUI.Button(new Rect(310, 10, 60, 60), tileButtonTextures[5]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -515,7 +548,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[5];
 		}
-		if (GUI.Button(new Rect(370, 10, 60, 60), tileButtonTexture6))
+        if (GUI.Button(new Rect(370, 10, 60, 60), tileButtonTextures[6]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -523,7 +556,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[6];
 		}
-		if (GUI.Button(new Rect(430, 10, 60, 60), tileButtonTexture7))
+        if (GUI.Button(new Rect(430, 10, 60, 60), tileButtonTextures[7]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -531,7 +564,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[7];
 		}
-		if (GUI.Button(new Rect(490, 10, 60, 60), tileButtonTexture8))
+        if (GUI.Button(new Rect(490, 10, 60, 60), tileButtonTextures[8]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
@@ -539,7 +572,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[8];
 		}
-        if (GUI.Button(new Rect(550, 10, 60, 60), tileButtonTexture9))
+        if (GUI.Button(new Rect(550, 10, 60, 60), tileButtonTextures[9]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -547,7 +580,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[9];
         }
-        if (GUI.Button(new Rect(610, 10, 60, 60), tileButtonTexture10))
+        if (GUI.Button(new Rect(610, 10, 60, 60), tileButtonTextures[10]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -555,7 +588,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[10];
         }
-        if (GUI.Button(new Rect(670, 10, 60, 60), tileButtonTexture11))
+        if (GUI.Button(new Rect(670, 10, 60, 60), tileButtonTextures[11]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -563,7 +596,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[11];
         }
-        if (GUI.Button(new Rect(730, 10, 60, 60), tileButtonTexture12))
+        if (GUI.Button(new Rect(730, 10, 60, 60), tileButtonTextures[12]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -571,7 +604,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[12];
         }
-        if (GUI.Button(new Rect(790, 10, 60, 60), tileButtonTexture13))
+        if (GUI.Button(new Rect(790, 10, 60, 60), tileButtonTextures[13]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -579,7 +612,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[13];
         }
-        if (GUI.Button(new Rect(850, 10, 60, 60), tileButtonTexture14))
+        if (GUI.Button(new Rect(850, 10, 60, 60), tileButtonTextures[14]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -587,7 +620,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[14];
         }
-        if (GUI.Button(new Rect(910, 10, 60, 60), tileButtonTexture15))
+        if (GUI.Button(new Rect(910, 10, 60, 60), tileButtonTextures[15]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -595,7 +628,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[15];
         }
-        if (GUI.Button(new Rect(970, 10, 60, 60), tileButtonTexture16))
+        if (GUI.Button(new Rect(970, 10, 60, 60), tileButtonTextures[16]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -603,7 +636,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[16];
         }
-        if (GUI.Button(new Rect(1030, 10, 60, 60), tileButtonTexture17))
+        if (GUI.Button(new Rect(1030, 10, 60, 60), tileButtonTextures[17]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -611,7 +644,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[17];
         }
-        if (GUI.Button(new Rect(1090, 10, 60, 60), tileButtonTexture18))
+        if (GUI.Button(new Rect(1090, 10, 60, 60), tileButtonTextures[18]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -619,7 +652,7 @@ public class MapEditor : MonoBehaviour {
 
             selectedTile = tilePrefabArray[18];
         }
-        if (GUI.Button(new Rect(1150, 10, 60, 60), tileButtonTexture19))
+        if (GUI.Button(new Rect(1150, 10, 60, 60), tileButtonTextures[19]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
@@ -629,7 +662,7 @@ public class MapEditor : MonoBehaviour {
         }
 
 		// 나무 버튼
-        if (GUI.Button(new Rect(10, 70, 60, 60), treeButtonTexture[0]))
+        if (GUI.Button(new Rect(10, 70, 60, 60), treeButtonTextures[0]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -638,7 +671,7 @@ public class MapEditor : MonoBehaviour {
 			selectedTree = treePrefabArray[0];
             selectedTreeName = treePrefabNameArray[0];
 		}
-        if (GUI.Button(new Rect(70, 70, 60, 60), treeButtonTexture[1]))
+        if (GUI.Button(new Rect(70, 70, 60, 60), treeButtonTextures[1]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -647,7 +680,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[1];
             selectedTreeName = treePrefabNameArray[1];
 		}
-        if (GUI.Button(new Rect(130, 70, 60, 60), treeButtonTexture[2]))
+        if (GUI.Button(new Rect(130, 70, 60, 60), treeButtonTextures[2]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -656,7 +689,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[2];
             selectedTreeName = treePrefabNameArray[2];
 		}
-        if (GUI.Button(new Rect(190, 70, 60, 60), treeButtonTexture[3]))
+        if (GUI.Button(new Rect(190, 70, 60, 60), treeButtonTextures[3]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -665,7 +698,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[3];
             selectedTreeName = treePrefabNameArray[3];
 		}
-        if (GUI.Button(new Rect(250, 70, 60, 60), treeButtonTexture[4]))
+        if (GUI.Button(new Rect(250, 70, 60, 60), treeButtonTextures[4]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -674,7 +707,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[4];
             selectedTreeName = treePrefabNameArray[4];
         }
-        if (GUI.Button(new Rect(310, 70, 60, 60), treeButtonTexture[5]))
+        if (GUI.Button(new Rect(310, 70, 60, 60), treeButtonTextures[5]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -683,7 +716,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[5];
             selectedTreeName = treePrefabNameArray[5];
         }
-        if (GUI.Button(new Rect(370, 70, 60, 60), treeButtonTexture[6]))
+        if (GUI.Button(new Rect(370, 70, 60, 60), treeButtonTextures[6]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -692,7 +725,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[6];
             selectedTreeName = treePrefabNameArray[6];
         }
-        if (GUI.Button(new Rect(430, 70, 60, 60), treeButtonTexture[7]))
+        if (GUI.Button(new Rect(430, 70, 60, 60), treeButtonTextures[7]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -701,7 +734,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[7];
             selectedTreeName = treePrefabNameArray[7];
         }
-        if (GUI.Button(new Rect(490, 70, 60, 60), treeButtonTexture[8]))
+        if (GUI.Button(new Rect(490, 70, 60, 60), treeButtonTextures[8]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -710,7 +743,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[8];
             selectedTreeName = treePrefabNameArray[8];
         }
-        if (GUI.Button(new Rect(550, 70, 60, 60), treeButtonTexture[9]))
+        if (GUI.Button(new Rect(550, 70, 60, 60), treeButtonTextures[9]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -719,7 +752,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[9];
             selectedTreeName = treePrefabNameArray[9];
         }
-        if (GUI.Button(new Rect(610, 70, 60, 60), treeButtonTexture[10]))
+        if (GUI.Button(new Rect(610, 70, 60, 60), treeButtonTextures[10]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -728,7 +761,7 @@ public class MapEditor : MonoBehaviour {
             selectedTree = treePrefabArray[10];
             selectedTreeName = treePrefabNameArray[10];
         }
-        if (GUI.Button(new Rect(670, 70, 60, 60), treeButtonTexture[11]))
+        if (GUI.Button(new Rect(670, 70, 60, 60), treeButtonTextures[11]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
@@ -739,7 +772,7 @@ public class MapEditor : MonoBehaviour {
         }
         
 		// 바위 버튼
-		if (GUI.Button(new Rect(10, 130, 60, 60), rockButtonTexture[0]))
+		if (GUI.Button(new Rect(10, 130, 60, 60), rockButtonTextures[0]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
@@ -748,7 +781,7 @@ public class MapEditor : MonoBehaviour {
             selectedRock = rockPrefabArray[0];
             selectedRockName = rockPrefabNameArray[0];
 		}
-        if (GUI.Button(new Rect(70, 130, 60, 60), rockButtonTexture[1]))
+        if (GUI.Button(new Rect(70, 130, 60, 60), rockButtonTextures[1]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
@@ -757,7 +790,7 @@ public class MapEditor : MonoBehaviour {
             selectedRock = rockPrefabArray[1];
             selectedRockName = rockPrefabNameArray[1];
 		}
-        if (GUI.Button(new Rect(130, 130, 60, 60), rockButtonTexture[2]))
+        if (GUI.Button(new Rect(130, 130, 60, 60), rockButtonTextures[2]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
@@ -766,7 +799,7 @@ public class MapEditor : MonoBehaviour {
             selectedRock = rockPrefabArray[2];
             selectedRockName = rockPrefabNameArray[2];
 		}
-        if (GUI.Button(new Rect(190, 130, 60, 60), rockButtonTexture[3]))
+        if (GUI.Button(new Rect(190, 130, 60, 60), rockButtonTextures[3]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
@@ -775,7 +808,7 @@ public class MapEditor : MonoBehaviour {
             selectedRock = rockPrefabArray[3];
             selectedRockName = rockPrefabNameArray[3];
 		}
-        if (GUI.Button(new Rect(250, 130, 60, 60), rockButtonTexture[4]))
+        if (GUI.Button(new Rect(250, 130, 60, 60), rockButtonTextures[4]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
@@ -784,7 +817,7 @@ public class MapEditor : MonoBehaviour {
             selectedRock = rockPrefabArray[4];
             selectedRockName = rockPrefabNameArray[4];
 		}
-        if (GUI.Button(new Rect(310, 130, 60, 60), rockButtonTexture[5]))
+        if (GUI.Button(new Rect(310, 130, 60, 60), rockButtonTextures[5]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
