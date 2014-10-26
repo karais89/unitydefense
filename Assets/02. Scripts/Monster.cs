@@ -84,7 +84,7 @@ public class Monster : MonoBehaviour {
                         }
                         else
                         {
-                            animation.Play("Attack_01");
+                            animation.CrossFade("Attack_01");
                             monsterState = MonsterState.attack;
                         }
                         
@@ -179,7 +179,7 @@ public class Monster : MonoBehaviour {
                 GameObject.Find("GameManager").GetComponent<GameManager>().gold += earnGold;
 
                 // 죽는 애니메이션 재생
-                animation.Play("Die");
+                animation.CrossFade("Die");
 
                 // gameObject.GetComponentInChildren<CapsuleCollider>().enabled = false;
                 

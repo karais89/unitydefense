@@ -10,10 +10,17 @@ public class TileMap : MonoBehaviour {
 	private int mapHeight = 0;
 	public GameObject testTile;
     public GameObject[,] tileArray = new GameObject[64, 64];
+    private GameObject gridPrefab;
+    private GameObject[,] gridArray = new GameObject[64, 64];
 
 	void Awake() {
 
 		CreateTestMap ();
+
+        gridPrefab = (GameObject)Resources.Load("Prefabs/GridQuad", typeof(GameObject));
+
+        //CreateGrids();
+
 	}
 
 	void CreateTestMap()
@@ -28,12 +35,47 @@ public class TileMap : MonoBehaviour {
 				GameObject newTile = (GameObject) Instantiate ( testTile, pos, rotation);
                 tileArray[x, y] = newTile;
                 // Map 게임오브젝트를 부모로 둔다
-                newTile.transform.parent = GameObject.Find("Map").transform;                
+                newTile.transform.parent = GameObject.Find("Map").transform;
 			}
 		}
 	}
 
+    private void CreateGrids()
+    {
+        for (int y = 0; y < sizeY; y++)
+        {
+            for (int x = 0; x < sizeX; x++)
+            {
+                Vector3 pos = new Vector3(x-1, 0.01f, y);
+                Quaternion rotation = Quaternion.Euler(90, 0, 0);
+                GameObject newGrid = (GameObject) Instantiate(gridPrefab, pos, rotation);
+                // newGrid.SetActive(false);
+                gridArray[x, y] = newGrid;
 
+                // Map 게임오브젝트를 부모로 둔다
+                newGrid.transform.parent = GameObject.Find("Map").transform;
+            }
+        }
+    }
+
+    public void DisplayGridBuildable( bool visible )
+    {
+        for (int y = 0; y < sizeY; y++)
+        {
+            for (int x = 0; x < sizeX; x++)
+            {
+                if ( visible == true )
+                {
+                    gridArray[x, y].SetActive(true);
+                }
+                else if ( visible == false )
+                {
+                    gridArray[x, y].SetActive(false);
+                }
+            }
+        }
+    }
+    
 	// Use this for initialization
 	void OnDrawGizmos () {
 		mapWidth = sizeX * tileWidth;

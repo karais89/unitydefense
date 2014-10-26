@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 	public float createTime = 2.0f;
 	private int monsterCount = 0;
 	private Transform[] spawnTransform = new Transform[5];
-	public static bool isGameOver = false;
+	public bool isGameOver = false;
 	public static List<GameObject> monsterList = new List<GameObject>();
 	// public static List<GameObject> bulletList = new List<GameObject>();
 	private System.Random rand = new System.Random();

@@ -121,6 +121,8 @@ public class TowerManager : MonoBehaviour {
                         GameObject.Find("GameManager").GetComponent<GameManager>().score += newTower.GetComponent<Tower>().GetEarnScore();
 
                         isTileBuildMode = false;
+
+                        // GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable(false);
                     }
 				}
 			}
@@ -154,10 +156,13 @@ public class TowerManager : MonoBehaviour {
 		int buttonHeight = 30;
 		
         // 타워 건설 버튼
-		if (GUI.Button (new Rect (Screen.width - buttonWidth, Screen.height - buttonHeight, buttonWidth, buttonHeight), "Tower1 gold 30")) {
+		if (GUI.Button (new Rect (Screen.width - buttonWidth, Screen.height - buttonHeight, buttonWidth, buttonHeight), "Tower1 gold 30"))
+        {
 			isTileBuildMode = true;
 
             newTowerToBuild.SetActive(true);
+
+            // GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable( true );
 
             // 골드 차감
             int buyGold = GameObject.Find("Tower(Clone)").GetComponent<Tower>().GetBuyGold();
