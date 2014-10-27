@@ -4,28 +4,12 @@ using LitJson;
 using System.Text;
 
 public class MapEditor : MonoBehaviour {
-
-	public int sizeX = 64;
-	public int sizeY = 64;
-    public int tileWidth = 1;
-    public int tileHeight = 1;
-    private int mapWidth = 0;
-    private int mapHeight = 0;
-
-    public TextAsset jsonData;
-
+    
 	public GameObject defaultTile;
-	private GameObject selectedTile;
-    private GameObject[] tilePrefabArray = new GameObject[20];
-    private GameObject[] treePrefabArray = new GameObject[12];
-    private GameObject[] rockPrefabArray = new GameObject[6];
-    private string[] treePrefabNameArray = new string[12];
-    private string[] rockPrefabNameArray = new string[6];
+	private GameObject selectedTile;   
     private string selectedTreeName = null;
     private string selectedRockName = null;
 
-
-    // private GameObjectPool tilePool = new GameObjectPool();
     public Texture[] rockButtonTextures = new Texture[6];
     public Texture[] treeButtonTextures = new Texture[12];
     public Texture[] tileButtonTextures = new Texture[20];
@@ -37,268 +21,16 @@ public class MapEditor : MonoBehaviour {
 	private bool isTreeBuildMode = false;
 	private bool isRockBuildMode = false;
     private bool isEraseMode = false;
-
-    public GameObject[,] tileArray = new GameObject[64, 64];
-
+    
 	// Use this for initialization
-	void Awake () {
+	void Awake () 
+    {
+        GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
 
-        // 프리팹 미리 불러들인다
-        for (int i = 0; i < 20; i++)
-        {
-            string prefabName = "Prefabs/PavementTile" + (i + 1);
-            tilePrefabArray[i] = (GameObject)Resources.Load(prefabName, typeof(GameObject));
-            // Debug.Log("Loading prefab: " + prefabName);
-        }
-
-        treePrefabArray[0] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Leafy_01", typeof(GameObject));
-        treePrefabArray[1] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Leafy_02", typeof(GameObject));
-        treePrefabArray[2] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Leafy_03", typeof(GameObject));
-        treePrefabArray[3] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Leafy_04", typeof(GameObject));
-        treePrefabArray[4] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Leafy_05", typeof(GameObject));
-        treePrefabArray[5] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Short_01", typeof(GameObject));
-        treePrefabArray[6] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Short_02", typeof(GameObject));
-        treePrefabArray[7] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Short_03", typeof(GameObject));
-        treePrefabArray[8] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Tall_01", typeof(GameObject));
-        treePrefabArray[9] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Tall_02", typeof(GameObject));
-        treePrefabArray[10] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Tall_03", typeof(GameObject));
-        treePrefabArray[11] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Tree_Tall_04", typeof(GameObject));
-
-        rockPrefabArray[0] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Cone", typeof(GameObject));
-        rockPrefabArray[1] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Heavy", typeof(GameObject));
-        rockPrefabArray[2] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Large", typeof(GameObject));
-        rockPrefabArray[3] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Medium", typeof(GameObject));
-        rockPrefabArray[4] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Small_01", typeof(GameObject));
-        rockPrefabArray[5] = (GameObject)Resources.Load("Models/CactusPack/Prefabs/Rock_Small_02", typeof(GameObject));
-
-        treePrefabNameArray[0] = "Tree_Leafy_01";
-        treePrefabNameArray[1] = "Tree_Leafy_02";
-        treePrefabNameArray[2] = "Tree_Leafy_03";
-        treePrefabNameArray[3] = "Tree_Leafy_04";
-        treePrefabNameArray[4] = "Tree_Leafy_05";
-        treePrefabNameArray[5] = "Tree_Short_01";
-        treePrefabNameArray[6] = "Tree_Short_02";
-        treePrefabNameArray[7] = "Tree_Short_03";
-        treePrefabNameArray[8] = "Tree_Tall_01";
-        treePrefabNameArray[9] = "Tree_Tall_02";
-        treePrefabNameArray[10] = "Tree_Tall_03";
-        treePrefabNameArray[11] = "Tree_Tall_04";
-
-        rockPrefabNameArray[0] = "Rock_Cone";
-        rockPrefabNameArray[1] = "Rock_Heavy";
-        rockPrefabNameArray[2] = "Rock_Large";
-        rockPrefabNameArray[3] = "Rock_Medium";
-        rockPrefabNameArray[4] = "Rock_Small_01";
-        rockPrefabNameArray[5] = "Rock_Small_02";
-
-
-
-        LoadMapJSON();
+        GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
+        // GameObject.Find("Map").GetComponent<TileMap>().CreateDefaultTiles();
 	}
-
-    void CreateDefaultTiles()
-    {
-        // 나무와 바위가 없는 다수의 디폴트 타일 생성
-        for (int y = 0; y < sizeY; y++)
-        {
-            for (int x = 0; x < sizeX; x++)
-            {
-                Vector3 pos = new Vector3(x, 0, y);
-                Quaternion rotation = Quaternion.Euler(90, 0, 0);
-                GameObject newTile = (GameObject)Instantiate(tilePrefabArray[1], pos, rotation);
-
-                newTile.transform.parent = GameObject.Find("Map").transform;
-
-                tileArray[x, y] = newTile;
-
-                newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
-                newTile.GetComponent<Tile>().indexX = x;
-                newTile.GetComponent<Tile>().indexY = y;
-                newTile.GetComponent<Tile>().prefabName = "PavementTile2";
-                newTile.GetComponent<Tile>().hasObstacle = false;
-                newTile.GetComponent<Tile>().obstacleName = "";
-            }
-        }
-    }
-
-    void LoadMapJSON()
-    {
-        LitJson.JsonData data = LitJson.JsonMapper.ToObject(jsonData.text);
-
-        for ( int i = 0; i < data.Count; i++ )
-        {
-            // JSON 파일에 담긴 데이터들을 가져온다
-            int x = (int) data[i]["indexX"];
-            int y = (int) data[i]["indexY"];
-
-            Tile.TileType type;
-            if (data[i]["type"].ToString().Equals( "empty" ) == true)
-            {
-                type = Tile.TileType.empty;
-            }
-            else if (data[i]["type"].ToString().Equals("walkable") == true)
-            {
-                type = Tile.TileType.walkable;
-            }
-            else if (data[i]["type"].ToString().Equals("obstacle") == true)
-            {
-                type = Tile.TileType.obstacle;
-            }
-            else
-            {
-                type = Tile.TileType.empty;
-            }
-
-            GameObject prefab = null;
-            string prefabName = null;
-            for (int j = 0; j < 20; j++ )
-            {
-                if (data[i]["prefabName"].ToString().Equals("PavementTile"+(j+1)) == true)
-                {
-                    prefab = tilePrefabArray[j];
-                    prefabName = "PavementTile"+(j+1);
-                    break;
-                }
-            }
-
-            // 가져온 정보를 바탕으로 타일을 생성한다
-            Vector3 pos = new Vector3(x, 0, y);
-            Quaternion rotation = Quaternion.Euler(90, 0, 0);
-            GameObject newTile = (GameObject)Instantiate(prefab, pos, rotation);
-
-            newTile.transform.parent = GameObject.Find("Map").transform;
-
-            tileArray[x, y] = newTile;
-
-            newTile.GetComponent<Tile>().indexX = x;
-            newTile.GetComponent<Tile>().indexY = y;
-            newTile.GetComponent<Tile>().type = type;
-            newTile.GetComponent<Tile>().prefabName = prefabName;
-
-            // 나무나 돌이 있다면 타일 위에 생성한다.
-            GameObject obstacle = null;
-            string obstacleName = null;
-            bool isEmpty = true;
-
-            if (data[i]["obstacleName"].ToString().Equals("") == true)
-            {
-                isEmpty = true;                
-            }
-            // 나무
-            else if (data[i]["obstacleName"].ToString().StartsWith("Tree") == true)
-            {
-                for (int j = 0; j < 12; j++)
-                {
-                    if (data[i]["obstacleName"].ToString().Equals( treePrefabNameArray[j] ) == true)
-                    {
-                        obstacle = treePrefabArray[j];
-                        obstacleName = treePrefabNameArray[j];
-                        isEmpty = false;
-
-                        // Debug.Log("match obstacle name: " + treePrefabNameArray[j]);
-                        break;
-                    }
-                }
-            }
-            // 바위
-            else if (data[i]["obstacleName"].ToString().StartsWith("Rock") == true)
-            {
-                for (int k = 0; k < 6; k++)
-                {
-                    if (data[i]["obstacleName"].ToString().Equals( rockPrefabNameArray[k] ) == true)
-                    {
-                        obstacle = rockPrefabArray[k];
-                        obstacleName = rockPrefabNameArray[k];
-                        isEmpty = false;
-
-                        // Debug.Log("match obstacle name: " + rockPrefabNameArray[k]);
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                isEmpty = true;
-            }
-            
-            if (isEmpty == false)
-            {
-                GameObject newObstacle = (GameObject)Instantiate(obstacle, pos, Quaternion.identity);
-                newObstacle.transform.parent = newTile.transform;
-
-                newTile.GetComponent<Tile>().obstacleName = obstacleName;
-            }
-        }
-    }
-
-    void WriteMapJSON()
-    {
-    	StringBuilder sb = new StringBuilder();
-    	LitJson.JsonWriter writer = new LitJson.JsonWriter(sb);
-
-        writer.WriteArrayStart();
-        for (int y = 0; y < sizeY; y++)
-        {
-            for (int x = 0; x < sizeX; x++)
-            {
-            	GameObject tile = tileArray[ x, y ];
-            	string typeString = null;
-                Tile.TileType type = tile.GetComponent<Tile>().type;
-                int indexX = tile.GetComponent<Tile>().indexX;
-                int indexY = tile.GetComponent<Tile>().indexY;
-                if ( type == Tile.TileType.empty )
-                {
-                    typeString = "emtpy";
-                }
-                else if ( type == Tile.TileType.walkable )
-                {
-                	typeString = "walkable";
-                }
-                else if ( type == Tile.TileType.obstacle )
-                {
-                	typeString = "obstacle";
-                }
-                else
-                {
-                	typeString = "emtpy";
-                }
-                string prefabString = tile.GetComponent<Tile>().prefabName;
-                string obstacleName = tile.GetComponent<Tile>().obstacleName;
-                
-            	writer.WriteObjectStart();
-            	writer.WritePropertyName("type");
-                writer.Write(typeString);                
-                writer.WritePropertyName("indexX");
-                writer.Write(indexX);
-                writer.WritePropertyName("indexY");
-                writer.Write(indexY);
-                writer.WritePropertyName("prefabName");
-                writer.Write(prefabString);
-                writer.WritePropertyName("obstacleName");
-                writer.Write(obstacleName);
-                writer.WriteObjectEnd();
-            }
-        }
-        writer.WriteArrayEnd();
-
-        // Debug.Log(sb.ToString());
-        // TODO
-        // 절대경로가 아닌 상대경로로 지정
-        System.IO.File.WriteAllText(@"C:\Project\unitydefense\Assets\Resources\map01.json", sb.ToString());
-    }
-
-
-    void ClearMap()
-    {
-        for (int y = 0; y < sizeY; y++ )
-        {
-            for (int x = 0; x < sizeX; x++)
-            {
-                Destroy(tileArray[x, y].gameObject);
-            }
-        }
-            
-    }
+    
 	
 	// Update is called once per frame
 	void Update () {
@@ -319,14 +51,14 @@ public class MapEditor : MonoBehaviour {
                         int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
 
                         Destroy(hitInfo.collider.gameObject);
-                        tileArray[x, y] = null;
+                        GameObject.Find("Map").GetComponent<TileMap>().tileArray[x, y] = null;                        
 
                         Debug.Log("create new tile");
 
                         Quaternion rotation = Quaternion.Euler(90, 0, 0);
                         GameObject newTile = (GameObject)Instantiate(selectedTile, hitInfo.collider.transform.position, rotation);
                         newTile.transform.parent = GameObject.Find("Map").transform;
-                        tileArray[x, y] = newTile;
+                        GameObject.Find("Map").GetComponent<TileMap>().tileArray[x, y] = newTile;                        
 
                         newTile.GetComponent<Tile>().indexX = x;
                         newTile.GetComponent<Tile>().indexY = y;
@@ -334,12 +66,14 @@ public class MapEditor : MonoBehaviour {
 
                         for (int i = 0; i < 20; i++)
                         {
-                            if (selectedTile == tilePrefabArray[i])
+                            if (selectedTile == GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[i])
                             {
                                 newTile.GetComponent<Tile>().prefabName = "PavementTile" + (i + 1);
                                 break;
                             }
-                        }   
+                        }
+                        newTile.GetComponent<Tile>().hasObstacle = false;
+                        newTile.GetComponent<Tile>().obstacleName = "";
                     }                    
 				}				
 			}
@@ -407,6 +141,9 @@ public class MapEditor : MonoBehaviour {
                 {
                     if ( hitInfo.collider.tag == "TREE" || hitInfo.collider.tag == "ROCK" )
                     {
+                        hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().hasObstacle = false;
+                        hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().obstacleName = "";
+
                         Destroy(hitInfo.collider.gameObject);
                     }
                     else if ( hitInfo.collider.tag == "TILE" )
@@ -417,11 +154,11 @@ public class MapEditor : MonoBehaviour {
                         Destroy(hitInfo.collider.gameObject);
 
                         Quaternion rotation = Quaternion.Euler(90, 0, 0);
-                        GameObject newTile = (GameObject)Instantiate(tilePrefabArray[1], hitInfo.collider.transform.position, rotation);
+                        GameObject newTile = (GameObject)Instantiate(GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[1], hitInfo.collider.transform.position, rotation);
 
                         newTile.transform.parent = GameObject.Find("Map").transform;
 
-                        tileArray[x, y] = newTile;
+                        GameObject.Find("Map").GetComponent<TileMap>().tileArray[x, y] = newTile;
 
                         newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
                         newTile.GetComponent<Tile>().indexX = x;
@@ -434,52 +171,28 @@ public class MapEditor : MonoBehaviour {
             }
         }
 	}
-
-    void OnDrawGizmos()
-    {
-        mapWidth = sizeX * tileWidth;
-        mapHeight = sizeY * tileHeight;
-
-        // draw layer border
-        Gizmos.color = Color.white;
-        Gizmos.DrawLine(Vector3.zero, new Vector3(mapWidth, 0, 0));
-        Gizmos.DrawLine(Vector3.zero, new Vector3(0, 0, mapHeight));
-        Gizmos.DrawLine(new Vector3(mapWidth, 0, 0), new Vector3(mapWidth, 0, mapHeight));
-        Gizmos.DrawLine(new Vector3(0, 0, mapHeight), new Vector3(mapWidth, 0, mapHeight));
-
-        // draw tile cells
-        Gizmos.color = Color.green;
-        for (int i = 1; i < sizeX; i++)
-        {
-            Gizmos.DrawLine(new Vector3(i * tileWidth, 0, 0), new Vector3(i * tileWidth, 0, mapHeight));
-        }
-
-        for (int i = 1; i < sizeY; i++)
-        {
-            Gizmos.DrawLine(new Vector3(0, 0, i * tileHeight), new Vector3(mapWidth, 0, i * tileHeight));
-        }
-    }
+    
 
 	void OnGUI()
 	{
         // 맵 리셋 버튼
         if (GUI.Button(new Rect(Screen.width - 300, Screen.height - 30, 100, 30), "Reset"))
         {
-            ClearMap();
-            CreateDefaultTiles();
+            GameObject.Find("Map").GetComponent<TileMap>().ClearMap();
+            GameObject.Find("Map").GetComponent<TileMap>().CreateDefaultTiles();
         }
 
         // 맵 데이터 불러오기 버튼
         if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 30, 100, 30), "Load Map"))
         {
-            ClearMap();
-            LoadMapJSON();
+            GameObject.Find("Map").GetComponent<TileMap>().ClearMap();
+            GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
         }
 
         // 맵 데이터 저장 버튼
         if (GUI.Button(new Rect(Screen.width-100, Screen.height-30, 100, 30), "Save Map") )
         {
-            WriteMapJSON();
+            GameObject.Find("Map").GetComponent<TileMap>().WriteMapJSON();
         }
 
         // 지우기 버튼
@@ -505,160 +218,180 @@ public class MapEditor : MonoBehaviour {
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
-			
-            selectedTile = tilePrefabArray[0];
+            isEraseMode = false;
+
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[0];
 		}
         if (GUI.Button(new Rect(70, 10, 60, 60), tileButtonTextures[1]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
-			
-            selectedTile = tilePrefabArray[1];
+            isEraseMode = false;
+
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[1];
 		}
         if (GUI.Button(new Rect(130, 10, 60, 60), tileButtonTextures[2]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[2];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[2];
 		}
         if (GUI.Button(new Rect(190, 10, 60, 60), tileButtonTextures[3]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[3];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[3];
 		}
         if (GUI.Button(new Rect(250, 10, 60, 60), tileButtonTextures[4]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[4];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[4];
 		}
         if (GUI.Button(new Rect(310, 10, 60, 60), tileButtonTextures[5]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[5];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[5];
 		}
         if (GUI.Button(new Rect(370, 10, 60, 60), tileButtonTextures[6]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[6];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[6];
 		}
         if (GUI.Button(new Rect(430, 10, 60, 60), tileButtonTextures[7]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[7];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[7];
 		}
         if (GUI.Button(new Rect(490, 10, 60, 60), tileButtonTextures[8]))
 		{
 			isTileBuildMode = true;
 			isTreeBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[8];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[8];
 		}
         if (GUI.Button(new Rect(550, 10, 60, 60), tileButtonTextures[9]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[9];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[9];
         }
         if (GUI.Button(new Rect(610, 10, 60, 60), tileButtonTextures[10]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[10];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[10];
         }
         if (GUI.Button(new Rect(670, 10, 60, 60), tileButtonTextures[11]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[11];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[11];
         }
         if (GUI.Button(new Rect(730, 10, 60, 60), tileButtonTextures[12]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[12];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[12];
         }
         if (GUI.Button(new Rect(790, 10, 60, 60), tileButtonTextures[13]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
-            isRockBuildMode = false;
+            isRockBuildMode = false; 
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[13];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[13];
         }
         if (GUI.Button(new Rect(850, 10, 60, 60), tileButtonTextures[14]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[14];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[14];
         }
         if (GUI.Button(new Rect(910, 10, 60, 60), tileButtonTextures[15]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[15];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[15];
         }
         if (GUI.Button(new Rect(970, 10, 60, 60), tileButtonTextures[16]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[16];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[16];
         }
         if (GUI.Button(new Rect(1030, 10, 60, 60), tileButtonTextures[17]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[17];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[17];
         }
         if (GUI.Button(new Rect(1090, 10, 60, 60), tileButtonTextures[18]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[18];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[18];
         }
         if (GUI.Button(new Rect(1150, 10, 60, 60), tileButtonTextures[19]))
         {
             isTileBuildMode = true;
             isTreeBuildMode = false;
             isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTile = tilePrefabArray[19];
+            selectedTile = GameObject.Find("Map").GetComponent<TileMap>().tilePrefabArray[19];
         }
 
 		// 나무 버튼
@@ -667,108 +400,120 @@ public class MapEditor : MonoBehaviour {
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-			selectedTree = treePrefabArray[0];
-            selectedTreeName = treePrefabNameArray[0];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[0];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[0];
 		}
         if (GUI.Button(new Rect(70, 70, 60, 60), treeButtonTextures[1]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[1];
-            selectedTreeName = treePrefabNameArray[1];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[1];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[1];
 		}
         if (GUI.Button(new Rect(130, 70, 60, 60), treeButtonTextures[2]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[2];
-            selectedTreeName = treePrefabNameArray[2];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[2];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[2];
 		}
         if (GUI.Button(new Rect(190, 70, 60, 60), treeButtonTextures[3]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[3];
-            selectedTreeName = treePrefabNameArray[3];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[3];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[3];
 		}
         if (GUI.Button(new Rect(250, 70, 60, 60), treeButtonTextures[4]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[4];
-            selectedTreeName = treePrefabNameArray[4];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[4];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[4];
         }
         if (GUI.Button(new Rect(310, 70, 60, 60), treeButtonTextures[5]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[5];
-            selectedTreeName = treePrefabNameArray[5];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[5];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[5];
         }
         if (GUI.Button(new Rect(370, 70, 60, 60), treeButtonTextures[6]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[6];
-            selectedTreeName = treePrefabNameArray[6];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[6];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[6];
         }
         if (GUI.Button(new Rect(430, 70, 60, 60), treeButtonTextures[7]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[7];
-            selectedTreeName = treePrefabNameArray[7];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[7];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[7];
         }
         if (GUI.Button(new Rect(490, 70, 60, 60), treeButtonTextures[8]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[8];
-            selectedTreeName = treePrefabNameArray[8];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[8];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[8];
         }
         if (GUI.Button(new Rect(550, 70, 60, 60), treeButtonTextures[9]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[9];
-            selectedTreeName = treePrefabNameArray[9];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[9];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[9];
         }
         if (GUI.Button(new Rect(610, 70, 60, 60), treeButtonTextures[10]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[10];
-            selectedTreeName = treePrefabNameArray[10];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[10];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[10];
         }
         if (GUI.Button(new Rect(670, 70, 60, 60), treeButtonTextures[11]))
 		{
 			isTreeBuildMode = true;
 			isTileBuildMode = false;
 			isRockBuildMode = false;
+            isEraseMode = false;
 
-            selectedTree = treePrefabArray[11];
-            selectedTreeName = treePrefabNameArray[11];
+            selectedTree = GameObject.Find("Map").GetComponent<TileMap>().treePrefabArray[11];
+            selectedTreeName = GameObject.Find("Map").GetComponent<TileMap>().treePrefabNameArray[11];
         }
         
 		// 바위 버튼
@@ -777,54 +522,60 @@ public class MapEditor : MonoBehaviour {
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
+            isEraseMode = false;
 
-            selectedRock = rockPrefabArray[0];
-            selectedRockName = rockPrefabNameArray[0];
+            selectedRock = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabArray[0];
+            selectedRockName = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabNameArray[0];
 		}
         if (GUI.Button(new Rect(70, 130, 60, 60), rockButtonTextures[1]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
+            isEraseMode = false;
 
-            selectedRock = rockPrefabArray[1];
-            selectedRockName = rockPrefabNameArray[1];
+            selectedRock = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabArray[1];
+            selectedRockName = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabNameArray[1];
 		}
         if (GUI.Button(new Rect(130, 130, 60, 60), rockButtonTextures[2]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
+            isEraseMode = false;
 
-            selectedRock = rockPrefabArray[2];
-            selectedRockName = rockPrefabNameArray[2];
+            selectedRock = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabArray[2];
+            selectedRockName = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabNameArray[2];
 		}
         if (GUI.Button(new Rect(190, 130, 60, 60), rockButtonTextures[3]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
+            isEraseMode = false;
 
-            selectedRock = rockPrefabArray[3];
-            selectedRockName = rockPrefabNameArray[3];
+            selectedRock = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabArray[3];
+            selectedRockName = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabNameArray[3];
 		}
         if (GUI.Button(new Rect(250, 130, 60, 60), rockButtonTextures[4]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
+            isEraseMode = false;
 
-            selectedRock = rockPrefabArray[4];
-            selectedRockName = rockPrefabNameArray[4];
+            selectedRock = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabArray[4];
+            selectedRockName = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabNameArray[4];
 		}
         if (GUI.Button(new Rect(310, 130, 60, 60), rockButtonTextures[5]))
 		{
 			isRockBuildMode = true;
 			isTreeBuildMode = false;
 			isTileBuildMode = false;
+            isEraseMode = false;
 
-            selectedRock = rockPrefabArray[5];
-            selectedRockName = rockPrefabNameArray[5];
+            selectedRock = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabArray[5];
+            selectedRockName = GameObject.Find("Map").GetComponent<TileMap>().rockPrefabNameArray[5];
 		}
 
     }

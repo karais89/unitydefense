@@ -36,6 +36,11 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+
+        GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
+
+        GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
+
 		for ( int i = 0; i < 5; i++ )
 		{
 			spawnTransform[i] = GameObject.Find( "SpawnPoint0" + i ).GetComponent<Transform>();
