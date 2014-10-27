@@ -19,7 +19,7 @@ public class TileMap : MonoBehaviour {
 
         gridPrefab = (GameObject)Resources.Load("Prefabs/GridQuad", typeof(GameObject));
 
-        //CreateGrids();
+        CreateGrids();
 
 	}
 
@@ -42,14 +42,14 @@ public class TileMap : MonoBehaviour {
 
     private void CreateGrids()
     {
-        for (int y = 0; y < sizeY; y++)
+        for (int y = 0; y < sizeY; y++)        
         {
-            for (int x = 0; x < sizeX; x++)
+            for (int x = 0; x < sizeX; x++)        
             {
-                Vector3 pos = new Vector3(x-1, 0.01f, y);
+                Vector3 pos = new Vector3(x, 0.01f, y);
                 Quaternion rotation = Quaternion.Euler(90, 0, 0);
                 GameObject newGrid = (GameObject) Instantiate(gridPrefab, pos, rotation);
-                // newGrid.SetActive(false);
+                newGrid.SetActive(false);
                 gridArray[x, y] = newGrid;
 
                 // Map 게임오브젝트를 부모로 둔다

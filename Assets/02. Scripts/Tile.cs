@@ -5,7 +5,7 @@ public class Tile : MonoBehaviour {
 
 	// public Color highlightColor;
 	// private Color normalColor;
-    public enum TileType { empty, walkable, obstacle };
+    public enum TileType { empty, walkable, tower, obstacle };
     public TileType type = TileType.empty;
     public int indexX = 0;
     public int indexY = 0;

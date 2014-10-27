@@ -122,7 +122,7 @@ public class TowerManager : MonoBehaviour {
 
                         isTileBuildMode = false;
 
-                        // GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable(false);
+                        GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable(false);
                     }
 				}
 			}
@@ -162,7 +162,7 @@ public class TowerManager : MonoBehaviour {
 
             newTowerToBuild.SetActive(true);
 
-            // GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable( true );
+            GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable( true );
 
             // 골드 차감
             int buyGold = GameObject.Find("Tower(Clone)").GetComponent<Tower>().GetBuyGold();
