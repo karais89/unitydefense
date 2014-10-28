@@ -1,0 +1,23 @@
+{
+	"Tile":
+	[
+		{
+			"type":"walkable",
+			"indexX":0,
+			"indexY":0,
+			"prefabName":"PavementTile02"
+		},
+		{
+			"type":"walkable",
+			"indexX":1,
+			"indexY":0,
+			"prefabName":"PavementTile02"
+		},
+		{
+			"type":"walkable",
+			"indexX":2,
+			"indexY":0,
+			"prefabName":"PavementTile01"
+		}
+	]
+}
