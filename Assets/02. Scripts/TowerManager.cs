@@ -123,6 +123,7 @@ public class TowerManager : MonoBehaviour {
                         isTileBuildMode = false;
 
                         GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable(false);
+                        newTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
                     }
 				}
 			}
@@ -142,6 +143,8 @@ public class TowerManager : MonoBehaviour {
                         rayCastHit = hitInfo1;
 
                         isVisibleMenu = true;
+
+                        hitInfo1.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(true);
                     }
                 }
             }

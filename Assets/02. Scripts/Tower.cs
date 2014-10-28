@@ -5,7 +5,7 @@ using System.Collections;
 public class Tower : MonoBehaviour {
     public int id = 0;
 	public GameObject firePos;
-	// public GameObject attackRange;
+	// public GameObject attackRangeSphere;
 	public float attackRange = 3.0f;
 	public float fireTerm = 1.0f;
 	public GameObject targetMonster = null;
@@ -35,22 +35,10 @@ public class Tower : MonoBehaviour {
     {
         return bulletDamage;
     }
+
 	// Use this for initialization
 	void Awake () {
 		
-		// InvokeRepeating("GetClosestEnemy", 0, 1.0f);
-		
-        // TODO
-		// 공격 범위 표시
-		// attackRange = gameObject.GetComponent( "AttackRange" ) as GameObject;
-		// attackRange = gameObject.GetComponentInChildren<AttackRange>;
-		// attackRange.renderer.enabled = true;
-		// attackRange.renderer.material.color = Color.green;
-		/*
-		float alpha = 0.5f;
-		attackRange.renderer.material.color.a = alpha;
-		*/
-
         bullet = (GameObject)Resources.Load("Prefabs/bullet", typeof(GameObject));
 
         pool.Create(bullet, 10);
@@ -59,6 +47,18 @@ public class Tower : MonoBehaviour {
 		StartCoroutine("CreateBullet");
 		
 	}
+
+    void Start()
+    {
+        /*
+        // 공격 범위 표시
+        //attackRangeSphere = GameObject.Find("AttackRangeSphere");
+        attackRangeSphere.renderer.enabled = false;
+        Color rangeColor = Color.green;
+        rangeColor.a = 0.5f;
+        attackRangeSphere.renderer.material.color = rangeColor;
+         */ 
+    }
 
     void OnApplicationQuit()
     {
@@ -69,6 +69,20 @@ public class Tower : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void DisplayAttackRangeSphere( bool visible )
+    {
+        /*
+        if ( visible == true )
+        {
+            attackRangeSphere.renderer.enabled = true;
+        }
+        else if ( visible == false )
+        {
+            attackRangeSphere.renderer.enabled = false;
+        }
+         */
+    }
 	
 	IEnumerator CreateBullet()
 	{

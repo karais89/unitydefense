@@ -9,10 +9,11 @@ public class HeroTower : MonoBehaviour {
     private Vector3 pointHP = Vector3.zero;
     private Rect rectHP;
     public Texture HP_EmptyTexture;
-    public Texture HP_FullTexture;
+    public Texture HP_FullTexture;    
 
     void Awake()
     {
+        
         HP = HP_Max;
     }
 

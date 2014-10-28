@@ -11,8 +11,10 @@ public class TileMap : MonoBehaviour {
 	private int mapWidth = 0;
 	private int mapHeight = 0;
     public GameObject[,] tileArray = new GameObject[64, 64];
-    private GameObject gridPrefab;
+    private GameObject gridPrefab;    
     private GameObject[,] gridArray = new GameObject[64, 64];
+    private GameObject gridDisablePrefab;
+    private GameObject[,] gridDisableArray = new GameObject[64, 64];
     public TextAsset jsonData;
     public GameObject[] tilePrefabArray = new GameObject[20];
     public GameObject[] treePrefabArray = new GameObject[12];
@@ -29,6 +31,7 @@ public class TileMap : MonoBehaviour {
 		// CreateTestMap ();
 
         gridPrefab = (GameObject)Resources.Load("Prefabs/GridQuad", typeof(GameObject));
+        gridDisablePrefab = (GameObject)Resources.Load("Prefabs/GridDisable", typeof(GameObject));
 
         CreateGrids();
 
@@ -111,6 +114,9 @@ public class TileMap : MonoBehaviour {
 		}
 	}
 
+    /// <summary>
+    /// JSON으로 저장된 맵 데이터를 불러들여 게임 오브젝트를 생성한다.
+    /// </summary>
     public void LoadMapJSON()
     {
         LitJson.JsonData data = LitJson.JsonMapper.ToObject(jsonData.text);
@@ -305,7 +311,14 @@ public class TileMap : MonoBehaviour {
 
                 // Map 게임오브젝트를 부모로 둔다
                 newGrid.transform.parent = GameObject.Find("Map").transform;
-               
+
+                // 건설 불가능한 영역의 그리드를 생성한다.
+                GameObject newGridDisable = (GameObject)Instantiate(gridDisablePrefab, pos, rotation);
+                newGridDisable.SetActive(false);
+                gridDisableArray[x, y] = newGridDisable;
+
+                // Map 게임오브젝트를 부모로 둔다
+                newGridDisable.transform.parent = GameObject.Find("Map").transform;
             }
         }
     }
@@ -331,6 +344,15 @@ public class TileMap : MonoBehaviour {
                 else if (tileArray[x, y].GetComponent<Tile>().hasObstacle == true)
                 {
                     gridArray[x, y].SetActive(false);
+
+                    if ( visible == true )
+                    {                        
+                        gridDisableArray[x, y].SetActive(true);
+                    }
+                    else if ( visible == false )
+                    {
+                        gridDisableArray[x, y].SetActive(false);
+                    }                    
                 }
             }
         }
