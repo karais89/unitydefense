@@ -37,6 +37,9 @@ public class TileMap : MonoBehaviour {
 
 	}
 
+    /// <summary>
+    /// 리소스 프리팹들을 불러들인다.
+    /// </summary>
     public void LoadResources()
     {
         // 프리팹 미리 불러들인다
@@ -88,9 +91,11 @@ public class TileMap : MonoBehaviour {
         rockPrefabNameArray[5] = "Rock_Small_02";
     }
 
+    /// <summary>
+    /// 나무와 바위가 없는 다수의 디폴트 타일 생성
+    /// </summary>
     public void CreateDefaultTiles()
     {
-        // 나무와 바위가 없는 다수의 디폴트 타일 생성
 		for (int y = 0; y < sizeY; y++) 
 		{
 			for (int x = 0; x < sizeX; x++) 
@@ -229,6 +234,9 @@ public class TileMap : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 맵 데이터를 JSON으로 저장한다.
+    /// </summary>
     public void WriteMapJSON()
     {
         StringBuilder sb = new StringBuilder();
@@ -285,6 +293,9 @@ public class TileMap : MonoBehaviour {
         System.IO.File.WriteAllText(@"C:\Project\unitydefense\Assets\Resources\map01.json", sb.ToString());
     }
 
+    /// <summary>
+    /// 타일들을 모두 파괴한다.
+    /// </summary>
     public void ClearMap()
     {
         for (int y = 0; y < sizeY; y++)
@@ -297,6 +308,9 @@ public class TileMap : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 타일 위에 보이는 그리드를 생성한다.
+    /// </summary>
     private void CreateGrids()
     {
         for (int y = 0; y < sizeY; y++)        
@@ -323,6 +337,10 @@ public class TileMap : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 건설 가능한 타일과 불가능한 타일에 그리드를 보여줄지 설정한다.
+    /// </summary>
+    /// <param name="visible"></param>
     public void DisplayGridBuildable( bool visible )
     {
         for (int y = 0; y < sizeY; y++)
@@ -358,7 +376,9 @@ public class TileMap : MonoBehaviour {
         }
     }
     
-	// Use this for initialization
+	/// <summary>
+	/// Gizmo 그리드를 그린다.
+	/// </summary>
 	void OnDrawGizmos () {
 		mapWidth = sizeX * tileWidth;
 		mapHeight = sizeY * tileHeight;

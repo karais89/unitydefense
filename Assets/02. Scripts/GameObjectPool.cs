@@ -25,7 +25,7 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
         }
     }
     
-    // 지정한 개수만큼 게임 오브젝트를 생성해서 메모리 풀 생성
+    /// 지정한 개수만큼 게임 오브젝트를 생성해서 메모리 풀 생성
     public bool Create(GameObject original, int maxCount)
     {
         this.originalObject = original;
@@ -40,7 +40,7 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
         return true;
     }
 
-    // 게임 오브젝트들의 부모를 지정한다.
+    /// 게임 오브젝트들의 부모를 지정한다.
     public bool SetParent( Transform parent )
     {
         if ( parent == null )
@@ -60,7 +60,7 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
         return true;
     }
 
-    // 리스트에 담긴 게임 오브젝트를 반환
+    /// 리스트에 담긴 게임 오브젝트를 반환
     public GameObject NewItem()
     {
         if ( list == null )
@@ -93,7 +93,7 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
         return null;
     }
 
-    // 해당 게임 오브젝트를 비활성화 시킨다.
+    /// 해당 게임 오브젝트를 비활성화 시킨다.
     public bool RemoveItem( GameObject gameObject )
     {
         if ( list == null )
@@ -117,7 +117,7 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
         return true;
     }
 
-    // 새로운 게임 오브젝트를 리스트에 추가
+    /// 새로운 게임 오브젝트를 리스트에 추가
     public void InsertItem(GameObject gameObject)
     {
         if ( gameObject == null)
@@ -129,7 +129,7 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
         list.Add(gameObject);
     }
 
-    // 모든 게임 오브젝트들을 비활성화
+    /// 모든 게임 오브젝트들을 비활성화
     public void DeactivateItems()
     {
         foreach ( GameObject item in list )
@@ -138,7 +138,7 @@ public class GameObjectPool : IEnumerable, System.IDisposable {
         }
     }
 
-    // 실제로 게임 오브젝트를 파괴하고 리스트를 비운다
+    /// 실제로 게임 오브젝트를 파괴하고 리스트를 비운다
     public void Dispose()
     {
         foreach( GameObject item in list )

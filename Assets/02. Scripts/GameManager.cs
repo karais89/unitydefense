@@ -58,6 +58,11 @@ public class GameManager : MonoBehaviour {
         pool.SetParent(GameObject.Find("Enemy").transform);
 	}
 
+
+    /// <summary>
+    /// 일정 시간 간격을 두고 몬스터를 생성한다.
+    /// </summary>
+    /// <returns></returns>
 	IEnumerator CreateMonster()
 	{
 		while ( isGameOver == false )

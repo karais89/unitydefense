@@ -151,6 +151,11 @@ public class Monster : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 타겟 pos을 향해 바라본다.
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     Vector3 LookAtTo( Vector3 pos )
     {
         Vector3 look = Vector3.zero;
@@ -161,7 +166,7 @@ public class Monster : MonoBehaviour {
         return look;
     }
 
-	// void OnCollisionEnter( Collision coll )
+	
     void OnTriggerEnter( Collider coll )
 	{if ( coll.collider.tag == "BULLET" )
 		{
@@ -198,6 +203,11 @@ public class Monster : MonoBehaviour {
 		}
 	}
 
+
+    /// <summary>
+    /// 지정된 위치에 피 이펙트를 생성한다.
+    /// </summary>
+    /// <param name="position"></param>
     void CreateBloodEffect( Vector3 position )
     {
         GameObject blood = (GameObject)Instantiate(bloodEffectPrefab, position, Quaternion.identity);

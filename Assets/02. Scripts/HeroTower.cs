@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HeroTower : MonoBehaviour {
     [HideInInspector]
-    public float HP = 0.0f;
+    public float HP = 0.0f;     // 현재 체력
 
     public float HP_Max = 200.0f;
     private Vector3 pointHP = Vector3.zero;

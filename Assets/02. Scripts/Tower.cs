@@ -84,6 +84,10 @@ public class Tower : MonoBehaviour {
          */
     }
 	
+    /// <summary>
+    /// 일정 시간 간격으로 총알을 생성한다.
+    /// </summary>
+    /// <returns></returns>
 	IEnumerator CreateBullet()
 	{
 		while(true)
@@ -120,6 +124,9 @@ public class Tower : MonoBehaviour {
 		}
 	}
 	
+    /// <summary>
+    /// 총알을 발사할 타겟 몬스터를 검사한다.
+    /// </summary>
 	void CheckTargetRange()
 	{
 		if (targetMonster == null) 
@@ -138,6 +145,10 @@ public class Tower : MonoBehaviour {
 		}
 	}
 	
+    /// <summary>
+    /// 타워에 가장 가까이에 있는 몬스터를 반환한다.
+    /// </summary>
+    /// <returns></returns>
 	public GameObject GetClosestMonster()
 	{
 		if ( targetMonster != null )
@@ -159,6 +170,9 @@ public class Tower : MonoBehaviour {
         return targetMonster;
 	}
 
+    /// <summary>
+    /// 타워를 업그레이드 한다.
+    /// </summary>
     public void Upgrade()
     {
         // 임시로 총알 데미지를 두배로 올림

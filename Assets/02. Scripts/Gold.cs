@@ -60,12 +60,20 @@ public class CsScore : MonoBehaviour {
         
 	}
 
+
+    /// <summary>
+    /// 골드 텍스트 이펙트를 보여주기 시작한다.
+    /// </summary>
     public void StartDisplay()
     {
         isVisible = true;
         StartCoroutine("DisplayGold");
     }
 
+    /// <summary>
+    /// 골드 텍스트 이펙트를 보여준다.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DisplayGold()
     {
         yield return new WaitForSeconds(displayDelay);
