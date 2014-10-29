@@ -5,7 +5,7 @@ using System.Collections;
 public class Tower : MonoBehaviour {
     public int id = 0;
 	public GameObject firePos;
-	// public GameObject attackRangeSphere;
+	public GameObject attackRangeSphere;
 	public float attackRange = 3.0f;
 	public float fireTerm = 1.0f;
 	public GameObject targetMonster = null;
@@ -50,14 +50,13 @@ public class Tower : MonoBehaviour {
 
     void Start()
     {
-        /*
+        
         // 공격 범위 표시
-        //attackRangeSphere = GameObject.Find("AttackRangeSphere");
         attackRangeSphere.renderer.enabled = false;
         Color rangeColor = Color.green;
-        rangeColor.a = 0.5f;
+        rangeColor.a = 0.3f;
         attackRangeSphere.renderer.material.color = rangeColor;
-         */ 
+        
     }
 
     void OnApplicationQuit()
@@ -72,7 +71,7 @@ public class Tower : MonoBehaviour {
 
     public void DisplayAttackRangeSphere( bool visible )
     {
-        /*
+        
         if ( visible == true )
         {
             attackRangeSphere.renderer.enabled = true;
@@ -81,7 +80,7 @@ public class Tower : MonoBehaviour {
         {
             attackRangeSphere.renderer.enabled = false;
         }
-         */
+        
     }
 	
     /// <summary>

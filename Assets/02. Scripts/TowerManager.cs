@@ -40,8 +40,10 @@ public class TowerManager : MonoBehaviour {
 
         // 건설할 타워를 타워 관리자의 차일드로 추가
         newTowerToBuild.transform.parent = this.transform;
+        newTowerToBuild.transform.position = new Vector3(99, 0, 99);
 
-        newTowerToBuild.SetActive(false);
+        //newTowerToBuild.SetActive(false);
+        newTowerToBuild.renderer.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -104,6 +106,7 @@ public class TowerManager : MonoBehaviour {
 
 				if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
 				{
+                    
                     // 타일을 선택한 경우에만 타워 생성
                     if ( hitInfo.transform.tag == "TILE" )
                     {
@@ -124,6 +127,10 @@ public class TowerManager : MonoBehaviour {
 
                         GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable(false);
                         newTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+
+                        hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.obstacle;
+                        hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
+                        hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = "Tower";
                     }
 				}
 			}
@@ -144,7 +151,7 @@ public class TowerManager : MonoBehaviour {
 
                         isVisibleMenu = true;
 
-                        hitInfo1.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(true);
+                        rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(true);
                     }
                 }
             }
@@ -163,13 +170,16 @@ public class TowerManager : MonoBehaviour {
         {
 			isTileBuildMode = true;
 
-            newTowerToBuild.SetActive(true);
+            // newTowerToBuild.SetActive(true);
+            newTowerToBuild.renderer.enabled = true;
 
             GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable( true );
 
             // 골드 차감
-            int buyGold = GameObject.Find("Tower(Clone)").GetComponent<Tower>().GetBuyGold();
+            int buyGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
             GameObject.Find("GameManager").GetComponent<GameManager>().gold -= buyGold;
+
+            rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
 		}
 
 		
@@ -186,11 +196,18 @@ public class TowerManager : MonoBehaviour {
                 isVisibleMenu = false;
 
                 // 골드 증가
-                int sellGold = GameObject.Find("Tower(Clone)").GetComponent<Tower>().GetBuyGold();
+                int sellGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
                 GameObject.Find("GameManager").GetComponent<GameManager>().gold += sellGold;
 
                 // Destroy(rayCastHit.collider.gameObject);
-                rayCastHit.collider.gameObject.SetActive(false);
+                /*
+                rayCastHit.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.walkable;
+                rayCastHit.collider.gameObject.GetComponent<Tile>().hasObstacle = false;
+                rayCastHit.collider.gameObject.GetComponent<Tile>().obstacleName = "";
+                */
+                // rayCastHit.collider.gameObject.SetActive(false);
+
+                Destroy(rayCastHit.collider.gameObject);
             }
             // 타워 업그레이드 버튼
             if (GUI.Button(new Rect(centerX, centerY+buttonHeight, buttonWidth, buttonHeight), "Upgrade Tower"))
@@ -198,8 +215,10 @@ public class TowerManager : MonoBehaviour {
                 isVisibleMenu = false;
 
                 // 레벨 1 증가
-                GameObject.Find("Tower(Clone)").GetComponent<Tower>().level += 1;
+                rayCastHit.collider.gameObject.GetComponent<Tower>().level += 1;
                 rayCastHit.collider.gameObject.GetComponent<Tower>().Upgrade();
+
+                rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
 
                 // TODO
                 // 
@@ -208,6 +227,7 @@ public class TowerManager : MonoBehaviour {
             if (GUI.Button(new Rect(centerX, centerY + buttonHeight * 2, buttonWidth, buttonHeight), "Cancel"))
             {
                 isVisibleMenu = false;
+                rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
             }
         }
         

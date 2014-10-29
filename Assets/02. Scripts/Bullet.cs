@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour {
 	public int id = 0;
-	public static int damage = 10;
+	public static int damage = 10;    
+    /// 속도    
 	public float speed = 0.5f;
 	public GameObject nearMonster;
 	public GameObject parentObject;
