@@ -10,7 +10,7 @@ public class SceneLoading : MonoBehaviour {
 	public UILabel Tip_Label2;
 	public UILabel Tip_Label3;
 
-	AsyncOperation async;
+
 	float	progressRounded;
 
 
@@ -43,30 +43,34 @@ public class SceneLoading : MonoBehaviour {
 		StartCoroutine(load());
 
 	}
-
+	public AsyncOperation async = null;
 	IEnumerator load(){
-		Application.backgroundLoadingPriority = ThreadPriority.Low;
+		//Application.backgroundLoadingPriority = ThreadPriority.Low;
 		async = Application.LoadLevelAsync ("scPlay");
 		async.allowSceneActivation = false;//로딩완료후 자동으로넘어가지않도록한다.
-		
 		while(!async.isDone){
 			float progress = async.progress * 100.0f;
 			progressRounded = Mathf.RoundToInt(progress);
 			if (async.progress >= 0.9f) {//async.progress는 0.9이상은표현못한다.
 				_loadingBar.value = 1.0f;
 				Persent_Label.text = "100";
-				yield return new WaitForSeconds(0.1F);//로딩완료시 0.1초 쉬어주고 씬넘긴다.
+				//yield return new WaitForSeconds(0.1F);//로딩완료시 0.1초 쉬어주고 씬넘긴다.
+				//윗부분 현재버그라서 뺌 
 				async.allowSceneActivation = true;
+				yield return null;
 			} else {
 				_loadingBar.value = progressRounded * 0.01f;
 				Persent_Label.text = progressRounded.ToString();
+				yield return null;
 			}
-			yield return null;
 		}
-		
+		yield return null;
 	}
 
 
+	void UpDate(){
+
+	}
 
 
 
