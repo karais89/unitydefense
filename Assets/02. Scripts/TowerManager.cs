@@ -176,10 +176,12 @@ public class TowerManager : MonoBehaviour {
             GameObject.Find("Map").GetComponent<TileMap>().DisplayGridBuildable( true );
 
             // 골드 차감
-            int buyGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
+            int buyGold = GameObject.Find("Tower(Clone)").GetComponent<Tower>().GetBuyGold();
+            //int buyGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
             GameObject.Find("GameManager").GetComponent<GameManager>().gold -= buyGold;
 
-            rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
+            
+            // rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
 		}
 
 		
