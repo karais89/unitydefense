@@ -121,7 +121,7 @@ public class TowerManager : MonoBehaviour {
 
                         towerList.Add(newTower);
 
-                        GameObject.Find("GameManager").GetComponent<GameManager>().score += newTower.GetComponent<Tower>().GetEarnScore();
+						GameManager.score += newTower.GetComponent<Tower>().GetEarnScore();
 
                         isTileBuildMode = false;
 
@@ -178,7 +178,7 @@ public class TowerManager : MonoBehaviour {
             // 골드 차감
             int buyGold = GameObject.Find("Tower(Clone)").GetComponent<Tower>().GetBuyGold();
             //int buyGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
-            GameObject.Find("GameManager").GetComponent<GameManager>().gold -= buyGold;
+            GameManager.gold -= buyGold;
 
             
             // rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
@@ -199,7 +199,7 @@ public class TowerManager : MonoBehaviour {
 
                 // 골드 증가
                 int sellGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
-                GameObject.Find("GameManager").GetComponent<GameManager>().gold += sellGold;
+                GameManager.gold += sellGold;
 
                 // Destroy(rayCastHit.collider.gameObject);
                 /*

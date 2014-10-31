@@ -28,7 +28,7 @@ public class HeroTower : MonoBehaviour {
         // HP가 모두 소모되면 게임 오버 처리
 	    if ( HP <= 0 )
         {
-            GameObject.Find("GameManager").GetComponent<GameManager>().isGameOver = true;
+			GameManager.isGameOver = true;
 
             Time.timeScale = 0.0f;
         }

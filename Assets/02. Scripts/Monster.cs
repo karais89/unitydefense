@@ -66,65 +66,72 @@ public class Monster : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
+		switch ( monsterState )
+		{
+		case MonsterState.walk:
+		{
+			if (transform.position.z < endPointTransform.position.z)
+			{
+				// 일직선 이동
+				// transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+				
+				// hero tower를 타겟으로 이동
+				float distance = (transform.position - LookAtTo(targetPosition)).magnitude;
+				if ( distance >= 1.0f )
+				{
+					transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+				}
+				else
+				{
+					animation.CrossFade("Attack_01");
+					monsterState = MonsterState.attack;
+				}
+				
+			}
+		}
+			break;
+			
+		case MonsterState.attack:
+		{
+			
+		}
+			break;
+			
+		case MonsterState.die:
+		{
+			if ( animation.isPlaying == false )
+			{
+				
+				
+				
+				
+				//사용이끝난 오브젝트 큐로 반환
+				GameManager.insertObjet(this.gameObject);
+				/*
+                GameObjectPool pool = GameObject.Find("GameManager").GetComponent<GameManager>().GetPool();
+                pool.RemoveItem(this.gameObject);*/
+				
+				/*
+                Vector3 initialPos = transform.position;
+                initialPos.z = 0;
+                transform.position = initialPos;
 
-        switch ( monsterState )
-        {
-            case MonsterState.walk:
-                {
-                    if (transform.position.z < endPointTransform.position.z)
-                    {
-                        // 일직선 이동
-                        // transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
-
-                        // hero tower를 타겟으로 이동
-                        float distance = (transform.position - LookAtTo(targetPosition)).magnitude;
-                        if ( distance >= 1.0f )
-                        {
-                            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
-                        }
-                        else
-                        {
-                            animation.CrossFade("Attack_01");
-                            monsterState = MonsterState.attack;
-                        }
-                        
-                    }
-                }
-                break;
-
-            case MonsterState.attack:
-                {
-
-                }
-                break;
-
-            case MonsterState.die:
-                {
-                    if ( animation.isPlaying == false )
-                    {
-                        GameObjectPool pool = GameObject.Find("GameManager").GetComponent<GameManager>().GetPool();
-                        pool.RemoveItem(this.gameObject);
-
-                        /*
-                        Vector3 initialPos = transform.position;
-                        initialPos.z = 0;
-                        transform.position = initialPos;
-
-                        gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
-                        monsterState = MonsterState.walk;
-                        animation.Play("Walk");
-                        HP = HP_Max;
-                        */
-                    }
-                }
-                break;
-
-            default:
-                {
-
-                }
-                break;
-        }
+                gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
+                monsterState = MonsterState.walk;
+                animation.Play("Walk");
+                HP = HP_Max;
+                 */
+			}
+		}
+			break;
+			
+		default:
+		{
+			
+		}
+			break;
+		}
 		
 	}
 
@@ -180,8 +187,8 @@ public class Monster : MonoBehaviour {
                 Debug.Log("monster died~");
 
                 monsterState = MonsterState.die;
-                GameObject.Find("GameManager").GetComponent<GameManager>().score += earnScore;
-                GameObject.Find("GameManager").GetComponent<GameManager>().gold += earnGold;
+				GameManager.score += earnScore;
+				GameManager.gold += earnGold;
 
                 // 죽는 애니메이션 재생
                 animation.CrossFade("Die");
@@ -196,9 +203,15 @@ public class Monster : MonoBehaviour {
 
                 // goldText.gameObject.GetComponent<Gold>().StartDisplay();
             }
-			
+
+
+			//총알 오브젝트를 삭제하지않고 게임매니저통합에서 재사용
+			//사용이끝난 오브젝트 큐로 반환
+			GameManager.insertObjet(coll.gameObject);
+
+			//사용안함
 			// 총알 오브젝트를 삭제하지 않고 타워에서 재사용
-            coll.gameObject.SetActive(false);
+            //coll.gameObject.SetActive(false);
 
 		}
 	}

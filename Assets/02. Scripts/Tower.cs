@@ -15,7 +15,9 @@ public class Tower : MonoBehaviour {
     public int sellGold = 10;
     public int level = 1;
     public int bulletDamage = 10;
-    private GameObjectPool pool = new GameObjectPool();
+   
+	//사용안함
+	//private GameObjectPool pool = new GameObjectPool();
     private GameObject bullet = null;
     
 
@@ -38,11 +40,11 @@ public class Tower : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		
-        bullet = (GameObject)Resources.Load("Prefabs/bullet", typeof(GameObject));
 
-        pool.Create(bullet, 10);
-        pool.SetParent(this.transform);
+		//사용안함
+        //bullet = (GameObject)Resources.Load("Prefabs/bullet", typeof(GameObject));
+        //pool.Create(bullet, 10);
+        //pool.SetParent(this.transform);
 		
 		StartCoroutine("CreateBullet");
 		
@@ -59,11 +61,13 @@ public class Tower : MonoBehaviour {
         
     }
 
-    void OnApplicationQuit()
-    {
-        pool.Dispose();
-    }
-	
+	//사용안함
+    //void OnApplicationQuit()
+    //{
+    //    pool.Dispose();
+    //}
+
+
 	// Update is called once per frame
 	void Update () {
 		
@@ -103,7 +107,12 @@ public class Tower : MonoBehaviour {
                 bulletCount++;
 				// Debug.Log ( "create bullet" );
 
-                GameObject newBullet = pool.NewItem();
+               
+				//사용안함
+				//GameObject newBullet = pool.NewItem();
+
+				//총알오브젝트생성 혹은 꺼내오기
+				GameObject newBullet = GameManager.createObjet(GameManager.bullet_PrefabName);
                 newBullet.transform.position = firePos.transform.position;
                 newBullet.transform.rotation = Quaternion.identity;
 				// bullet.transform.Rotate( 90, 0, 0 );

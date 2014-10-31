@@ -5,23 +5,129 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 	// public GameObject waypoint;
 
-	private GameObject monsterPrefab = null;
+	//사용안함
+	//private GameObject monsterPrefab = null; 
+
 	public float createTime = 2.0f;
 	private int monsterCount = 0;
 	private Transform[] spawnTransform = new Transform[5];
-	public bool isGameOver = false;
-	public static List<GameObject> monsterList = new List<GameObject>();
-	// public static List<GameObject> bulletList = new List<GameObject>();
+	public static bool isGameOver = false;
+
 
 
 	private System.Random rand = new System.Random();
 
+
+	/*private static GameManager _instance;
+	
+	public static GameManager get(){
+		if(_instance == null) 
+			_instance = GameManager.FindObjectOfType(typeof(GameManager)) as GameManager; 
+		
+		return _instance; 
+	}*/
+	
+
+	//큐 선언 - 프리팹을 재활용할 용도
+	//개인적으론 static 보단 싱글톤이 좋은뎀 ㅋㅋ static다 달아줘야함 ㅠ 
+	///몬스터큐
+	public static Queue<GameObject> monster_Queue = new Queue<GameObject>();
+	///총알큐
+	public static Queue<GameObject> bullet_Queue = new Queue<GameObject>();
+	///몬스터 리스트
+	public static List<GameObject> monsterList = new List<GameObject>();
+
+    ///몬스터를 담아둘 폴더오브젝트 
+	private static Transform enemyFolder = null;//파인드는 유니티에 무리를 주는행위라서 어웨이크에서 한번만 실행하기위해 클레스변수에 담음
+	//총알을 담아둘 폴더오브젝트
+	private static Transform bulletFolder = null;
+
+	//생성될 프리팹에 이름붙일용도
+	private static int monster_Queue_Count;
+	private static int bullet_Queue_Count;
+
+	//프리팹명칭 const는 내부적으로 static이 된다.
+	public const string monster_PrefabName = "Monster";	
+	public const string bullet_PrefabName = "Bullet";
+
+
+	///오브젝트생성 (생성할프리팹명)
+	public static GameObject createObjet(string name)//월래 통합해서 만들엇는데 개별적으로 옵션줘야할듯해서 다시 따로만듬
+	{
+		GameObject obj = null;
+
+		//이름에 따라 메서드선택
+		switch(name){
+		case monster_PrefabName:
+			obj = createMonster(name);
+			break;
+		case bullet_PrefabName:
+			obj = createBullet(name);
+			break;
+		default:
+			break;
+		}
+		return obj;
+	}
+
+	///몬스터생성 혹은 꺼내오기
+	public static GameObject createMonster(string name){
+		GameObject obj = null;
+		if (monster_Queue.Count == 0) {
+			obj = (GameObject)Instantiate (Resources.Load ("Prefabs/" + monster_PrefabName) as GameObject);
+			obj.transform.parent = enemyFolder;//생성시에만 부모설정
+			obj.name = name + "_" + monster_Queue_Count++;//이름과 함께 테스트용도로 번호매겨줌 ~_~
+		} else {
+			obj = monster_Queue.Dequeue();
+			obj.SetActive(true);
+		}
+		monsterList.Add(obj);//몬스터만 리스트에 담기
+		return obj;
+	}
+
+
+	///총알생성 혹은 꺼내오기
+	public static GameObject createBullet(string name){
+		GameObject obj = null;
+		if (bullet_Queue.Count == 0) {
+			obj = (GameObject)Instantiate (Resources.Load ("Prefabs/" + bullet_PrefabName) as GameObject);
+			obj.transform.parent = bulletFolder;
+			obj.name = name + "_" + bullet_Queue_Count++;
+		} else {
+			obj = bullet_Queue.Dequeue ();
+			obj.SetActive (true);
+		}
+		return obj;
+	}
+	
+
+	
+	
+	///죽거나 사용이 끝난 오브젝트를 큐로 넣어준다(GameObject 사용된오브젝트)
+	public static void insertObjet(GameObject obj)
+	{
+		if(obj.name.StartsWith(monster_PrefabName))//앞글자확인후처리
+		{
+			monster_Queue.Enqueue(obj);
+			monsterList.Remove(obj);//몬스터는 리스트에서 뺀다
+		}
+		else if(obj.name.StartsWith(bullet_PrefabName))
+		{
+			//lock (lockThis) {
+			bullet_Queue.Enqueue(obj);
+			//}
+		}
+		obj.SetActive(false);
+	}
+
+
+
 	///시작소지금액
     public int initialGold = 120;
 	///금액
-    public int gold = 0;
+	public static int gold = 0;
 	///점수
-    public int score = 0;
+	public static int score = 0;
 
 	///금액라벨
 	public UILabel goldText = null;
@@ -43,6 +149,7 @@ public class GameManager : MonoBehaviour {
 	///셋팅메뉴
     private bool isVisibleSettingMenu = false;
 
+	/*  //사용안함
 	///오브젝트풀
     private GameObjectPool pool = new GameObjectPool();
 	///오브젝트풀
@@ -50,6 +157,7 @@ public class GameManager : MonoBehaviour {
 	{
 		return pool;
 	}
+	*/
 
 
     private int currentWave = 1;
@@ -70,6 +178,9 @@ public class GameManager : MonoBehaviour {
 		//팝업창 꺼두기
 		StopPopup.SetActive (false);
 
+		//씬 변경시 제거안되게
+		//DontDestroyOnLoad (this.gameObject);
+
         GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
 
         GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
@@ -82,14 +193,20 @@ public class GameManager : MonoBehaviour {
 		// waypoint에 일정 시간 간격으로 캐릭터 생성
 		StartCoroutine( this.CreateMonster () );
         gold = initialGold;
-        //없어도 될듯
+
+        //사용안함
 		//goldText.text = gold.ToString();
         //scoreText.text = "Score: " + score;
 
-        monsterPrefab = (GameObject)Resources.Load("Prefabs/Troll", typeof(GameObject));
+		//몬스터를담을 폴더지정
+		enemyFolder = GameObject.Find("Enemy").transform;
+		bulletFolder = GameObject.Find("Bullet").transform;
+
+		//사용안함
+       /* monsterPrefab = (GameObject)Resources.Load("Prefabs/Troll", typeof(GameObject));
 
         pool.Create(monsterPrefab, monsterNumPerWave);
-        pool.SetParent(GameObject.Find("Enemy").transform);
+        pool.SetParent(GameObject.Find("Enemy").transform);*/
 	}
 
 
@@ -113,11 +230,18 @@ public class GameManager : MonoBehaviour {
             }
 
 			Debug.Log ( "create new monster id = " + monsterCount );
-			
+			Debug.Log("monsterList.Count : " + monsterList.Count);
 
 			int random = rand.Next(0, 4);
+
+			//몬스터오브젝트생성 혹은 꺼내오기
+			GameObject newMonster = createObjet(monster_PrefabName);
+			newMonster.transform.position = spawnTransform[random].position;
+			newMonster.transform.rotation = Quaternion.identity;
+			newMonster.GetComponent<Monster>().id = monsterCount;
+
             // GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);
-            GameObject newMonster = pool.NewItem();
+            /*GameObject newMonster = pool.NewItem();
             newMonster.transform.position = spawnTransform[random].position;
             newMonster.transform.rotation = Quaternion.identity;
             newMonster.GetComponent<Monster>().id = monsterCount;
@@ -125,7 +249,7 @@ public class GameManager : MonoBehaviour {
             // 생성된 몬스터들은 Enemy를 부모르 둔다
             // newMonster.transform.parent = GameObject.Find("Enemy").transform;
 
-            monsterList.Add(newMonster);
+            monsterList.Add(newMonster);*/
 		}
 	}
 	

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 // 참고 http://cafe.naver.com/unityhub/5393
 // http://hyunity3d.tistory.com/195
 
+
+//전체 사용안함
 public class GameObjectPool : IEnumerable, System.IDisposable {
 
     private List<GameObject> list = new List<GameObject>();
