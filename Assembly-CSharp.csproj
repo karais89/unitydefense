@@ -59,6 +59,7 @@
      <Compile Include="Assets\02. Scripts\MapEditor.cs" />
      <Compile Include="Assets\02. Scripts\Monster.cs" />
      <Compile Include="Assets\02. Scripts\Performance.cs" />
+     <Compile Include="Assets\02. Scripts\Point.cs" />
      <Compile Include="Assets\02. Scripts\SceneLoading.cs" />
      <Compile Include="Assets\02. Scripts\Tile.cs" />
      <Compile Include="Assets\02. Scripts\TileMap.cs" />
