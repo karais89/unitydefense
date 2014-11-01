@@ -6,7 +6,7 @@ public class CameraControl : MonoBehaviour {
 	// private Transform transform;
 	public float scrollSpeed = 1.0f;
 	public int scrollDistance = 10;
-	public float zoomSpeed = 10.0f;
+	public float zoomSpeed = 1.1f;
 	private float zoomInMax = 2.0f;
 	private float zoomOutMax = 5.0f;
 
@@ -49,11 +49,15 @@ public class CameraControl : MonoBehaviour {
 		// 마우스 스크롤 휠로 확대 축소
 		if ( Input.GetAxis( "Mouse ScrollWheel" ) > 0 )
 		{
-			transform.Translate( Vector3.forward * -zoomSpeed * Time.deltaTime );
+			//transform.Translate( Vector3.forward * -zoomSpeed * Time.deltaTime );
+
+            this.camera.orthographicSize = this.camera.orthographicSize - zoomSpeed;
 		}
 		if ( Input.GetAxis( "Mouse ScrollWheel" ) < 0 )
 		{
-			transform.Translate( Vector3.forward * zoomSpeed * Time.deltaTime );
+			// transform.Translate( Vector3.forward * zoomSpeed * Time.deltaTime );
+
+            this.camera.orthographicSize = this.camera.orthographicSize + zoomSpeed;
 		}
 	}
 }
