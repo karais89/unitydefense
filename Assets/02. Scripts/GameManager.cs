@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour {
 			obj.name = name + "_" + monster_Queue_Count++;//이름과 함께 테스트용도로 번호매겨줌 ~_~
 		} else {
 			obj = monster_Queue.Dequeue();
-			obj.SetActive(true);
+			obj.SetActive(true);//새로 생성한건 어차피 트루상태라서 꺼낼때만 실행하도록함
 		}
 		monsterList.Add(obj);//몬스터만 리스트에 담기
 		return obj;
@@ -113,9 +113,7 @@ public class GameManager : MonoBehaviour {
 		}
 		else if(obj.name.StartsWith(bullet_PrefabName))
 		{
-			//lock (lockThis) {
 			bullet_Queue.Enqueue(obj);
-			//}
 		}
 		obj.SetActive(false);
 	}
@@ -230,7 +228,7 @@ public class GameManager : MonoBehaviour {
             }
 
 			Debug.Log ( "create new monster id = " + monsterCount );
-			Debug.Log("monsterList.Count : " + monsterList.Count);
+			//Debug.Log("monsterList.Count : " + monsterList.Count);
 
 			int random = rand.Next(0, 4);
 

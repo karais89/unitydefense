@@ -44,7 +44,7 @@ public class Bullet : MonoBehaviour {
 		if (nearMonster.activeSelf == true)//해당몹이 액티브일경우만
 		{
 			// FIXIT
-			// 총알 날아가는 방향이 이상함..
+			// 총알 날아가는 방향이 이상함.....이상해서 고침요ㅋ
 			
 			transform.LookAt (nearMonster.transform.position);//타겟을 쳐다보게함
 			

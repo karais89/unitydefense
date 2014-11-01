@@ -229,6 +229,8 @@ public class Monster : MonoBehaviour {
 
     }
 
+
+
     void OnGUI()
     {
         // GUI 몬스터 HP
@@ -247,6 +249,8 @@ public class Monster : MonoBehaviour {
         GUI.DrawTexture(new Rect(0, 0, 100 * (HP / HP_Max), rectHP.height), HP_FullTexture);
         GUI.EndGroup();
     }
+
+
 }
 
 
