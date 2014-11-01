@@ -26,6 +26,10 @@ public class Monster : MonoBehaviour {
     [HideInInspector]
     public Vector3 targetPosition = Vector3.zero;
 
+	///생성된 HpBar를 담아둘변수
+	GameObject HpBar = null;
+
+
 	// Use this for initialization
 	void Awake () {
 		// navAgent = gameObject.GetComponent<NavMeshAgent>();
@@ -182,6 +186,8 @@ public class Monster : MonoBehaviour {
 
             CreateBloodEffect(coll.transform.position);
 
+
+
             if ( HP <= 0 )
             {
                 Debug.Log("monster died~");
@@ -193,6 +199,10 @@ public class Monster : MonoBehaviour {
                 // 죽는 애니메이션 재생
                 animation.CrossFade("Die");
 
+
+				GameManager.insertObjet(HpBar);
+				HpBar = null;
+
                 // gameObject.GetComponentInChildren<CapsuleCollider>().enabled = false;
                 
                 // FIXIT
@@ -203,6 +213,14 @@ public class Monster : MonoBehaviour {
 
                 // goldText.gameObject.GetComponent<Gold>().StartDisplay();
             }
+			else
+			{
+				//HpBar생성
+				CreateHpBar();
+			}
+
+			//현재체력표시
+			CurrentHpView();
 
 
 			//총알 오브젝트를 삭제하지않고 게임매니저통합에서 재사용
@@ -231,7 +249,38 @@ public class Monster : MonoBehaviour {
 
 
 
-    void OnGUI()
+	
+	///HpBar를 생성해준다
+	private void CreateHpBar()
+	{
+		if (HpBar == null)
+		{
+			//피바생성
+			HpBar = GameManager.createObjet (GameManager.hpBar_PrefabName);
+			
+			//따라갈 대상설정
+			HpBar.GetComponent<UIWidget>().SetAnchor(this.transform);
+
+			//약간위에서 따라가도록
+			HpBar.GetComponent<UIWidget>().topAnchor.SetHorizontal(this.transform , 20);
+			HpBar.GetComponent<UIWidget>().bottomAnchor.SetHorizontal(this.transform , 20);
+
+		}
+	}
+
+	///현제체력을 보여준다
+	private void CurrentHpView()
+	{
+		if (HpBar == null) 
+		{
+			return;
+		}
+		HpBar.transform.GetChild(0).GetComponent<UISlider>().sliderValue = HP / HP_Max;
+	}
+
+
+	//사용안함
+    /*void OnGUI()
     {
         // GUI 몬스터 HP
         Vector3 pointTransform = Vector3.zero;
@@ -248,7 +297,7 @@ public class Monster : MonoBehaviour {
         GUI.BeginGroup(rectHP, "");
         GUI.DrawTexture(new Rect(0, 0, 100 * (HP / HP_Max), rectHP.height), HP_FullTexture);
         GUI.EndGroup();
-    }
+    }*/
 
 
 }

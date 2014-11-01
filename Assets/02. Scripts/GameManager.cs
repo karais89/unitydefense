@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour {
 	public static Queue<GameObject> monster_Queue = new Queue<GameObject>();
 	///총알큐
 	public static Queue<GameObject> bullet_Queue = new Queue<GameObject>();
+	///HpBar큐
+	public static Queue<GameObject> hpBar_Queue = new Queue<GameObject>();
+
 	///몬스터 리스트
 	public static List<GameObject> monsterList = new List<GameObject>();
 
@@ -41,15 +44,19 @@ public class GameManager : MonoBehaviour {
 	private static Transform enemyFolder = null;//파인드는 유니티에 무리를 주는행위라서 어웨이크에서 한번만 실행하기위해 클레스변수에 담음
 	//총알을 담아둘 폴더오브젝트
 	private static Transform bulletFolder = null;
+	//Hpbar를 담아둘 폴더오브젝트
+	private static Transform hpBarFolder = null;
+
 
 	//생성될 프리팹에 이름붙일용도
 	private static int monster_Queue_Count;
 	private static int bullet_Queue_Count;
+	private static int hpBar_Queue_Count;
 
 	//프리팹명칭 const는 내부적으로 static이 된다.
 	public const string monster_PrefabName = "Monster";	
 	public const string bullet_PrefabName = "Bullet";
-
+	public const string hpBar_PrefabName = "HpBar";
 
 	///오브젝트생성 (생성할프리팹명)
 	public static GameObject createObjet(string name)//월래 통합해서 만들엇는데 개별적으로 옵션줘야할듯해서 다시 따로만듬
@@ -63,6 +70,9 @@ public class GameManager : MonoBehaviour {
 			break;
 		case bullet_PrefabName:
 			obj = createBullet(name);
+			break;
+		case hpBar_PrefabName:
+			obj = createHpBar(name);
 			break;
 		default:
 			break;
@@ -99,6 +109,20 @@ public class GameManager : MonoBehaviour {
 		}
 		return obj;
 	}
+
+	///HpBar생성 혹은 꺼내오기
+	public static GameObject createHpBar(string name){
+		GameObject obj = null;
+		if (hpBar_Queue.Count == 0) {
+			obj = (GameObject)Instantiate (Resources.Load ("Prefabs/" + hpBar_PrefabName) as GameObject);
+			obj.transform.parent = hpBarFolder;
+			obj.name = name + "_" + hpBar_Queue_Count++;
+		} else {
+			obj = hpBar_Queue.Dequeue ();
+			obj.SetActive (true);
+		}
+		return obj;
+	}
 	
 
 	
@@ -106,6 +130,10 @@ public class GameManager : MonoBehaviour {
 	///죽거나 사용이 끝난 오브젝트를 큐로 넣어준다(GameObject 사용된오브젝트)
 	public static void insertObjet(GameObject obj)
 	{
+		if (obj == null) 
+		{
+			return;
+		}
 		if(obj.name.StartsWith(monster_PrefabName))//앞글자확인후처리
 		{
 			monster_Queue.Enqueue(obj);
@@ -114,6 +142,10 @@ public class GameManager : MonoBehaviour {
 		else if(obj.name.StartsWith(bullet_PrefabName))
 		{
 			bullet_Queue.Enqueue(obj);
+		}
+		else if(obj.name.StartsWith(hpBar_PrefabName))
+		{
+			hpBar_Queue.Enqueue(obj);
 		}
 		obj.SetActive(false);
 	}
@@ -199,6 +231,7 @@ public class GameManager : MonoBehaviour {
 		//몬스터를담을 폴더지정
 		enemyFolder = GameObject.Find("Enemy").transform;
 		bulletFolder = GameObject.Find("Bullet").transform;
+		hpBarFolder = GameObject.Find("HpBarUI").transform;
 
 		//사용안함
        /* monsterPrefab = (GameObject)Resources.Load("Prefabs/Troll", typeof(GameObject));

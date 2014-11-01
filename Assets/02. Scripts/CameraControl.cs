@@ -23,7 +23,7 @@ public class CameraControl : MonoBehaviour {
 		Debug.DrawRay( ray.origin, ray.direction * 100.0f, Color.green );
 
 		// 마우스 상하좌우 스크롤
-		float mousePosX = Input.mousePosition.x;
+		/*float mousePosX = Input.mousePosition.x;
 		float mousePosY = Input.mousePosition.y;
 
 		if ( mousePosX < scrollDistance )
@@ -44,7 +44,7 @@ public class CameraControl : MonoBehaviour {
 		if ( mousePosY >= Screen.height - scrollDistance )
 		{
 			transform.Translate( Vector3.up * scrollSpeed * Time.deltaTime );
-		}
+		}*/
 
 		// 마우스 스크롤 휠로 확대 축소
 		if ( Input.GetAxis( "Mouse ScrollWheel" ) > 0 )
