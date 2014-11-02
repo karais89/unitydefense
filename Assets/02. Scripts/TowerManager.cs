@@ -17,7 +17,13 @@ public class TowerManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-	
+
+
+
+
+
+
+
 		// normalColor = GameObject.FindWithTag ( "TILE" ).GetComponent<Renderer>().material.color;
 
 		/*
@@ -162,11 +168,48 @@ public class TowerManager : MonoBehaviour {
 
 	}
 
+
+
+	///타일에 건설모드 - UI에서 호출
+	public void TileBuildMode(){
+		if (isTileBuildMode == false) {
+			//건설모드시작
+			isTileBuildMode = true;
+			GameObject.Find ("Map").GetComponent<TileMap> ().DisplayGridBuildable (true);
+			//골드차감구조변경필요할덧
+		} else {
+			//건설모드종료
+			isTileBuildMode = false;
+			GameObject.Find ("Map").GetComponent<TileMap> ().DisplayGridBuildable (false);
+		}
+	}
+
+
+	//그리드 단위로 이동 테스트
+	/*Vector3 gridSize = new Vector3(1,1,1);
+	Vector3 movementDirection  = new Vector3(0,0,1);
+	GameObject newTower = null;
+	newTower = (GameObject)Instantiate(tower, this.transform.position, Quaternion.identity);
+	InvokeRepeating("UpdatePosition", 1.0f, 1.0f);
+	void UpdatePosition () {
+		Vector3 newPos = newTower.transform.position + movementDirection;
+		newPos = new Vector3(Mathf.Round(newPos.x/gridSize.x)*gridSize.x,
+		                 Mathf.Round(newPos.y/gridSize.y)*gridSize.y,
+		                 Mathf.Round(newPos.z/gridSize.z)*gridSize.z);
+
+		newTower.transform.position = newPos;
+	}*/
+	//테스트결과 movementDirection인 z가1 즉 위쪽방향을 1초마다 이동하라고명령내린듯
+	//1칸씩 위로 계속이동함
+	
+	
 	void OnGUI()
 	{
 		int buttonWidth = 100;
 		int buttonHeight = 30;
-		
+
+		//사용안함
+		/*
         // 타워 건설 버튼
 		if (GUI.Button (new Rect (Screen.width - buttonWidth, Screen.height - buttonHeight, buttonWidth, buttonHeight), "Tower1 gold 30"))
         {
@@ -184,7 +227,7 @@ public class TowerManager : MonoBehaviour {
 
             
             // rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
-		}
+		}*/
 
 		
         if ( isVisibleMenu == true )
