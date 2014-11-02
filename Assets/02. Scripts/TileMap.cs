@@ -133,11 +133,7 @@ public class TileMap : MonoBehaviour {
             int y = (int)data[i]["indexY"];
 
             Tile.TileType type;
-            if (data[i]["type"].ToString().Equals("empty") == true)
-            {
-                type = Tile.TileType.empty;
-            }
-            else if (data[i]["type"].ToString().Equals("walkable") == true)
+            if (data[i]["type"].ToString().Equals("walkable") == true)
             {
                 type = Tile.TileType.walkable;
             }
@@ -147,7 +143,7 @@ public class TileMap : MonoBehaviour {
             }
             else
             {
-                type = Tile.TileType.empty;
+                type = Tile.TileType.walkable;
             }
 
             GameObject prefab = null;
@@ -252,11 +248,7 @@ public class TileMap : MonoBehaviour {
                 Tile.TileType type = tile.GetComponent<Tile>().type;
                 int indexX = tile.GetComponent<Tile>().indexX;
                 int indexY = tile.GetComponent<Tile>().indexY;
-                if (type == Tile.TileType.empty)
-                {
-                    typeString = "emtpy";
-                }
-                else if (type == Tile.TileType.walkable)
+                if (type == Tile.TileType.walkable)
                 {
                     typeString = "walkable";
                 }
@@ -266,7 +258,7 @@ public class TileMap : MonoBehaviour {
                 }
                 else
                 {
-                    typeString = "emtpy";
+                    typeString = "walkable";
                 }
                 string prefabString = tile.GetComponent<Tile>().prefabName;
                 string obstacleName = tile.GetComponent<Tile>().obstacleName;

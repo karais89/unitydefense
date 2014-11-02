@@ -53,12 +53,14 @@ public class TowerManager : MonoBehaviour {
 		if ( isTileBuildMode == true )
         {
             // FIXIT
+            /*
 			// 마우스 커서를 따라 생성할 타워를 위치시킨다
 			Vector3 targetPosition = Camera.main.ScreenToWorldPoint( Input.mousePosition );
 			
             targetPosition.z = targetPosition.y;
             targetPosition.y = 0.0f;
 			newTowerToBuild.transform.Translate( targetPosition, Space.World );
+            */
 
             // TODO
             // 타일 단위로 생성할 타워 위치

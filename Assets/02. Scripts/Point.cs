@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+// 참고 - http://andwhy.tistory.com/77
 namespace Common
 {
     public class Point

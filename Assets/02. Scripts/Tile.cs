@@ -5,8 +5,8 @@ public class Tile : MonoBehaviour {
 
 	// public Color highlightColor;
 	// private Color normalColor;
-    public enum TileType { empty, walkable, obstacle };
-    public TileType type = TileType.empty;
+    public enum TileType { walkable = 0, obstacle };
+    public TileType type = TileType.walkable;
     public int indexX = 0;
     public int indexY = 0;
     public string prefabName = null;

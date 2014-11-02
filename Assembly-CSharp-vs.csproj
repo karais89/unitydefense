@@ -53,11 +53,10 @@
      <Compile Include="Assets\02. Scripts\Gold.cs" />
      <Compile Include="Assets\02. Scripts\Grid.cs" />
      <Compile Include="Assets\02. Scripts\HeroTower.cs" />
-     <Compile Include="Assets\02. Scripts\Hp_Billboard.cs" />
-     <Compile Include="Assets\02. Scripts\MainMenu.cs" />
      <Compile Include="Assets\02. Scripts\MainMenus.cs" />
      <Compile Include="Assets\02. Scripts\MapEditor.cs" />
      <Compile Include="Assets\02. Scripts\Monster.cs" />
+     <Compile Include="Assets\02. Scripts\PathFinder.cs" />
      <Compile Include="Assets\02. Scripts\Performance.cs" />
      <Compile Include="Assets\02. Scripts\Point.cs" />
      <Compile Include="Assets\02. Scripts\SceneLoading.cs" />
