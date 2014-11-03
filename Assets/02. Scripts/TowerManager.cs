@@ -13,12 +13,23 @@ public class TowerManager : MonoBehaviour {
     private RaycastHit rayCastHit;
     public static List<GameObject> towerList = new List<GameObject>();
     private int towerCount = 0;
-    private bool isVisibleMenu = false;
+    
+	//사용안함
+	//private bool isVisibleMenu = false;
+
+
+	///타워UI
+	public GameObject TowerUI = null;
+
+	//select된 tower
+	private GameObject selectTower = null;
+
 
 	// Use this for initialization
 	void Awake () {
 
-
+		//최소안보이게
+		TowerUI.SetActive (false);
 
 
 
@@ -150,17 +161,49 @@ public class TowerManager : MonoBehaviour {
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray1 = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hitInfo1;
-                if (Physics.Raycast(ray1, out hitInfo1, 100.0f))
+                RaycastHit hitInfo;
+                if (Physics.Raycast(ray1, out hitInfo, 100.0f))
                 {
-                    if ( hitInfo1.transform.tag == "TOWER" )
+                    if ( hitInfo.transform.tag == "TOWER" )
                     {
-                        rayCastHit = hitInfo1;
+                        rayCastHit = hitInfo;
 
-                        isVisibleMenu = true;
+                        
+						//사용안함
+						//대신 selectTower가 눌인지로 판별
+						//isVisibleMenu = true;
 
-                        rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(true);
+						if(selectTower != null){
+							//범위표시삭제
+							selectTower.GetComponent<Tower>().DisplayAttackRangeSphere(false);
+						}
+
+						//TowerUi 활성화
+						TowerUI.SetActive(true);
+
+						//selectTower 설정
+						selectTower = rayCastHit.collider.gameObject;
+
+						//anchor를 선택된 tower로 설정
+						TowerUI.GetComponent<UIWidget>().SetAnchor(rayCastHit.collider.gameObject);
+
+
+						selectTower.GetComponent<Tower>().DisplayAttackRangeSphere(true);
                     }
+					/*else
+					{   
+						//맨땅선택시 ui제거
+
+
+						//TowerUi활성화
+						towerUI.SetActive(false);
+
+						//범위취소
+						selectTower.GetComponent<Tower>().DisplayAttackRangeSphere(false);
+
+						//selectTower 비우기
+						selectTower = null;
+					}*/
                 }
             }
         }
@@ -176,7 +219,9 @@ public class TowerManager : MonoBehaviour {
 			//건설모드시작
 			isTileBuildMode = true;
 			GameObject.Find ("Map").GetComponent<TileMap> ().DisplayGridBuildable (true);
-			//골드차감구조변경필요할덧
+
+			/////////////골드차감구조변경필요할덧
+
 		} else {
 			//건설모드종료
 			isTileBuildMode = false;
@@ -184,6 +229,46 @@ public class TowerManager : MonoBehaviour {
 		}
 	}
 
+
+	//타워UpGrade - UI에서 호출
+	public void UpGrade(){
+		selectTower.GetComponent<Tower> ().level += 1;
+		selectTower.GetComponent<Tower> ().Upgrade ();
+		
+		selectTower.GetComponent<Tower> ().DisplayAttackRangeSphere (false);
+		selectTower = null;
+		TowerUI.SetActive(false);
+	}
+
+	//타워Sell - UI에서 호출
+	public void Sell(){
+
+		// 골드 증가
+		int sellGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
+		GameManager.gold += sellGold;
+		
+		// Destroy(rayCastHit.collider.gameObject);
+		
+		//rayCastHit.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.walkable;
+		//rayCastHit.collider.gameObject.GetComponent<Tile>().hasObstacle = false;
+		//rayCastHit.collider.gameObject.GetComponent<Tile>().obstacleName = "";
+		
+		// rayCastHit.collider.gameObject.SetActive(false);
+		
+		Destroy(rayCastHit.collider.gameObject);
+
+		selectTower.GetComponent<Tower> ().DisplayAttackRangeSphere (false);
+		selectTower = null;
+		TowerUI.SetActive(false);
+	}
+
+	//타워Cancel - UI에서 호출
+	public void Cancel(){
+		
+		selectTower.GetComponent<Tower> ().DisplayAttackRangeSphere (false);
+		selectTower = null;
+		TowerUI.SetActive(false);
+	}
 
 	//그리드 단위로 이동 테스트
 	/*Vector3 gridSize = new Vector3(1,1,1);
@@ -229,8 +314,9 @@ public class TowerManager : MonoBehaviour {
             // rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
 		}*/
 
-		
-        if ( isVisibleMenu == true )
+
+		//사용안함
+        /*if ( isVisibleMenu == true )
         {
             // TODO
             // 화면 중앙에 보이는 것은 임의
@@ -247,11 +333,11 @@ public class TowerManager : MonoBehaviour {
                 GameManager.gold += sellGold;
 
                 // Destroy(rayCastHit.collider.gameObject);
-                /*
-                rayCastHit.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.walkable;
-                rayCastHit.collider.gameObject.GetComponent<Tile>().hasObstacle = false;
-                rayCastHit.collider.gameObject.GetComponent<Tile>().obstacleName = "";
-                */
+
+                //rayCastHit.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.walkable;
+                //rayCastHit.collider.gameObject.GetComponent<Tile>().hasObstacle = false;
+                //rayCastHit.collider.gameObject.GetComponent<Tile>().obstacleName = "";
+
                 // rayCastHit.collider.gameObject.SetActive(false);
 
                 Destroy(rayCastHit.collider.gameObject);
@@ -276,7 +362,7 @@ public class TowerManager : MonoBehaviour {
                 isVisibleMenu = false;
                 rayCastHit.collider.gameObject.GetComponent<Tower>().DisplayAttackRangeSphere(false);
             }
-        }
+        }*/
         
 	}
 
