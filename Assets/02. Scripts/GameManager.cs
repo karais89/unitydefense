@@ -40,6 +40,15 @@ public class GameManager : MonoBehaviour {
 	///몬스터 리스트
 	public static List<GameObject> monsterList = new List<GameObject>();
 
+
+	public static void reSetList(){
+		monster_Queue.Clear();
+		bullet_Queue.Clear ();
+		hpBar_Queue.Clear ();
+		monsterList.Clear ();
+
+	}
+
     ///몬스터를 담아둘 폴더오브젝트 
 	private static Transform enemyFolder = null;//파인드는 유니티에 무리를 주는행위라서 어웨이크에서 한번만 실행하기위해 클레스변수에 담음
 	//총알을 담아둘 폴더오브젝트
@@ -219,6 +228,8 @@ public class GameManager : MonoBehaviour {
 		{
 			spawnTransform[i] = GameObject.Find( "SpawnPoint0" + i ).GetComponent<Transform>();
 		}
+	
+
 
 		// waypoint에 일정 시간 간격으로 캐릭터 생성
 		StartCoroutine( this.CreateMonster () );
@@ -247,7 +258,6 @@ public class GameManager : MonoBehaviour {
 		while ( isGameOver == false )
 		{
 			yield return new WaitForSeconds( createTime );
-
             monsterCount++;
 
             if ( monsterCount > monsterNumPerWave )
@@ -354,6 +364,7 @@ public class GameManager : MonoBehaviour {
 	/// 종료 버튼 - ui에서 호출
 	public void QuitButton()
 	{
+		reSetList ();
 		Application.LoadLevel(0);
 	}
 

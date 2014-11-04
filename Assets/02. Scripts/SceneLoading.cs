@@ -27,6 +27,9 @@ public class SceneLoading : MonoBehaviour {
 	///start버튼에서 호출하도록 설계
 	/// 씬을로드한다.
 	public void StartLoad()	{
+
+		//Application.LoadLevel ("scPlay");
+
 		//신로딩꺼져있는걸 켜준다.
 		SceneLoadding.SetActive (true);
 
