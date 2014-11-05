@@ -141,6 +141,7 @@ public class MapEditor : MonoBehaviour {
                 {
                     if ( hitInfo.collider.tag == "TREE" || hitInfo.collider.tag == "ROCK" )
                     {
+                        hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().type = Tile.TileType.walkable;
                         hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().hasObstacle = false;
                         hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().obstacleName = "";
 
@@ -192,7 +193,7 @@ public class MapEditor : MonoBehaviour {
         // 맵 데이터 저장 버튼
         if (GUI.Button(new Rect(Screen.width-100, Screen.height-30, 100, 30), "Save Map") )
         {
-            GameObject.Find("Map").GetComponent<TileMap>().WriteMapJSON();
+            GameObject.Find("Map").GetComponent<TileMap>().WriteMapJSON();            
         }
 
         // 지우기 버튼

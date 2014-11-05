@@ -10,6 +10,7 @@ public class TileMap : MonoBehaviour {
 	public int tileHeight = 1;
 	private int mapWidth = 0;
 	private int mapHeight = 0;
+    public int[,] mapData = new int[64, 64];
     public GameObject[,] tileArray = new GameObject[64, 64];
     private GameObject gridPrefab;    
     private GameObject[,] gridArray = new GameObject[64, 64];
@@ -22,13 +23,10 @@ public class TileMap : MonoBehaviour {
     public string[] treePrefabNameArray = new string[12];
     public string[] rockPrefabNameArray = new string[6];
 
+    
+
 	void Awake() {
 
-        // LoadResources();
-
-        // LoadMapJSON();
-
-		// CreateTestMap ();
 
         gridPrefab = (GameObject)Resources.Load("Prefabs/GridQuad", typeof(GameObject));
         gridDisablePrefab = (GameObject)Resources.Load("Prefabs/GridDisable", typeof(GameObject));
@@ -228,6 +226,8 @@ public class TileMap : MonoBehaviour {
                 newTile.GetComponent<Tile>().obstacleName = obstacleName;
             }
         }
+
+        CreateMapData();
     }
 
     /// <summary>
@@ -283,6 +283,26 @@ public class TileMap : MonoBehaviour {
         // TODO
         // 절대경로가 아닌 상대경로로 지정
         System.IO.File.WriteAllText(@"C:\Project\unitydefense\Assets\Resources\map01.json", sb.ToString());
+    }
+
+    private void CreateMapData()
+    {
+        for (int y = 0; y < sizeY; y++)
+        {
+            for (int x = 0; x < sizeX; x++)
+            {
+                if ( tileArray[x, y] == null )
+                {
+                    Debug.Log("tileArray[" + x + ", " + y + "] is NULL");
+                }
+
+                mapData[x, y] = (int) tileArray[x, y].GetComponent<Tile>().type;
+            }
+        }
+
+        // 임시 코드...
+        // 영웅 타워가 최종 목적지이다.
+        mapData[3, 6] = 111;
     }
 
     /// <summary>

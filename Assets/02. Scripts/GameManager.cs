@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Common;
 
 public class GameManager : MonoBehaviour {
-	// public GameObject waypoint;
-
+	
 	//사용안함
 	//private GameObject monsterPrefab = null; 
 
@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour {
 	private int monsterCount = 0;
 	private Transform[] spawnTransform = new Transform[5];
 	public static bool isGameOver = false;
-
-
 
 	private System.Random rand = new System.Random();
 
@@ -41,13 +39,7 @@ public class GameManager : MonoBehaviour {
 	public static List<GameObject> monsterList = new List<GameObject>();
 
 
-	public static void reSetList(){
-		monster_Queue.Clear();
-		bullet_Queue.Clear ();
-		hpBar_Queue.Clear ();
-		monsterList.Clear ();
-
-	}
+	
 
     ///몬스터를 담아둘 폴더오브젝트 
 	private static Transform enemyFolder = null;//파인드는 유니티에 무리를 주는행위라서 어웨이크에서 한번만 실행하기위해 클레스변수에 담음
@@ -66,100 +58,6 @@ public class GameManager : MonoBehaviour {
 	public const string monster_PrefabName = "Monster";	
 	public const string bullet_PrefabName = "Bullet";
 	public const string hpBar_PrefabName = "HpBar";
-
-	///오브젝트생성 (생성할프리팹명)
-	public static GameObject createObjet(string name)//월래 통합해서 만들엇는데 개별적으로 옵션줘야할듯해서 다시 따로만듬
-	{
-		GameObject obj = null;
-
-		//이름에 따라 메서드선택
-		switch(name){
-		case monster_PrefabName:
-			obj = createMonster(name);
-			break;
-		case bullet_PrefabName:
-			obj = createBullet(name);
-			break;
-		case hpBar_PrefabName:
-			obj = createHpBar(name);
-			break;
-		default:
-			break;
-		}
-		return obj;
-	}
-
-	///몬스터생성 혹은 꺼내오기
-	public static GameObject createMonster(string name){
-		GameObject obj = null;
-		if (monster_Queue.Count == 0) {
-			obj = (GameObject)Instantiate (Resources.Load ("Prefabs/" + monster_PrefabName) as GameObject);
-			obj.transform.parent = enemyFolder;//생성시에만 부모설정
-			obj.name = name + "_" + monster_Queue_Count++;//이름과 함께 테스트용도로 번호매겨줌 ~_~
-		} else {
-			obj = monster_Queue.Dequeue();
-			obj.SetActive(true);//새로 생성한건 어차피 트루상태라서 꺼낼때만 실행하도록함
-		}
-		monsterList.Add(obj);//몬스터만 리스트에 담기
-		return obj;
-	}
-
-
-	///총알생성 혹은 꺼내오기
-	public static GameObject createBullet(string name){
-		GameObject obj = null;
-		if (bullet_Queue.Count == 0) {
-			obj = (GameObject)Instantiate (Resources.Load ("Prefabs/" + bullet_PrefabName) as GameObject);
-			obj.transform.parent = bulletFolder;
-			obj.name = name + "_" + bullet_Queue_Count++;
-		} else {
-			obj = bullet_Queue.Dequeue ();
-			obj.SetActive (true);
-		}
-		return obj;
-	}
-
-	///HpBar생성 혹은 꺼내오기
-	public static GameObject createHpBar(string name){
-		GameObject obj = null;
-		if (hpBar_Queue.Count == 0) {
-			obj = (GameObject)Instantiate (Resources.Load ("Prefabs/" + hpBar_PrefabName) as GameObject);
-			obj.transform.parent = hpBarFolder;
-			obj.name = name + "_" + hpBar_Queue_Count++;
-		} else {
-			obj = hpBar_Queue.Dequeue ();
-			obj.SetActive (true);
-		}
-		return obj;
-	}
-	
-
-	
-	
-	///죽거나 사용이 끝난 오브젝트를 큐로 넣어준다(GameObject 사용된오브젝트)
-	public static void insertObjet(GameObject obj)
-	{
-		if (obj == null) 
-		{
-			return;
-		}
-		if(obj.name.StartsWith(monster_PrefabName))//앞글자확인후처리
-		{
-			monster_Queue.Enqueue(obj);
-			monsterList.Remove(obj);//몬스터는 리스트에서 뺀다
-		}
-		else if(obj.name.StartsWith(bullet_PrefabName))
-		{
-			bullet_Queue.Enqueue(obj);
-		}
-		else if(obj.name.StartsWith(hpBar_PrefabName))
-		{
-			hpBar_Queue.Enqueue(obj);
-		}
-		obj.SetActive(false);
-	}
-
-
 
 	///시작소지금액
     public int initialGold = 120;
@@ -210,6 +108,28 @@ public class GameManager : MonoBehaviour {
 	///스코어텍스트
 	//public GUIText scoreText = null;
 
+    // 테스트 용 맵 정보
+    public int[,] wallMap = 
+    {{1, 1, 1, 1, 1, 11, 11, 11, 1, 1, 1, 1, 1},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 1, 1, 1, 1, 111, 111, 111, 1, 1, 1, 1, 1}};
 
 	// Use this for initialization
 	void Awake () {
@@ -223,6 +143,8 @@ public class GameManager : MonoBehaviour {
         GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
 
         GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
+
+        InitPathFinder();
 
 		for ( int i = 0; i < 5; i++ )
 		{
@@ -250,6 +172,151 @@ public class GameManager : MonoBehaviour {
         pool.Create(monsterPrefab, monsterNumPerWave);
         pool.SetParent(GameObject.Find("Enemy").transform);*/
 	}
+
+    public static void reSetList()
+    {
+        monster_Queue.Clear();
+        bullet_Queue.Clear();
+        hpBar_Queue.Clear();
+        monsterList.Clear();
+    }
+
+    ///오브젝트생성 (생성할프리팹명)
+    public static GameObject createObjet(string name)//월래 통합해서 만들엇는데 개별적으로 옵션줘야할듯해서 다시 따로만듬
+    {
+        GameObject obj = null;
+
+        //이름에 따라 메서드선택
+        switch (name)
+        {
+            case monster_PrefabName:
+                obj = createMonster(name);
+                break;
+            case bullet_PrefabName:
+                obj = createBullet(name);
+                break;
+            case hpBar_PrefabName:
+                obj = createHpBar(name);
+                break;
+            default:
+                break;
+        }
+        return obj;
+    }
+
+    ///몬스터생성 혹은 꺼내오기
+    public static GameObject createMonster(string name)
+    {
+        GameObject obj = null;
+        if (monster_Queue.Count == 0)
+        {
+            obj = (GameObject)Instantiate(Resources.Load("Prefabs/" + monster_PrefabName) as GameObject);
+            obj.transform.parent = enemyFolder;//생성시에만 부모설정
+            obj.name = name + "_" + monster_Queue_Count++;//이름과 함께 테스트용도로 번호매겨줌 ~_~
+        }
+        else
+        {
+            obj = monster_Queue.Dequeue();
+            obj.SetActive(true);//새로 생성한건 어차피 트루상태라서 꺼낼때만 실행하도록함
+        }
+        monsterList.Add(obj);//몬스터만 리스트에 담기
+        return obj;
+    }
+
+
+    ///총알생성 혹은 꺼내오기
+    public static GameObject createBullet(string name)
+    {
+        GameObject obj = null;
+        if (bullet_Queue.Count == 0)
+        {
+            obj = (GameObject)Instantiate(Resources.Load("Prefabs/" + bullet_PrefabName) as GameObject);
+            obj.transform.parent = bulletFolder;
+            obj.name = name + "_" + bullet_Queue_Count++;
+        }
+        else
+        {
+            obj = bullet_Queue.Dequeue();
+            obj.SetActive(true);
+        }
+        return obj;
+    }
+
+    ///HpBar생성 혹은 꺼내오기
+    public static GameObject createHpBar(string name)
+    {
+        GameObject obj = null;
+        if (hpBar_Queue.Count == 0)
+        {
+            obj = (GameObject)Instantiate(Resources.Load("Prefabs/" + hpBar_PrefabName) as GameObject);
+            obj.transform.parent = hpBarFolder;
+            obj.name = name + "_" + hpBar_Queue_Count++;
+        }
+        else
+        {
+            obj = hpBar_Queue.Dequeue();
+            obj.SetActive(true);
+        }
+        return obj;
+    }
+    
+    ///죽거나 사용이 끝난 오브젝트를 큐로 넣어준다(GameObject 사용된오브젝트)
+    public static void insertObjet(GameObject obj)
+    {
+        if (obj == null)
+        {
+            return;
+        }
+        if (obj.name.StartsWith(monster_PrefabName))//앞글자확인후처리
+        {
+            monster_Queue.Enqueue(obj);
+            monsterList.Remove(obj);//몬스터는 리스트에서 뺀다
+        }
+        else if (obj.name.StartsWith(bullet_PrefabName))
+        {
+            bullet_Queue.Enqueue(obj);
+        }
+        else if (obj.name.StartsWith(hpBar_PrefabName))
+        {
+            hpBar_Queue.Enqueue(obj);
+        }
+        obj.SetActive(false);
+    }
+
+    public void InitPathFinder()
+    {
+        //PathFinder.Instance.SetMapData(wallMap);
+
+        PathFinder.Instance.SetMapData( GameObject.Find("Map").GetComponent<TileMap>().mapData );
+    }
+
+
+    Point getStartPoint()
+    {
+        //check startPoints
+        List<Point> startPointList = new List<Point>();
+        int _w = wallMap.GetLength(0);
+        int _h = wallMap.GetLength(1);
+        int x, y;
+        for (x = 0; x < _w; x++)
+        {
+            for (y = 0; y < _h; y++)
+            {
+                if (wallMap[x, y] >= 10 && wallMap[x, y] <= 100)
+                {
+                    startPointList.Add(new Point(x, y));
+                }
+            }
+        }
+        if (startPointList.Count == 0)
+        {
+            Debug.LogError("Not Found Start Position");
+            return null;
+        }
+        int ranIdx = Random.Range(0, startPointList.Count);
+        return startPointList[ranIdx];
+    }
+
 
 
     /// 일정 시간 간격을 두고 몬스터를 생성한다.
@@ -280,6 +347,10 @@ public class GameManager : MonoBehaviour {
 			newMonster.transform.position = spawnTransform[random].position;
 			newMonster.transform.rotation = Quaternion.identity;
 			newMonster.GetComponent<Monster>().id = monsterCount;
+
+            //Point startPoint = getStartPoint();
+            Point startPoint = new Point( (int)spawnTransform[random].position.x, (int)spawnTransform[random].position.z);
+            newMonster.GetComponent<Monster>().SetStartPoint( startPoint );
 
             // GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);
             /*GameObject newMonster = pool.NewItem();
@@ -367,81 +438,5 @@ public class GameManager : MonoBehaviour {
 		reSetList ();
 		Application.LoadLevel(0);
 	}
-
-
-
-
-
-
-    /*void OnGUI()
-    {
-        // 일시 정지 버튼
-        if ( GUI.Button(new Rect(10, Screen.height-30, 60, 30), "Pause" ) )
-        {
-            if ( isGamePaused == false )
-            {
-                isGamePaused = true;
-                Time.timeScale = 0.0f;
-            }
-            else if ( isGamePaused == true )
-            {
-                isGamePaused = false;
-                if ( isGameFaster == false )
-                {
-                    Time.timeScale = 1.0f;
-                }
-                else if ( isGameFaster == true )
-                {
-                    Time.timeScale = 2.0f;
-                }                
-            }            
-        }
-
-        // 게임 두배 속도 버튼
-        if (GUI.Button(new Rect(80, Screen.height-30, 60, 30), "X2"))
-        {
-            if (isGameFaster == false )
-            {
-                Time.timeScale = 2.0f;
-                isGameFaster = true;
-            }
-            else if (isGameFaster == true)
-            {
-                Time.timeScale = 1.0f;
-                isGameFaster = false;
-            }
-        }
-
-        // 설정 버튼
-        if (GUI.Button(new Rect(Screen.width-90, 10, 90, 30), "Setting"))
-        {
-            if (isVisibleSettingMenu == false )
-            {
-                isVisibleSettingMenu = true;
-            }
-            else if (isVisibleSettingMenu == true)
-            {
-                isVisibleSettingMenu = false;
-            }
-        }
-
-        // 메인 메뉴 씬으로 이동 버튼
-        if ( isVisibleSettingMenu == true )
-        {
-            if (GUI.Button(new Rect(Screen.width - 90, 40, 90, 30), "Main Menu"))
-            {
-                Application.LoadLevel(0);
-            }
-
-            // TODO
-            // 사운드 조정 버튼
-        }        
-
-    }*/
-
-
-
-
-
 
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Common;
 
 public class Monster : MonoBehaviour {
     public int id = 0;
@@ -29,6 +30,11 @@ public class Monster : MonoBehaviour {
 	///생성된 HpBar를 담아둘변수
 	GameObject HpBar = null;
 
+    //private bool isMoveAble = false;
+    private Point[] pathArr;
+    private Point startPoint;
+    private Point nextPoint;
+    private int pathIndex = 0;
 
 	// Use this for initialization
 	void Awake () {
@@ -77,10 +83,9 @@ public class Monster : MonoBehaviour {
 		{
 			if (transform.position.z < endPointTransform.position.z)
 			{
-				// 일직선 이동
-				// transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
-				
+								
 				// hero tower를 타겟으로 이동
+                /*
 				float distance = (transform.position - LookAtTo(targetPosition)).magnitude;
 				if ( distance >= 1.0f )
 				{
@@ -91,7 +96,39 @@ public class Monster : MonoBehaviour {
 					animation.CrossFade("Attack_01");
 					monsterState = MonsterState.attack;
 				}
-				
+				*/
+
+                float _speed = /*GameManager.instance.cellSize * */Time.deltaTime * moveSpeed;
+                int tx = nextPoint.x - startPoint.x;
+                int ty = nextPoint.y - startPoint.y;
+
+                float dx = _speed * tx;
+                float dy = -_speed * ty;
+                float rx = (nextPoint.x /* * GameManager.instance.cellSize + GameManager.instance.cellSize / 2.0f*/) - this.transform.localPosition.x;
+                float ry = (-nextPoint.y /* * GameManager.instance.cellSize - GameManager.instance.cellSize / 2.0f*/) - this.transform.localPosition.z;
+                bool isCloseX = false;
+                bool isCloseY = false;
+                if (Mathf.Abs(dx) > Mathf.Abs(rx) || dx == 0) 
+                {
+                    dx = rx;
+                    isCloseX = true;
+                }
+                if (Mathf.Abs(dy) > Mathf.Abs(ry) || dy == 0) 
+                {
+                    dy = ry;
+                    isCloseY = true;
+                }
+
+                this.transform.localPosition += new Vector3(dx, 0, -dy);
+
+                if (isCloseX && isCloseY)
+                {
+                    if (pathArr.Length <= pathIndex + 1)
+                    {
+                        return;
+                    }
+                    SetNextPoint();
+                }
 			}
 		}
 			break;
@@ -138,6 +175,38 @@ public class Monster : MonoBehaviour {
 		}
 		
 	}
+
+    
+
+    public void SetStartPoint(Point p)
+    {
+        startPoint = p;
+        GetPath();
+        nextPoint = pathArr[pathIndex];
+        // showCharDir();
+        // isMoveAble = true;
+    }
+
+    public void GetPath()
+    {
+        Point[] pArr = PathFinder.Instance.GetPath(startPoint, 111);
+        if (pArr == null) 
+        {
+            Debug.Log("NULL path");
+            return;
+        }
+        pathArr = pArr;
+        //pathArr = new Point[]{new Point(startPoint.x + 1, startPoint.y), new Point(startPoint.x + 2, startPoint.y), new Point(startPoint.x + 2, startPoint.y+1), new Point(startPoint.x + 2, startPoint.y)};
+        pathIndex = 0;
+    }
+
+    private void SetNextPoint()
+    {
+        startPoint = nextPoint;
+        pathIndex++;
+        nextPoint = pathArr[pathIndex];
+        // showCharDir();
+    }
 
     void ActionState()
     {
