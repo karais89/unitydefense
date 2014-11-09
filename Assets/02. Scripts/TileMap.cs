@@ -11,6 +11,7 @@ public class TileMap : MonoBehaviour {
 	private int mapWidth = 0;
 	private int mapHeight = 0;
     public int[,] mapData = new int[64, 64];
+    public UILabel mapLabel;
     public GameObject[,] tileArray = new GameObject[64, 64];
     private GameObject gridPrefab;    
     private GameObject[,] gridArray = new GameObject[64, 64];
@@ -33,6 +34,7 @@ public class TileMap : MonoBehaviour {
 
         CreateGrids();
 
+        mapLabel.text = "00000000";
 	}
 
     /// <summary>
@@ -297,8 +299,12 @@ public class TileMap : MonoBehaviour {
                 }
 
                 mapData[x, y] = (int) tileArray[x, y].GetComponent<Tile>().type;
+
+                
             }
         }
+
+        // mapLabel.text = mapData[0, 0].ToString();
 
         // 임시 코드...
         // 영웅 타워가 최종 목적지이다.
@@ -345,8 +351,11 @@ public class TileMap : MonoBehaviour {
 
                 // Map 게임오브젝트를 부모로 둔다
                 newGridDisable.transform.parent = GameObject.Find("Map").transform;
+
+                
             }
         }
+
     }
 
     /// <summary>
@@ -386,6 +395,9 @@ public class TileMap : MonoBehaviour {
                 }
             }
         }
+
+
+        
     }
     
 	/// <summary>

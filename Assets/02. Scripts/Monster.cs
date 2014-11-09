@@ -98,14 +98,14 @@ public class Monster : MonoBehaviour {
 				}
 				*/
 
-                float _speed = /*GameManager.instance.cellSize * */Time.deltaTime * moveSpeed;
+                float _speed = Time.deltaTime * moveSpeed;
                 int tx = nextPoint.x - startPoint.x;
                 int ty = nextPoint.y - startPoint.y;
 
                 float dx = _speed * tx;
                 float dy = -_speed * ty;
-                float rx = (nextPoint.x /* * GameManager.instance.cellSize + GameManager.instance.cellSize / 2.0f*/) - this.transform.localPosition.x;
-                float ry = (-nextPoint.y /* * GameManager.instance.cellSize - GameManager.instance.cellSize / 2.0f*/) - this.transform.localPosition.z;
+                float rx = (nextPoint.x) - this.transform.localPosition.x;
+                float ry = (-nextPoint.y) - this.transform.localPosition.z;
                 bool isCloseX = false;
                 bool isCloseY = false;
                 if (Mathf.Abs(dx) > Mathf.Abs(rx) || dx == 0) 
@@ -183,7 +183,7 @@ public class Monster : MonoBehaviour {
         startPoint = p;
         GetPath();
         nextPoint = pathArr[pathIndex];
-        // showCharDir();
+        ShowCharDir();
         // isMoveAble = true;
     }
 
@@ -205,7 +205,34 @@ public class Monster : MonoBehaviour {
         startPoint = nextPoint;
         pathIndex++;
         nextPoint = pathArr[pathIndex];
-        // showCharDir();
+        ShowCharDir();
+    }
+
+
+    private void ShowCharDir()
+    {
+        Vector3 look = new Vector3(nextPoint.x, 0, nextPoint.y);
+        transform.LookAt(look);
+        /*
+        if (startPoint.x < nextPoint.x)
+        {
+            // spr.Play(charAniStr[(int)CHAR_ANI.RIGHT]);
+        } 
+        else if (startPoint.x > nextPoint.x)
+        {
+            // spr.Play(charAniStr[(int)CHAR_ANI.LEFT]);
+        }   
+        else if (startPoint.y > nextPoint.y)
+        {
+            // spr.Play(charAniStr[(int)CHAR_ANI.UP]);
+        }   
+        else if (startPoint.y < nextPoint.y)
+        {
+            // spr.Play(charAniStr[(int)CHAR_ANI.DOWN]);
+        }
+            
+        // spr.ClipFps *= moveSpeed;
+         **/
     }
 
     void ActionState()
