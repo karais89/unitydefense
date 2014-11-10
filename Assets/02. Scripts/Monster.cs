@@ -187,17 +187,19 @@ public class Monster : MonoBehaviour {
         // isMoveAble = true;
     }
 
-    public void GetPath()
+    public bool GetPath()
     {
         Point[] pArr = PathFinder.Instance.GetPath(startPoint, 111);
-        if (pArr == null) 
+        if (pArr == null)
         {
             Debug.Log("NULL path");
-            return;
+            return false;
         }
         pathArr = pArr;
         //pathArr = new Point[]{new Point(startPoint.x + 1, startPoint.y), new Point(startPoint.x + 2, startPoint.y), new Point(startPoint.x + 2, startPoint.y+1), new Point(startPoint.x + 2, startPoint.y)};
         pathIndex = 0;
+
+        return true;
     }
 
     private void SetNextPoint()

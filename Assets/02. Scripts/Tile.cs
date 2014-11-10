@@ -13,20 +13,24 @@ public class Tile : MonoBehaviour {
     public bool hasObstacle = false;
     public string obstacleName = null;
     private GameObject tileLabel;
+    private bool isVisibleLabel = false;
 
 	// Use this for initialization
 	void Awake () {
 		// normalColor = renderer.material.color;
 
         tileLabel = (GameObject)Instantiate(Resources.Load("Prefabs/TileWidget") as GameObject);
-        
+        tileLabel.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void Update () 
     {
-        int iType = (int)type;
-        tileLabel.transform.GetChild(0).GetComponent<UILabel>().text = iType.ToString();
+        if ( isVisibleLabel == true )
+        {
+            int iType = (int)type;
+            tileLabel.transform.GetChild(0).GetComponent<UILabel>().text = iType.ToString();
+        }        
 	}
 
     public void SetTileLabelAnchor()
@@ -39,5 +43,18 @@ public class Tile : MonoBehaviour {
     public void SetTileLabel( string s )
     {
         tileLabel.transform.GetChild(0).GetComponent<UILabel>().text = s;
+    }
+
+    public void SetVisibleLabel( bool visible )
+    {
+        isVisibleLabel = visible;
+        if ( isVisibleLabel == true )
+        {
+            tileLabel.SetActive(true);
+        }
+        else if ( isVisibleLabel == false )
+        {
+            tileLabel.SetActive(false);
+        }
     }
 }

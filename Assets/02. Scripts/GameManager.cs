@@ -290,33 +290,16 @@ public class GameManager : MonoBehaviour {
         PathFinder.Instance.SetMapData( GameObject.Find("Map").GetComponent<TileMap>().mapData );
     }
 
-
-    Point getStartPoint()
+    public void ResearchPathUnits()
     {
-        //check startPoints
-        List<Point> startPointList = new List<Point>();
-        int _w = wallMap.GetLength(0);
-        int _h = wallMap.GetLength(1);
-        int x, y;
-        for (x = 0; x < _w; x++)
+        foreach (GameObject monster in monsterList)
         {
-            for (y = 0; y < _h; y++)
+            if (monster != null)
             {
-                if (wallMap[x, y] >= 10 && wallMap[x, y] <= 100)
-                {
-                    startPointList.Add(new Point(x, y));
-                }
+                monster.GetComponent<Monster>().GetPath();
             }
         }
-        if (startPointList.Count == 0)
-        {
-            Debug.LogError("Not Found Start Position");
-            return null;
-        }
-        int ranIdx = Random.Range(0, startPointList.Count);
-        return startPointList[ranIdx];
     }
-
 
 
     /// 일정 시간 간격을 두고 몬스터를 생성한다.
