@@ -97,6 +97,7 @@ public class MapEditor : MonoBehaviour {
 
                         newTree.transform.parent = hitInfo.collider.gameObject.transform;
 
+                        hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.obstacle;
                         hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
                         hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = selectedTreeName;
                     }                    
@@ -122,6 +123,7 @@ public class MapEditor : MonoBehaviour {
 
                         newRock.transform.parent = hitInfo.collider.gameObject.transform;
 
+                        hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.obstacle;
                         hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
                         hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = selectedRockName;
                     }

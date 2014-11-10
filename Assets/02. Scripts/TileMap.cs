@@ -11,7 +11,7 @@ public class TileMap : MonoBehaviour {
 	private int mapWidth = 0;
 	private int mapHeight = 0;
     public int[,] mapData = new int[64, 64];
-    public UILabel mapLabel;
+    //public UILabel mapLabel;
     public GameObject[,] tileArray = new GameObject[64, 64];
     private GameObject gridPrefab;    
     private GameObject[,] gridArray = new GameObject[64, 64];
@@ -34,7 +34,7 @@ public class TileMap : MonoBehaviour {
 
         CreateGrids();
 
-        mapLabel.text = "00000000";
+        
 	}
 
     /// <summary>
@@ -172,6 +172,11 @@ public class TileMap : MonoBehaviour {
             newTile.GetComponent<Tile>().type = type;
             newTile.GetComponent<Tile>().prefabName = prefabName;
             newTile.GetComponent<Tile>().hasObstacle = false;
+            newTile.GetComponent<Tile>().SetTileLabelAnchor();
+
+            int iType = (int)type;
+            string strType = iType.ToString();
+            newTile.GetComponent<Tile>().SetTileLabel(strType);
 
             // 나무나 돌이 있다면 타일 위에 생성한다.
             GameObject obstacle = null;
@@ -299,16 +304,13 @@ public class TileMap : MonoBehaviour {
                 }
 
                 mapData[x, y] = (int) tileArray[x, y].GetComponent<Tile>().type;
-
-                
             }
         }
-
-        // mapLabel.text = mapData[0, 0].ToString();
-
+        
         // 임시 코드...
         // 영웅 타워가 최종 목적지이다.
-        mapData[3, 6] = 111;
+        mapData[3, 12] = 111;
+        tileArray[3, 12].GetComponent<Tile>().type = Tile.TileType.hero;
     }
 
     /// <summary>
