@@ -2,6 +2,8 @@
 using System.Collections;
 using LitJson;
 using System.Text;
+using System.Collections.Generic;
+using Common;
 
 public class TileMap : MonoBehaviour {
 	public int sizeX = 64;
@@ -23,6 +25,9 @@ public class TileMap : MonoBehaviour {
     public GameObject[] rockPrefabArray = new GameObject[6];
     public string[] treePrefabNameArray = new string[12];
     public string[] rockPrefabNameArray = new string[6];
+    // private GameObject[] spawnArray; 
+    private List<GameObject> spawnList = new List<GameObject>();
+    private GameObject spawnPrefab;
 
     
 
@@ -89,6 +94,8 @@ public class TileMap : MonoBehaviour {
         rockPrefabNameArray[3] = "Rock_Medium";
         rockPrefabNameArray[4] = "Rock_Small_01";
         rockPrefabNameArray[5] = "Rock_Small_02";
+
+        spawnPrefab = (GameObject)Resources.Load("Prefabs/SpawnSphere", typeof(GameObject));
     }
 
     /// <summary>
@@ -141,6 +148,10 @@ public class TileMap : MonoBehaviour {
             {
                 type = Tile.TileType.obstacle;
             }
+            else if (data[i]["type"].ToString().Equals("spawn") == true)
+            {
+                type = Tile.TileType.spawn;
+            }
             else
             {
                 type = Tile.TileType.walkable;
@@ -177,6 +188,16 @@ public class TileMap : MonoBehaviour {
             int iType = (int)type;
             string strType = iType.ToString();
             newTile.GetComponent<Tile>().SetTileLabel(strType);
+
+            // 몬스터 생성 지점을 표시한다.
+            if ( type == Tile.TileType.spawn )
+            {
+                GameObject newSpawn = (GameObject) Instantiate(spawnPrefab, pos, Quaternion.identity);
+                newSpawn.transform.parent = GameObject.Find("Map").transform;
+                newSpawn.GetComponent<Spawn>().point = new Point(x, y);
+
+                GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Add(newSpawn);
+            }
 
             // 나무나 돌이 있다면 타일 위에 생성한다.
             GameObject obstacle = null;
@@ -262,6 +283,10 @@ public class TileMap : MonoBehaviour {
                 else if (type == Tile.TileType.obstacle)
                 {
                     typeString = "obstacle";
+                }
+                else if (type == Tile.TileType.spawn)
+                {
+                    typeString = "spawn";
                 }
                 else
                 {

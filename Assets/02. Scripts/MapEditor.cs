@@ -21,10 +21,15 @@ public class MapEditor : MonoBehaviour {
 	private bool isTreeBuildMode = false;
 	private bool isRockBuildMode = false;
     private bool isEraseMode = false;
+    private bool isSpawnMode = false;
+
+    private GameObject spawnPrefab = null;
     
 	// Use this for initialization
 	void Awake () 
     {
+        spawnPrefab = (GameObject)Resources.Load("Prefabs/SpawnSphere");
+
         GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
 
         GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
@@ -173,6 +178,31 @@ public class MapEditor : MonoBehaviour {
                 }
             }
         }
+
+        if ( isSpawnMode == true )
+        {
+            // 마우스 클릭한 지점에 몬스터 생성 지점을 심는다
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitInfo;
+
+                if (Physics.Raycast(ray, out hitInfo, 100.0f))
+                {
+                    if ( hitInfo.collider.tag == "TILE" )
+                    {
+                        int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
+                        int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
+
+                        GameObject newSpawn = (GameObject)Instantiate( spawnPrefab, hitInfo.collider.transform.position, Quaternion.identity );
+                        newSpawn.transform.parent = GameObject.Find("Map").transform;
+
+                        hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.spawn;                       
+
+                    }
+                }
+            }
+        }
 	}
     
 
@@ -210,6 +240,24 @@ public class MapEditor : MonoBehaviour {
                 isEraseMode = false;
             }
 
+            isTileBuildMode = false;
+            isTreeBuildMode = false;
+            isRockBuildMode = false;
+        }
+
+        // Spwan 생성 버튼
+        if (GUI.Button(new Rect(110, Screen.height - 30, 100, 30), "Spawn Point"))
+        {
+            if ( isSpawnMode == false )
+            {
+                isSpawnMode = true;
+            }
+            else if ( isSpawnMode == true )
+            {
+                isSpawnMode = false;
+            }
+
+            isEraseMode = false;
             isTileBuildMode = false;
             isTreeBuildMode = false;
             isRockBuildMode = false;

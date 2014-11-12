@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
 
 	public float createTime = 2.0f;
 	private int monsterCount = 0;
-	private Transform[] spawnTransform = new Transform[5];
+	private Transform[] spawnTransform = new Transform[16];
 	public static bool isGameOver = false;
 
 	private System.Random rand = new System.Random();
@@ -37,9 +37,6 @@ public class GameManager : MonoBehaviour {
 
 	///몬스터 리스트
 	public static List<GameObject> monsterList = new List<GameObject>();
-
-
-	
 
     ///몬스터를 담아둘 폴더오브젝트 
 	private static Transform enemyFolder = null;//파인드는 유니티에 무리를 주는행위라서 어웨이크에서 한번만 실행하기위해 클레스변수에 담음
@@ -96,40 +93,11 @@ public class GameManager : MonoBehaviour {
 	}
 	*/
 
-
     private int currentWave = 1;
     public int maxWave = 30;
     public int monsterNumPerWave = 32;
     private bool isWaveEnded = false;
 
-
-	///속도
-	//private bool isGameFaster = false;
-	///스코어텍스트
-	//public GUIText scoreText = null;
-
-    // 테스트 용 맵 정보
-    public int[,] wallMap = 
-    {{1, 1, 1, 1, 1, 11, 11, 11, 1, 1, 1, 1, 1},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {1, 1, 1, 1, 1, 111, 111, 111, 1, 1, 1, 1, 1}};
 
 	// Use this for initialization
 	void Awake () {
@@ -146,13 +114,15 @@ public class GameManager : MonoBehaviour {
 
         InitPathFinder();
 
-		for ( int i = 0; i < 5; i++ )
-		{
-			spawnTransform[i] = GameObject.Find( "SpawnPoint0" + i ).GetComponent<Transform>();
-		}
-	
-
-
+        List<GameObject> list = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList;
+        
+        int i = 0;
+        foreach( GameObject spawn in list )
+        {
+            spawnTransform[i] = spawn.transform;
+            i++;
+        }
+        
 		// waypoint에 일정 시간 간격으로 캐릭터 생성
 		StartCoroutine( this.CreateMonster () );
         gold = initialGold;
@@ -323,7 +293,8 @@ public class GameManager : MonoBehaviour {
 			Debug.Log ( "create new monster id = " + monsterCount );
 			//Debug.Log("monsterList.Count : " + monsterList.Count);
 
-			int random = rand.Next(0, 4);
+            int count = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Count;
+			int random = rand.Next(0, count);
 
 			//몬스터오브젝트생성 혹은 꺼내오기
 			GameObject newMonster = createObjet(monster_PrefabName);

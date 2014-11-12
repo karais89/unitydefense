@@ -49,6 +49,7 @@
      <Compile Include="Assets\02. Scripts\Bullet.cs" />
      <Compile Include="Assets\02. Scripts\CameraControl.cs" />
      <Compile Include="Assets\02. Scripts\GameManager.cs" />
+     <Compile Include="Assets\02. Scripts\GameObjectFactory.cs" />
      <Compile Include="Assets\02. Scripts\GameObjectPool.cs" />
      <Compile Include="Assets\02. Scripts\Gold.cs" />
      <Compile Include="Assets\02. Scripts\Grid.cs" />
@@ -59,7 +60,11 @@
      <Compile Include="Assets\02. Scripts\PathFinder.cs" />
      <Compile Include="Assets\02. Scripts\Performance.cs" />
      <Compile Include="Assets\02. Scripts\Point.cs" />
+     <Compile Include="Assets\02. Scripts\ResourceManager.cs" />
      <Compile Include="Assets\02. Scripts\SceneLoading.cs" />
+     <Compile Include="Assets\02. Scripts\SoundManager.cs" />
+     <Compile Include="Assets\02. Scripts\Spawn.cs" />
+     <Compile Include="Assets\02. Scripts\SpawnManager.cs" />
      <Compile Include="Assets\02. Scripts\Tile.cs" />
      <Compile Include="Assets\02. Scripts\TileMap.cs" />
      <Compile Include="Assets\02. Scripts\Tower.cs" />
