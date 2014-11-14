@@ -90,6 +90,7 @@ public class PathFinder {
         searchCount = 1;
 
         SetPathCount(new List<Point>() { current }, targetIndex, 100);
+        //SetPathCount(new List<Point>() { current }, targetIndex);
 
         if (goalPoint == null)
         {
@@ -135,11 +136,22 @@ public class PathFinder {
         foreach (Point p in pList)
         {
             List<Point> retList = RecordPath(p, targetIdx);
-            if (retList != null && retList.Count > 0) { _List.AddRange(retList); }
+            if (retList != null && retList.Count > 0) 
+            {
+                _List.AddRange(retList); 
+            }
         }
-        if (_List.Count == 0) { Debug.Log("SEARCHING FAIL!!!!"); return; }
+        if (_List.Count == 0)
+        {
+            Debug.Log("SEARCHING FAIL!!!!");
+            return;
+        }
         searchCount++;
-        if (searchCount >= max) { isSearching = false; return; }
+        if (searchCount >= max)
+        {
+            isSearching = false;
+            return;
+        }
 
         SetPathCount(_List, targetIdx, max);
     }
@@ -156,6 +168,7 @@ public class PathFinder {
     private List<Point> RecordPath(Point p, int targetIdx)
     {
         if (!isSearching) return null;
+
         if (originalMap[p.x, p.y] == targetIdx)
         {
             isSearching = false;
@@ -164,6 +177,7 @@ public class PathFinder {
             Debug.Log("SEARCHING COMPLETE!!!!   : " + searchCount);
             return null;
         }
+
         List<Point> rList = null;
         if (mapData.map[p.x, p.y] == 0)
         {
@@ -176,10 +190,22 @@ public class PathFinder {
 
     private void GetNeighbours(Point p, ref List<Point> rList)
     {
-        if (p.x > 0 && mapData.map[p.x - 1, p.y] == 0) rList.Add(new Point(p.x - 1, p.y));
-        if (p.y > 0 && mapData.map[p.x, p.y - 1] == 0) rList.Add(new Point(p.x, p.y - 1));
-        if (p.x < originalMap.GetLength(0) - 1 && mapData.map[p.x + 1, p.y] == 0) rList.Add(new Point(p.x + 1, p.y));
-        if (p.y < originalMap.GetLength(1) - 1 && mapData.map[p.x, p.y + 1] == 0) rList.Add(new Point(p.x, p.y + 1));
+        if (p.x > 0 && mapData.map[p.x - 1, p.y] == 0)
+        {
+            rList.Add(new Point(p.x - 1, p.y));
+        }
+        if (p.y > 0 && mapData.map[p.x, p.y - 1] == 0)
+        {
+            rList.Add(new Point(p.x, p.y - 1));
+        }
+        if (p.x < originalMap.GetLength(0) - 1 && mapData.map[p.x + 1, p.y] == 0)
+        {
+            rList.Add(new Point(p.x + 1, p.y));
+        }
+        if (p.y < originalMap.GetLength(1) - 1 && mapData.map[p.x, p.y + 1] == 0)
+        {
+            rList.Add(new Point(p.x, p.y + 1));
+        }
     }
 
     /// <summary>

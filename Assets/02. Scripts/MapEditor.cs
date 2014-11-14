@@ -175,6 +175,12 @@ public class MapEditor : MonoBehaviour {
                         newTile.GetComponent<Tile>().hasObstacle = false;
                         newTile.GetComponent<Tile>().obstacleName = "";
                     }
+                    else if ( hitInfo.collider.tag == "SPAWN" )
+                    {
+                        //hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().type = Tile.TileType.walkable;
+                        
+                        Destroy(hitInfo.collider.gameObject);
+                    }
                 }
             }
         }

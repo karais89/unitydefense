@@ -6,19 +6,19 @@ using System.Collections.Generic;
 using Common;
 
 public class TileMap : MonoBehaviour {
-	public int sizeX = 64;
-	public int sizeY = 64;
+	public const int sizeX = 64;
+	public const int sizeY = 64;
 	public int tileWidth = 1;
 	public int tileHeight = 1;
 	private int mapWidth = 0;
 	private int mapHeight = 0;
-    public int[,] mapData = new int[64, 64];
+    public int[,] mapData = new int[sizeX, sizeY];
     //public UILabel mapLabel;
-    public GameObject[,] tileArray = new GameObject[64, 64];
+    public GameObject[,] tileArray = new GameObject[sizeX, sizeY];
     private GameObject gridPrefab;    
-    private GameObject[,] gridArray = new GameObject[64, 64];
+    private GameObject[,] gridArray = new GameObject[sizeX, sizeY];
     private GameObject gridDisablePrefab;
-    private GameObject[,] gridDisableArray = new GameObject[64, 64];
+    private GameObject[,] gridDisableArray = new GameObject[sizeX, sizeY];
     public TextAsset jsonData;
     public GameObject[] tilePrefabArray = new GameObject[20];
     public GameObject[] treePrefabArray = new GameObject[12];
@@ -351,6 +351,9 @@ public class TileMap : MonoBehaviour {
                 tileArray[x, y] = null;
             }
         }
+
+        GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Clear();
+        GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList = null;
     }
 
     /// <summary>
