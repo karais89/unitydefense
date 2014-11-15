@@ -178,7 +178,7 @@ public class MapEditor : MonoBehaviour {
                     else if ( hitInfo.collider.tag == "SPAWN" )
                     {
                         //hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().type = Tile.TileType.walkable;
-                        
+                        Debug.Log("Erase Spawn");
                         Destroy(hitInfo.collider.gameObject);
                     }
                 }
