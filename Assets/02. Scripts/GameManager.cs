@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour {
 
         GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
 
-        InitPathFinder();
+        //InitPathFinder();
 
         List<GameObject> list = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList;
         
@@ -299,14 +299,12 @@ public class GameManager : MonoBehaviour {
 			//몬스터오브젝트생성 혹은 꺼내오기
 			GameObject newMonster = createObjet(monster_PrefabName);
 			newMonster.transform.position = spawnTransform[random].position;
-            //newMonster.transform.position = spawnTransform[4].position;
 			newMonster.transform.rotation = Quaternion.identity;
 			newMonster.GetComponent<Monster>().id = monsterCount;
 
             //Point startPoint = getStartPoint();
             Point startPoint = new Point( (int)spawnTransform[random].position.x, (int)spawnTransform[random].position.z);
-            //Point startPoint = new Point((int)spawnTransform[4].position.x, (int)spawnTransform[4].position.z);
-            newMonster.GetComponent<Monster>().SetStartPoint( startPoint );
+            // newMonster.GetComponent<Monster>().SetStartPoint( startPoint );
 
             // GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);
             /*GameObject newMonster = pool.NewItem();

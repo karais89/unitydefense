@@ -151,7 +151,7 @@ public class TowerManager : MonoBehaviour {
                         hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
                         hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = "Tower";
 
-                        GameObject.Find("GameManager").GetComponent<GameManager>().ResearchPathUnits();
+                        //GameObject.Find("GameManager").GetComponent<GameManager>().ResearchPathUnits();
                     }
 				}
 			}

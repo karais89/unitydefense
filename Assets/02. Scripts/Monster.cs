@@ -85,7 +85,7 @@ public class Monster : MonoBehaviour {
 			{
 								
 				// hero tower를 타겟으로 이동
-                /*
+                
 				float distance = (transform.position - LookAtTo(targetPosition)).magnitude;
 				if ( distance >= 1.0f )
 				{
@@ -96,8 +96,9 @@ public class Monster : MonoBehaviour {
 					animation.CrossFade("Attack_01");
 					monsterState = MonsterState.attack;
 				}
-				*/
+				
 
+                /*
                 float _speed = Time.deltaTime * moveSpeed;
                 int tx = nextPoint.x - startPoint.x;
                 int ty = nextPoint.y - startPoint.y;
@@ -129,6 +130,7 @@ public class Monster : MonoBehaviour {
                     }
                     SetNextPoint();
                 }
+                */
 			}
 		}
 			break;
@@ -375,27 +377,6 @@ public class Monster : MonoBehaviour {
 		}
 		HpBar.transform.GetChild(0).GetComponent<UISlider>().sliderValue = HP / HP_Max;
 	}
-
-
-	//사용안함
-    /*void OnGUI()
-    {
-        // GUI 몬스터 HP
-        Vector3 pointTransform = Vector3.zero;
-        pointTransform.x = transform.position.x;
-        pointTransform.y = transform.position.y + 1.5f;
-        pointTransform.z = transform.position.z;        
-        pointHP = Camera.main.WorldToScreenPoint(pointTransform);
-        rectHP.width = 100;
-        rectHP.height = 10;
-        rectHP.x = pointHP.x - (rectHP.width / 2);
-        rectHP.y = Screen.height - pointHP.y - (rectHP.height / 2);
-
-        GUI.DrawTexture(rectHP, HP_EmptyTexture);
-        GUI.BeginGroup(rectHP, "");
-        GUI.DrawTexture(new Rect(0, 0, 100 * (HP / HP_Max), rectHP.height), HP_FullTexture);
-        GUI.EndGroup();
-    }*/
 
 
 }
