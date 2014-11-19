@@ -19,7 +19,7 @@ public class Monster : MonoBehaviour {
     public Texture HP_EmptyTexture;
     public Texture HP_FullTexture;
 
-	// private NavMeshAgent navAgent;
+	private NavMeshAgent navAgent;
     public const int earnGold = 3;
     public const int earnScore = 10;
     public GameObject bloodEffectPrefab;
@@ -38,7 +38,7 @@ public class Monster : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		// navAgent = gameObject.GetComponent<NavMeshAgent>();
+        //navAgent = gameObject.GetComponent<NavMeshAgent>();
 
 		endPointTransform = GameObject.Find ("EndPoint").GetComponent<Transform> ();
         targetPosition = GameObject.Find("HeroTower").GetComponent<Transform>().position;
@@ -56,6 +56,10 @@ public class Monster : MonoBehaviour {
         initialPos.z = 0;
         transform.position = initialPos;
 
+        
+        // 추적 대상의 위치 설정하면 바로 추적 시작
+        //navAgent.destination = endPointTransform.position;
+
         // gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
 
         monsterState = MonsterState.walk;
@@ -66,14 +70,16 @@ public class Monster : MonoBehaviour {
         HP = HP_Max;
     }
 
+    /*
 	void Start()
 	{
-		// navAgent = this.gameObject.GetComponent<NavMeshAgent>();
+		navAgent = this.gameObject.GetComponent<NavMeshAgent>();
 
 		// 추적 대상의 위치 설정하면 바로 추적 시작
-		// navAgent.destination = endPointTransform.position;
+		navAgent.destination = endPointTransform.position;
 	}
-	
+	*/
+
 	// Update is called once per frame
 	void Update () {
 		
