@@ -2,7 +2,8 @@
 using System.Collections;
 using Common;
 
-public class Monster : MonoBehaviour {
+//public class Monster : MonoBehaviour {
+public class Monster : Pathfinding {
     public int id = 0;
 	public float moveSpeed = 0.3f;
 	public float maxDistance = 1000.0f;
@@ -19,7 +20,7 @@ public class Monster : MonoBehaviour {
     public Texture HP_EmptyTexture;
     public Texture HP_FullTexture;
 
-	private NavMeshAgent navAgent;
+	//private NavMeshAgent navAgent;
     public const int earnGold = 3;
     public const int earnScore = 10;
     public GameObject bloodEffectPrefab;
@@ -47,6 +48,11 @@ public class Monster : MonoBehaviour {
 		// animation.Play( "Walk" );
 
         HP = HP_Max;
+
+        // 추적 대상의 위치 설정하면 바로 추적 시작
+        //navAgent.destination = endPointTransform.position;
+
+        
 	}
 
     void OnEnable()
@@ -89,9 +95,12 @@ public class Monster : MonoBehaviour {
 		{
 			if (transform.position.z < endPointTransform.position.z)
 			{
+                StartCoroutine(PathTimer());
+
+                Movement();
 								
 				// hero tower를 타겟으로 이동
-                
+                /*
 				float distance = (transform.position - LookAtTo(targetPosition)).magnitude;
 				if ( distance >= 1.0f )
 				{
@@ -102,8 +111,9 @@ public class Monster : MonoBehaviour {
 					animation.CrossFade("Attack_01");
 					monsterState = MonsterState.attack;
 				}
-				
+				*/
 
+                // 이동 AI로 이동
                 /*
                 float _speed = Time.deltaTime * moveSpeed;
                 int tx = nextPoint.x - startPoint.x;
@@ -183,6 +193,38 @@ public class Monster : MonoBehaviour {
 		}
 		
 	}
+
+
+    IEnumerator PathTimer()
+    {
+        FindPath(transform.position, endPointTransform.position);
+        yield return new WaitForSeconds(0.5F);
+    }
+
+
+    private void Movement()
+    {
+        //Debug.Log("Movement() called");
+        if (Path.Count > 0)
+        {
+            //Debug.Log("Movement() called");
+
+            if (Vector3.Distance(transform.position, new Vector3(Path[0].x, transform.position.y, Path[0].z)) < 0.2F)
+            {
+                Path.RemoveAt(0);
+            }
+
+            if (Path.Count > 0)
+            {
+                Vector3 direction = (new Vector3(Path[0].x, transform.position.y, Path[0].z) - transform.position).normalized;
+                if (direction == Vector3.zero)
+                {
+                    // direction = (end - transform.position).normalized;
+                }
+                transform.position = Vector3.MoveTowards(transform.position, transform.position + direction, Time.deltaTime * 4F);
+            }
+        }
+    }
 
     
 
