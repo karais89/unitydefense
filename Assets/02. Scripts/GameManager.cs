@@ -108,10 +108,12 @@ public class GameManager : MonoBehaviour {
 		//씬 변경시 제거안되게
 		//DontDestroyOnLoad (this.gameObject);
 
-        GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
+        GameObject.Find("Map").SetActive(false);
+        
+        //GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
 
-        GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
-
+        //GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
+        
         //InitPathFinder();
 
         List<GameObject> list = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList;
