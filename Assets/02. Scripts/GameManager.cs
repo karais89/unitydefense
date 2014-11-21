@@ -295,17 +295,18 @@ public class GameManager : MonoBehaviour {
 			Debug.Log ( "create new monster id = " + monsterCount );
 			//Debug.Log("monsterList.Count : " + monsterList.Count);
 
-            int count = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Count;
-			int random = rand.Next(0, count);
+            //int count = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Count;
+			//int random = rand.Next(0, count);
 
 			//몬스터오브젝트생성 혹은 꺼내오기
 			GameObject newMonster = createObjet(monster_PrefabName);
-			newMonster.transform.position = spawnTransform[random].position;
+			//newMonster.transform.position = spawnTransform[random].position;
+            newMonster.transform.position = new Vector3(0, 0, 0);
 			newMonster.transform.rotation = Quaternion.identity;
 			newMonster.GetComponent<Monster>().id = monsterCount;
 
             //Point startPoint = getStartPoint();
-            Point startPoint = new Point( (int)spawnTransform[random].position.x, (int)spawnTransform[random].position.z);
+            //Point startPoint = new Point( (int)spawnTransform[random].position.x, (int)spawnTransform[random].position.z);
             // newMonster.GetComponent<Monster>().SetStartPoint( startPoint );
 
             // GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);

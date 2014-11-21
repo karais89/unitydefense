@@ -197,6 +197,8 @@ public class Monster : Pathfinding {
 
     IEnumerator PathTimer()
     {
+
+
         FindPath(transform.position, endPointTransform.position);
         yield return new WaitForSeconds(0.5F);
     }
