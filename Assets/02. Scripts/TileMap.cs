@@ -433,6 +433,7 @@ public class TileMap : MonoBehaviour {
 	/// <summary>
 	/// Gizmo 그리드를 그린다.
 	/// </summary>
+    /*
 	void OnDrawGizmos () {
 		mapWidth = sizeX * tileWidth;
 		mapHeight = sizeY * tileHeight;
@@ -456,6 +457,7 @@ public class TileMap : MonoBehaviour {
 			Gizmos.DrawLine(new Vector3(0, 0, i * tileHeight), new Vector3(mapWidth, 0, i * tileHeight));
 		}
 	}
+     */
 	
 	// Update is called once per frame
 	void Update () {

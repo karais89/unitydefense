@@ -7,7 +7,7 @@ public class Monster : Pathfinding {
     public int id = 0;
 	public float moveSpeed = 0.3f;
 	public float maxDistance = 1000.0f;
-	private Transform endPointTransform;
+	private Vector3 endPoint;
 	public enum MonsterState { idle, walk, attack, gothit, die };
 	public MonsterState monsterState = MonsterState.walk;
 
@@ -41,7 +41,8 @@ public class Monster : Pathfinding {
 	void Awake () {
         //navAgent = gameObject.GetComponent<NavMeshAgent>();
 
-		endPointTransform = GameObject.Find ("EndPoint").GetComponent<Transform> ();
+		//endPoint = GameObject.Find ("EndPoint").GetComponent<Transform> ().position;
+        endPoint = new Vector3(0, 0, 9);
         targetPosition = GameObject.Find("HeroTower").GetComponent<Transform>().position;
 
 		// 걷는 애니메이션 바로 시작
@@ -93,7 +94,7 @@ public class Monster : Pathfinding {
 		{
 		case MonsterState.walk:
 		{
-			if (transform.position.z < endPointTransform.position.z)
+			if (transform.position.z < endPoint.z)
 			{
                 StartCoroutine(PathTimer());
 
@@ -197,9 +198,9 @@ public class Monster : Pathfinding {
 
     IEnumerator PathTimer()
     {
+        //Debug.Log("PathTimer() called");
 
-
-        FindPath(transform.position, endPointTransform.position);
+        FindPath(transform.position, endPoint);
         yield return new WaitForSeconds(0.5F);
     }
 
