@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Common;
 
 public class Spawn : MonoBehaviour {
-
-    public Point point;
+    public int indexX;
+    public int indexY;
 
     void Awake()
     {

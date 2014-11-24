@@ -3,7 +3,6 @@ using System.Collections;
 using LitJson;
 using System.Text;
 using System.Collections.Generic;
-using Common;
 
 public class TileMap : MonoBehaviour {
 	public const int sizeX = 64;
@@ -194,7 +193,8 @@ public class TileMap : MonoBehaviour {
             {
                 GameObject newSpawn = (GameObject) Instantiate(spawnPrefab, pos, Quaternion.identity);
                 newSpawn.transform.parent = GameObject.Find("Map").transform;
-                newSpawn.GetComponent<Spawn>().point = new Point(x, y);
+                newSpawn.GetComponent<Spawn>().indexX = x;
+                newSpawn.GetComponent<Spawn>().indexY = x;
 
                 GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Add(newSpawn);
             }

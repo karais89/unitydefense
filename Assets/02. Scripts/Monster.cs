@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Common;
 
 //public class Monster : MonoBehaviour {
 public class Monster : Pathfinding {
@@ -30,13 +29,7 @@ public class Monster : Pathfinding {
 
 	///생성된 HpBar를 담아둘변수
 	GameObject HpBar = null;
-
-    //private bool isMoveAble = false;
-    private Point[] pathArr;
-    private Point startPoint;
-    private Point nextPoint;
-    private int pathIndex = 0;
-
+    
 	// Use this for initialization
 	void Awake () {
         //navAgent = gameObject.GetComponent<NavMeshAgent>();
@@ -114,40 +107,7 @@ public class Monster : Pathfinding {
 				}
 				*/
 
-                // 이동 AI로 이동
-                /*
-                float _speed = Time.deltaTime * moveSpeed;
-                int tx = nextPoint.x - startPoint.x;
-                int ty = nextPoint.y - startPoint.y;
-
-                float dx = _speed * tx;
-                float dy = -_speed * ty;
-                float rx = (nextPoint.x) - this.transform.localPosition.x;
-                float ry = (-nextPoint.y) - this.transform.localPosition.z;
-                bool isCloseX = false;
-                bool isCloseY = false;
-                if (Mathf.Abs(dx) > Mathf.Abs(rx) || dx == 0) 
-                {
-                    dx = rx;
-                    isCloseX = true;
-                }
-                if (Mathf.Abs(dy) > Mathf.Abs(ry) || dy == 0) 
-                {
-                    dy = ry;
-                    isCloseY = true;
-                }
-
-                this.transform.localPosition += new Vector3(dx, 0, -dy);
-
-                if (isCloseX && isCloseY)
-                {
-                    if (pathArr.Length <= pathIndex + 1)
-                    {
-                        return;
-                    }
-                    SetNextPoint();
-                }
-                */
+                
 			}
 		}
 			break;
@@ -163,25 +123,9 @@ public class Monster : Pathfinding {
 			if ( animation.isPlaying == false )
 			{
 				
-				
-				
-				
 				//사용이끝난 오브젝트 큐로 반환
 				GameManager.insertObjet(this.gameObject);
-				/*
-                GameObjectPool pool = GameObject.Find("GameManager").GetComponent<GameManager>().GetPool();
-                pool.RemoveItem(this.gameObject);*/
 				
-				/*
-                Vector3 initialPos = transform.position;
-                initialPos.z = 0;
-                transform.position = initialPos;
-
-                gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
-                monsterState = MonsterState.walk;
-                animation.Play("Walk");
-                HP = HP_Max;
-                 */
 			}
 		}
 			break;
@@ -229,66 +173,6 @@ public class Monster : Pathfinding {
         }
     }
 
-    
-
-    public void SetStartPoint(Point p)
-    {
-        startPoint = p;
-        GetPath();
-        nextPoint = pathArr[pathIndex];
-        ShowCharDir();
-        // isMoveAble = true;
-    }
-
-    public bool GetPath()
-    {
-        Point[] pArr = PathFinder.Instance.GetPath(startPoint, 111);
-        if (pArr == null)
-        {
-            Debug.Log("NULL path");
-            return false;
-        }
-        pathArr = pArr;
-        //pathArr = new Point[]{new Point(startPoint.x + 1, startPoint.y), new Point(startPoint.x + 2, startPoint.y), new Point(startPoint.x + 2, startPoint.y+1), new Point(startPoint.x + 2, startPoint.y)};
-        pathIndex = 0;
-
-        return true;
-    }
-
-    private void SetNextPoint()
-    {
-        startPoint = nextPoint;
-        pathIndex++;
-        nextPoint = pathArr[pathIndex];
-        ShowCharDir();
-    }
-
-
-    private void ShowCharDir()
-    {
-        Vector3 look = new Vector3(nextPoint.x, 0, nextPoint.y);
-        transform.LookAt(look);
-        /*
-        if (startPoint.x < nextPoint.x)
-        {
-            // spr.Play(charAniStr[(int)CHAR_ANI.RIGHT]);
-        } 
-        else if (startPoint.x > nextPoint.x)
-        {
-            // spr.Play(charAniStr[(int)CHAR_ANI.LEFT]);
-        }   
-        else if (startPoint.y > nextPoint.y)
-        {
-            // spr.Play(charAniStr[(int)CHAR_ANI.UP]);
-        }   
-        else if (startPoint.y < nextPoint.y)
-        {
-            // spr.Play(charAniStr[(int)CHAR_ANI.DOWN]);
-        }
-            
-        // spr.ClipFps *= moveSpeed;
-         **/
-    }
 
     void ActionState()
     {

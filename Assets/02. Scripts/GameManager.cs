@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Common;
 
 public class GameManager : MonoBehaviour {
 	
@@ -254,25 +253,7 @@ public class GameManager : MonoBehaviour {
         }
         obj.SetActive(false);
     }
-
-    public void InitPathFinder()
-    {
-        //PathFinder.Instance.SetMapData(wallMap);
-
-        PathFinder.Instance.SetMapData( GameObject.Find("Map").GetComponent<TileMap>().mapData );
-    }
-
-    public void ResearchPathUnits()
-    {
-        foreach (GameObject monster in monsterList)
-        {
-            if (monster != null)
-            {
-                monster.GetComponent<Monster>().GetPath();
-            }
-        }
-    }
-
+    
 
     /// 일정 시간 간격을 두고 몬스터를 생성한다.
 	IEnumerator CreateMonster()

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Common;
 
 public class Tile : MonoBehaviour {
 
@@ -8,7 +7,6 @@ public class Tile : MonoBehaviour {
 	// private Color normalColor;
     public enum TileType { walkable = 0, obstacle = 1, spawn = 11, hero = 111 };
     public TileType type = TileType.walkable;
-    public Point point;
     public int indexX = 0;
     public int indexY = 0;
     public string prefabName = null;
