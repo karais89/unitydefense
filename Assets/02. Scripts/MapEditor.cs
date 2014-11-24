@@ -146,8 +146,12 @@ public class MapEditor : MonoBehaviour {
 
                 if (Physics.Raycast(ray, out hitInfo, 100.0f))
                 {
+                    Debug.Log("Raycast tag = " + hitInfo.collider.tag);
+
                     if ( hitInfo.collider.tag == "TREE" || hitInfo.collider.tag == "ROCK" )
                     {
+                        Debug.Log("Erase Tree/Rock");
+
                         hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().type = Tile.TileType.walkable;
                         hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().hasObstacle = false;
                         hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().obstacleName = "";
@@ -156,6 +160,8 @@ public class MapEditor : MonoBehaviour {
                     }
                     else if ( hitInfo.collider.tag == "TILE" )
                     {
+                        Debug.Log("Erase Tile");
+
                         int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
                         int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
 
@@ -179,7 +185,14 @@ public class MapEditor : MonoBehaviour {
                     {
                         //hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().type = Tile.TileType.walkable;
                         Debug.Log("Erase Spawn");
+
+                        int x = hitInfo.collider.gameObject.GetComponent<Spawn>().indexX;
+                        int y = hitInfo.collider.gameObject.GetComponent<Spawn>().indexY;
+
+                        GameObject.Find("Map").GetComponent<TileMap>().tileArray[x, y].GetComponent<Tile>().type = Tile.TileType.walkable;
+
                         Destroy(hitInfo.collider.gameObject);
+
                     }
                 }
             }
@@ -197,13 +210,13 @@ public class MapEditor : MonoBehaviour {
                 {
                     if ( hitInfo.collider.tag == "TILE" )
                     {
-                        /*
                         int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
                         int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
-                        */
-
+                        
                         GameObject newSpawn = (GameObject)Instantiate( spawnPrefab, hitInfo.collider.transform.position, Quaternion.identity );
                         newSpawn.transform.parent = GameObject.Find("Map").transform;
+                        newSpawn.GetComponent<Spawn>().indexX = x;
+                        newSpawn.GetComponent<Spawn>().indexY = y;
 
                         hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.spawn;                       
 
