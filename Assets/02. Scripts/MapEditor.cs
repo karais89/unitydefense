@@ -197,8 +197,10 @@ public class MapEditor : MonoBehaviour {
                 {
                     if ( hitInfo.collider.tag == "TILE" )
                     {
+                        /*
                         int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
                         int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
+                        */
 
                         GameObject newSpawn = (GameObject)Instantiate( spawnPrefab, hitInfo.collider.transform.position, Quaternion.identity );
                         newSpawn.transform.parent = GameObject.Find("Map").transform;

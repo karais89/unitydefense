@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//public class Monster : MonoBehaviour {
-public class Monster : Pathfinding {
+public class Monster : MonoBehaviour {
+//public class Monster : Pathfinding {
     public int id = 0;
 	public float moveSpeed = 0.3f;
 	public float maxDistance = 1000.0f;
@@ -13,8 +13,7 @@ public class Monster : Pathfinding {
     [HideInInspector]
     public float HP = 0.0f;
 
-    public const float HP_Max = 30.0f;
-    private Vector3 pointHP = Vector3.zero;
+    public const float HP_Max = 30.0f;    
     private Rect rectHP;
     public Texture HP_EmptyTexture;
     public Texture HP_FullTexture;
@@ -87,27 +86,24 @@ public class Monster : Pathfinding {
 		{
 		case MonsterState.walk:
 		{
-			if (transform.position.z < endPoint.z)
-			{
-                StartCoroutine(PathTimer());
+            // Simply A# 로 이동
+            /*
+            StartCoroutine(PathTimer());
 
-                Movement();
-								
-				// hero tower를 타겟으로 이동
-                /*
-				float distance = (transform.position - LookAtTo(targetPosition)).magnitude;
-				if ( distance >= 1.0f )
-				{
-					transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
-				}
-				else
-				{
-					animation.CrossFade("Attack_01");
-					monsterState = MonsterState.attack;
-				}
-				*/
-
+            Movement();
+            */
+			
+			// hero tower를 타겟으로 이동
                 
+			float distance = (transform.position - LookAtTo(targetPosition)).magnitude;
+			if ( distance >= 1.0f )
+			{
+				transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+			}
+			else
+			{
+				animation.CrossFade("Attack_01");
+				monsterState = MonsterState.attack;
 			}
 		}
 			break;
@@ -140,6 +136,7 @@ public class Monster : Pathfinding {
 	}
 
 
+    /*
     IEnumerator PathTimer()
     {
         //Debug.Log("PathTimer() called");
@@ -147,8 +144,10 @@ public class Monster : Pathfinding {
         FindPath(transform.position, endPoint);
         yield return new WaitForSeconds(0.5F);
     }
+    */
 
 
+    /*
     private void Movement()
     {
         //Debug.Log("Movement() called");
@@ -172,6 +171,7 @@ public class Monster : Pathfinding {
             }
         }
     }
+    */
 
 
     void ActionState()
@@ -310,7 +310,8 @@ public class Monster : Pathfinding {
 		{
 			return;
 		}
-		HpBar.transform.GetChild(0).GetComponent<UISlider>().sliderValue = HP / HP_Max;
+
+		HpBar.transform.GetChild(0).GetComponent<UISlider>().value = HP / HP_Max;
 	}
 
 

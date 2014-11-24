@@ -8,10 +8,12 @@ public class SpawnManager : MonoBehaviour {
 
     // private Transform[] spawnTransform = new Transform[5];
     public List<GameObject> spawnList = new List<GameObject>();
+    /*
     private int currentWave = 1;
     public int maxWave = 30;
     public int monsterNumPerWave = 32;
     private bool isWaveEnded = false;
+    */
 
     void Awake()
     {

@@ -79,25 +79,12 @@ public class GameManager : MonoBehaviour {
     private bool isGamePaused = false;
 	///게임속도
 	private float GameSpeed = 1.0f;
-	///셋팅메뉴
-    private bool isVisibleSettingMenu = false;
-
-	/*  //사용안함
-	///오브젝트풀
-    private GameObjectPool pool = new GameObjectPool();
-	///오브젝트풀
-	public GameObjectPool GetPool()
-	{
-		return pool;
-	}
-	*/
-
+	
     private int currentWave = 1;
     public int maxWave = 30;
     public int monsterNumPerWave = 32;
     private bool isWaveEnded = false;
-
-
+    
 	// Use this for initialization
 	void Awake () {
 
@@ -107,11 +94,12 @@ public class GameManager : MonoBehaviour {
 		//씬 변경시 제거안되게
 		//DontDestroyOnLoad (this.gameObject);
 
-        GameObject.Find("Map").SetActive(false);
+        //GameObject.Find("Map").SetActive(false);
+        GameObject.Find("MapFilled").SetActive(false);
         
-        //GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
+        GameObject.Find("Map").GetComponent<TileMap>().LoadResources();
 
-        //GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
+        GameObject.Find("Map").GetComponent<TileMap>().LoadMapJSON();
         
         //InitPathFinder();
 
@@ -276,30 +264,16 @@ public class GameManager : MonoBehaviour {
 			Debug.Log ( "create new monster id = " + monsterCount );
 			//Debug.Log("monsterList.Count : " + monsterList.Count);
 
-            //int count = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Count;
-			//int random = rand.Next(0, count);
+            int count = GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Count;
+			int random = rand.Next(0, count);
 
 			//몬스터오브젝트생성 혹은 꺼내오기
 			GameObject newMonster = createObjet(monster_PrefabName);
-			//newMonster.transform.position = spawnTransform[random].position;
-            newMonster.transform.position = new Vector3(0, 0, 0);
+			newMonster.transform.position = spawnTransform[random].position;
+            //newMonster.transform.position = new Vector3(0, 0, 0);
 			newMonster.transform.rotation = Quaternion.identity;
 			newMonster.GetComponent<Monster>().id = monsterCount;
 
-            //Point startPoint = getStartPoint();
-            //Point startPoint = new Point( (int)spawnTransform[random].position.x, (int)spawnTransform[random].position.z);
-            // newMonster.GetComponent<Monster>().SetStartPoint( startPoint );
-
-            // GameObject newMonster = (GameObject)Instantiate(monsterPrefab, spawnTransform[random].position, Quaternion.identity);
-            /*GameObject newMonster = pool.NewItem();
-            newMonster.transform.position = spawnTransform[random].position;
-            newMonster.transform.rotation = Quaternion.identity;
-            newMonster.GetComponent<Monster>().id = monsterCount;
-
-            // 생성된 몬스터들은 Enemy를 부모르 둔다
-            // newMonster.transform.parent = GameObject.Find("Enemy").transform;
-
-            monsterList.Add(newMonster);*/
 		}
 	}
 	

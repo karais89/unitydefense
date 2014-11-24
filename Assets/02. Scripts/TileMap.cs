@@ -9,8 +9,6 @@ public class TileMap : MonoBehaviour {
 	public const int sizeY = 64;
 	public int tileWidth = 1;
 	public int tileHeight = 1;
-	private int mapWidth = 0;
-	private int mapHeight = 0;
     public int[,] mapData = new int[sizeX, sizeY];
     //public UILabel mapLabel;
     public GameObject[,] tileArray = new GameObject[sizeX, sizeY];
@@ -23,12 +21,8 @@ public class TileMap : MonoBehaviour {
     public GameObject[] treePrefabArray = new GameObject[12];
     public GameObject[] rockPrefabArray = new GameObject[6];
     public string[] treePrefabNameArray = new string[12];
-    public string[] rockPrefabNameArray = new string[6];
-    // private GameObject[] spawnArray; 
-    private List<GameObject> spawnList = new List<GameObject>();
+    public string[] rockPrefabNameArray = new string[6];    
     private GameObject spawnPrefab;
-
-    
 
 	void Awake() {
 

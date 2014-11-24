@@ -16,11 +16,6 @@ public class Tower : MonoBehaviour {
     public int level = 1;
     public int bulletDamage = 10;
    
-	//사용안함
-	//private GameObjectPool pool = new GameObjectPool();
-    private GameObject bullet = null;
-    
-
     public int GetEarnScore()
     {
         return earnScore;
@@ -41,11 +36,6 @@ public class Tower : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 
-		//사용안함
-        //bullet = (GameObject)Resources.Load("Prefabs/bullet", typeof(GameObject));
-        //pool.Create(bullet, 10);
-        //pool.SetParent(this.transform);
-		
 		StartCoroutine("CreateBullet");
 		
 	}
@@ -60,12 +50,6 @@ public class Tower : MonoBehaviour {
         attackRangeSphere.renderer.material.color = rangeColor;
         
     }
-
-	//사용안함
-    //void OnApplicationQuit()
-    //{
-    //    pool.Dispose();
-    //}
 
 
 	// Update is called once per frame
@@ -114,9 +98,7 @@ public class Tower : MonoBehaviour {
 				//총알오브젝트생성 혹은 꺼내오기
 				GameObject newBullet = GameManager.createObjet(GameManager.bullet_PrefabName);
                 newBullet.transform.position = firePos.transform.position;
-                newBullet.transform.rotation = Quaternion.identity;
-				// bullet.transform.Rotate( 90, 0, 0 );
-                // bullet.transform.Rotate(  targetMonster.transform.position - firePos.transform.position );
+                newBullet.transform.rotation = Quaternion.identity;				
                 newBullet.GetComponent<Bullet>().id = bulletCount;
                 newBullet.GetComponent<Bullet>().nearMonster = targetMonster;
 

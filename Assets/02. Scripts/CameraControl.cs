@@ -7,8 +7,10 @@ public class CameraControl : MonoBehaviour {
 	public float scrollSpeed = 1.0f;
 	public int scrollDistance = 10;
 	public float zoomSpeed = 1.1f;
+    /*
 	private float zoomInMax = 2.0f;
 	private float zoomOutMax = 5.0f;
+     */ 
 
 	// Use this for initialization
 	void Awake () {
