@@ -129,7 +129,6 @@
      <Compile Include="Assets\NGUI\Scripts\Editor\UIWidgetContainerEditor.cs" />
      <Compile Include="Assets\NGUI\Scripts\Editor\UIWidgetInspector.cs" />
      <Compile Include="Assets\NGUI\Scripts\Editor\UIWrapContentEditor.cs" />
-     <Compile Include="Assets\Pathfinding\Editor\WaypointEditor.cs" />
      <None Include="Assets\Resources\Models\Earthborn Troll\Shader\Alpha_Texture.shader" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\ReadMe - 3.6.8.txt" />
@@ -170,9 +169,6 @@
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
      <None Include="Assets\NGUI\Examples\Resources\Localization.txt" />
- <Reference Include="Assembly-UnityScript">
- <HintPath>C:/Project/unitydefense/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
- </Reference>
  <Reference Include="LitJson">
  <HintPath>C:/Project/unitydefense/Assets/Plugins/LitJson.dll</HintPath>
  </Reference>
