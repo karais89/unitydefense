@@ -345,9 +345,15 @@ public class TileMap : MonoBehaviour {
                 tileArray[x, y] = null;
             }
         }
-
-        GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Clear();
-        GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList = null;
+        if (GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList != null)
+        {
+            foreach (GameObject spawn in GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList)
+            {
+                Destroy(spawn);
+            }
+            GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Clear();
+            //GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList = null;
+        }
     }
 
     /// <summary>

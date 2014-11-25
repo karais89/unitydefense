@@ -183,7 +183,6 @@ public class MapEditor : MonoBehaviour {
                     }
                     else if ( hitInfo.collider.tag == "SPAWN" )
                     {
-                        //hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().type = Tile.TileType.walkable;
                         Debug.Log("Erase Spawn");
 
                         int x = hitInfo.collider.gameObject.GetComponent<Spawn>().indexX;
@@ -217,6 +216,8 @@ public class MapEditor : MonoBehaviour {
                         newSpawn.transform.parent = GameObject.Find("Map").transform;
                         newSpawn.GetComponent<Spawn>().indexX = x;
                         newSpawn.GetComponent<Spawn>().indexY = y;
+
+                        GameObject.Find("SpawnManager").GetComponent<SpawnManager>().spawnList.Add(newSpawn);
 
                         hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.spawn;                       
 
