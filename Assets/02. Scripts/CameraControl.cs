@@ -51,15 +51,15 @@ public class CameraControl : MonoBehaviour {
 		// 마우스 스크롤 휠로 확대 축소
 		if ( Input.GetAxis( "Mouse ScrollWheel" ) > 0 )
 		{
-			//transform.Translate( Vector3.forward * -zoomSpeed * Time.deltaTime );
+			transform.Translate( Vector3.forward * -zoomSpeed * Time.deltaTime );
 
-            this.camera.orthographicSize = this.camera.orthographicSize - zoomSpeed;
+            //this.camera.orthographicSize = this.camera.orthographicSize - zoomSpeed;
 		}
 		if ( Input.GetAxis( "Mouse ScrollWheel" ) < 0 )
 		{
-			// transform.Translate( Vector3.forward * zoomSpeed * Time.deltaTime );
+			transform.Translate( Vector3.forward * zoomSpeed * Time.deltaTime );
 
-            this.camera.orthographicSize = this.camera.orthographicSize + zoomSpeed;
+            //this.camera.orthographicSize = this.camera.orthographicSize + zoomSpeed;
 		}
 	}
 }

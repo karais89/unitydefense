@@ -12,11 +12,6 @@ public class Bullet : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 
-		// TODO
-		// 타워에 가장 가까이에 있는 몬스터를 타겟으로 총알 생성
-        // nearMonster = transform.parent.GetComponent<Tower>().GetClosestMonster();
-        
-
 		/*
 		rigidbody 적용해서 이동
 		Debug.Log ( "AddForceAtPosition x = " + nearMonster.transform.position.x + " y = " + nearMonster.transform.position.y + " z = " + nearMonster.transform.position.z );
@@ -44,7 +39,6 @@ public class Bullet : MonoBehaviour {
 		if (nearMonster.activeSelf == true)//해당몹이 액티브일경우만
 		{
 			// FIXIT
-			// 총알 날아가는 방향이 이상함.....이상해서 고침요ㅋ
 			
 			transform.LookAt (nearMonster.transform.position);//타겟을 쳐다보게함
 			
