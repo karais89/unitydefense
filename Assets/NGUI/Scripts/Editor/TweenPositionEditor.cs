@@ -3,31 +3,31 @@
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
-[CustomEditor(typeof(TweenPosition))]
+[CustomEditor( typeof( TweenPosition ) )]
 public class TweenPositionEditor : UITweenerEditor
 {
-	public override void OnInspectorGUI ()
-	{
-		GUILayout.Space(6f);
-		NGUIEditorTools.SetLabelWidth(120f);
+    public override void OnInspectorGUI()
+    {
+        GUILayout.Space( 6f );
+        NGUIEditorTools.SetLabelWidth( 120f );
 
-		TweenPosition tw = target as TweenPosition;
-		GUI.changed = false;
+        TweenPosition tw = target as TweenPosition;
+        GUI.changed = false;
 
-		Vector3 from = EditorGUILayout.Vector3Field("From", tw.from);
-		Vector3 to = EditorGUILayout.Vector3Field("To", tw.to);
+        Vector3 from = EditorGUILayout.Vector3Field( "From", tw.from );
+        Vector3 to = EditorGUILayout.Vector3Field( "To", tw.to );
 
-		if (GUI.changed)
-		{
-			NGUIEditorTools.RegisterUndo("Tween Change", tw);
-			tw.from = from;
-			tw.to = to;
-			NGUITools.SetDirty(tw);
-		}
+        if ( GUI.changed )
+        {
+            NGUIEditorTools.RegisterUndo( "Tween Change", tw );
+            tw.from = from;
+            tw.to = to;
+            NGUITools.SetDirty( tw );
+        }
 
-		DrawCommonProperties();
-	}
+        DrawCommonProperties();
+    }
 }

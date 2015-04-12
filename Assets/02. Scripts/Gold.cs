@@ -1,19 +1,27 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿/**
+ * @file Gold.cs
+ * @brief
+ * @details
+ * @author ddayin
+ * @date 2014-10-29
+ */
 
-public class Gold : MonoBehaviour {
+using System.Collections;
+using UnityEngine;
+
+public class Gold : MonoBehaviour
+{
     /*
      * using UnityEngine;
 using System.Collections;
- 
+
 public class CsScore : MonoBehaviour {
- 
     public float ScoreDelay = 0.5f;
     // Use this for initialization
     void Start () {
-        StartCoroutine("DisplayScore"); 
+        StartCoroutine("DisplayScore");
     }
-     
+
     // Update is called once per frame
     void Update () {
         Vector3 pos = transform.position;
@@ -23,13 +31,13 @@ public class CsScore : MonoBehaviour {
     IEnumerator DisplayScore()
     {
         yield return new WaitForSeconds(ScoreDelay);
- 
+
         for(float a = 1; a >= 0; a -= 0.05f)
         {
             transform.guiText.material.color = new Vector4(1, 1, 1, a);
             yield return new WaitForFixedUpdate();
         }
- 
+
         Destroy(gameObject);
     }
 }
@@ -38,18 +46,18 @@ public class CsScore : MonoBehaviour {
     public float displayDelay = 1.0f;
     public bool isVisible = false;
 
-    void Awake()
+    private void Awake()
     {
         // StartCoroutine("DisplayGold");
     }
-      
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () 
+
+    // Use this for initialization
+    private void Start()
+    {
+    }
+
+    // Update is called once per frame
+    private void Update()
     {
         if ( isVisible == true )
         {
@@ -57,9 +65,7 @@ public class CsScore : MonoBehaviour {
             pos.y += speed;
             transform.position = pos;
         }
-        
-	}
-
+    }
 
     /// <summary>
     /// 골드 텍스트 이펙트를 보여주기 시작한다.
@@ -67,24 +73,24 @@ public class CsScore : MonoBehaviour {
     public void StartDisplay()
     {
         isVisible = true;
-        StartCoroutine("DisplayGold");
+        StartCoroutine( "DisplayGold" );
     }
 
     /// <summary>
     /// 골드 텍스트 이펙트를 보여준다.
     /// </summary>
     /// <returns></returns>
-    IEnumerator DisplayGold()
+    private IEnumerator DisplayGold()
     {
-        yield return new WaitForSeconds(displayDelay);
+        yield return new WaitForSeconds( displayDelay );
 
-        for (float a = 1; a >= 0; a -= 0.05f)
+        for ( float a = 1; a >= 0; a -= 0.05f )
         {
-            transform.guiText.material.color = new Vector4(1, 1, 1, a);
+            transform.guiText.material.color = new Vector4( 1, 1, 1, a );
             yield return new WaitForFixedUpdate();
         }
 
         isVisible = false;
-        Destroy(gameObject);
+        Destroy( gameObject );
     }
 }

@@ -5,32 +5,32 @@ using UnityEngine;
 /// Look at how it's used in Example 6.
 /// </summary>
 
-[AddComponentMenu("NGUI/Examples/Window Auto-Yaw")]
+[AddComponentMenu( "NGUI/Examples/Window Auto-Yaw" )]
 public class WindowAutoYaw : MonoBehaviour
 {
-	public int updateOrder = 0;
-	public Camera uiCamera;
-	public float yawAmount = 20f;
+    public int updateOrder = 0;
+    public Camera uiCamera;
+    public float yawAmount = 20f;
 
-	Transform mTrans;
+    private Transform mTrans;
 
-	void OnDisable ()
-	{
-		mTrans.localRotation = Quaternion.identity;
-	}
+    private void OnDisable()
+    {
+        mTrans.localRotation = Quaternion.identity;
+    }
 
-	void OnEnable ()
-	{
-		if (uiCamera == null) uiCamera = NGUITools.FindCameraForLayer(gameObject.layer);
-		mTrans = transform;
-	}
+    private void OnEnable()
+    {
+        if ( uiCamera == null ) uiCamera = NGUITools.FindCameraForLayer( gameObject.layer );
+        mTrans = transform;
+    }
 
-	void Update ()
-	{
-		if (uiCamera != null)
-		{
-			Vector3 pos = uiCamera.WorldToViewportPoint(mTrans.position);
-			mTrans.localRotation = Quaternion.Euler(0f, (pos.x * 2f - 1f) * yawAmount, 0f);
-		}
-	}
+    private void Update()
+    {
+        if ( uiCamera != null )
+        {
+            Vector3 pos = uiCamera.WorldToViewportPoint( mTrans.position );
+            mTrans.localRotation = Quaternion.Euler( 0f, ( pos.x * 2f - 1f ) * yawAmount, 0f );
+        }
+    }
 }

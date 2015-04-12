@@ -1,15 +1,24 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿/**
+ * @file MainMenus.cs
+ * @brief
+ * @details
+ * @author rejerkake
+ * @date 2014-11-01
+ */
 
-public class MainMenus : MonoBehaviour {
+using UnityEngine;
 
-	public GameObject stageSelect;
+public class MainMenus : MonoBehaviour
+{
+    public GameObject stageSelect;
 
-	public void StageSelectOn(){
-		stageSelect.SetActive (true);
-	}
+    public void StageSelectOn()
+    {
+        stageSelect.SetActive( true );
+    }
 
-	public void StageSelectOff(){
-		stageSelect.SetActive (false);
-	}
+    public void StageSelectOff()
+    {
+        stageSelect.SetActive( false );
+    }
 }

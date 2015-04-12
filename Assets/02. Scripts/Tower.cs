@@ -1,65 +1,71 @@
-﻿using UnityEngine;
+﻿/**
+ * @file Tower.cs
+ * @brief
+ * @details
+ * @author ddayin
+ * @date 2014-10-29
+ */
+
 using System.Collections;
+using UnityEngine;
 
-
-public class Tower : MonoBehaviour {
+public class Tower : MonoBehaviour
+{
     public int id = 0;
-	public GameObject firePos;
-	public GameObject attackRangeSphere;
-	public float attackRange = 3.0f;
-	public float fireTerm = 1.0f;
-	public GameObject targetMonster = null;
+    public GameObject firePos;
+    public GameObject attackRangeSphere;
+    public float attackRange = 3.0f;
+    public float fireTerm = 1.0f;
+    public GameObject targetMonster = null;
     private int bulletCount = 0;
     public int earnScore = 20;
     public int buyGold = 30;
     public int sellGold = 10;
     public int level = 1;
     public int bulletDamage = 10;
-   
+
     public int GetEarnScore()
     {
         return earnScore;
     }
+
     public int GetBuyGold()
     {
         return buyGold;
     }
+
     public int GetSellGold()
     {
         return sellGold;
     }
+
     public int GetBulletDamage()
     {
         return bulletDamage;
     }
 
-	// Use this for initialization
-	void Awake () {
-
-		StartCoroutine("CreateBullet");
-		
-	}
-
-    void Start()
+    // Use this for initialization
+    private void Awake()
     {
-        
+        StartCoroutine( "CreateBullet" );
+    }
+
+    private void Start()
+    {
         // 공격 범위 표시
         attackRangeSphere.renderer.enabled = false;
         Color rangeColor = Color.green;
         rangeColor.a = 0.3f;
         attackRangeSphere.renderer.material.color = rangeColor;
-        
     }
 
-
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Update is called once per frame
+    private void Update()
+    {
+    }
 
     public void DisplayAttackRangeSphere( bool visible )
     {
-        
         if ( visible == true )
         {
             attackRangeSphere.renderer.enabled = true;
@@ -68,97 +74,95 @@ public class Tower : MonoBehaviour {
         {
             attackRangeSphere.renderer.enabled = false;
         }
-        
     }
-	
+
     /// <summary>
     /// 일정 시간 간격으로 총알을 생성한다.
     /// </summary>
     /// <returns></returns>
-	IEnumerator CreateBullet()
-	{
-		while(true)
-		{
-			// 일정 대기 시간이 있고 총알이 생성됨
-			yield return new WaitForSeconds( fireTerm );
-			
-			CheckTargetRange();
-			
-			GetClosestMonster();
-			
-			if(targetMonster != null)
-			{
+    private IEnumerator CreateBullet()
+    {
+        while ( true )
+        {
+            // 일정 대기 시간이 있고 총알이 생성됨
+            yield return new WaitForSeconds( fireTerm );
+
+            CheckTargetRange();
+
+            GetClosestMonster();
+
+            if ( targetMonster != null )
+            {
                 bulletCount++;
-				// Debug.Log ( "create bullet" );
+                // Debug.Log ( "create bullet" );
 
-               
-				//사용안함
-				//GameObject newBullet = pool.NewItem();
+                //사용안함
+                //GameObject newBullet = pool.NewItem();
 
-				//총알오브젝트생성 혹은 꺼내오기
-				GameObject newBullet = GameManager.createObjet(GameManager.bullet_PrefabName);
+                //총알오브젝트생성 혹은 꺼내오기
+                GameObject newBullet = GameManager.createObjet( GameManager.bullet_PrefabName );
                 newBullet.transform.position = firePos.transform.position;
-                newBullet.transform.rotation = Quaternion.identity;				
+                newBullet.transform.rotation = Quaternion.identity;
                 newBullet.GetComponent<Bullet>().id = bulletCount;
                 newBullet.GetComponent<Bullet>().nearMonster = targetMonster;
 
                 // Vector3 targetDir = targetMonster.transform.position - transform.position;
                 // bullet.rigidbody.velocity = transform.TransformDirection(targetDir * 1.0f);
-				
-				// 총알을 타워의 차일드로 추가
+
+                // 총알을 타워의 차일드로 추가
                 // newBullet.transform.parent = this.transform;
 
                 // Vector3 force = targetMonster.transform.position - transform.position;
                 // bullet.rigidbody.AddForce(targetMonster.transform.position);
-			}
-		}
-	}
-	
+            }
+        }
+    }
+
     /// <summary>
     /// 총알을 발사할 타겟 몬스터를 검사한다.
     /// </summary>
-	void CheckTargetRange()
-	{
-		if (targetMonster == null) 
-		{
-			return;		
-		}
+    private void CheckTargetRange()
+    {
+        if ( targetMonster == null )
+        {
+            return;
+        }
         if ( targetMonster.GetComponent<Monster>().monsterState == Monster.MonsterState.die )
         {
             targetMonster = null;
             return;
         }
-		
-		if ( Vector3.Distance( targetMonster.transform.position, transform.position ) >= attackRange )
-		{
-			targetMonster = null;
-		}
-	}
-	
+
+        if ( Vector3.Distance( targetMonster.transform.position, transform.position ) >= attackRange )
+        {
+            targetMonster = null;
+        }
+    }
+
     /// <summary>
     /// 타워에 가장 가까이에 있는 몬스터를 반환한다.
     /// </summary>
     /// <returns></returns>
-	public GameObject GetClosestMonster()
-	{
-		if ( targetMonster != null )
-		{
-			return targetMonster;
-		}
-		
-		foreach( GameObject monster in GameManager.monsterList )
-		{
-			if ( Vector3.Distance( monster.transform.position, transform.position ) < attackRange )
-			{
+    public GameObject GetClosestMonster()
+    {
+        if ( targetMonster != null )
+        {
+            return targetMonster;
+        }
+
+        foreach ( GameObject monster in GameManager.monsterList )
+        {
+            if ( Vector3.Distance( monster.transform.position, transform.position ) < attackRange )
+            {
                 if ( monster.GetComponent<Monster>().monsterState == Monster.MonsterState.die )
                 {
                     continue;
                 }
-				targetMonster = monster;
-			}
-		}
+                targetMonster = monster;
+            }
+        }
         return targetMonster;
-	}
+    }
 
     /// <summary>
     /// 타워를 업그레이드 한다.

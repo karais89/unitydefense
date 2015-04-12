@@ -9,95 +9,98 @@ using UnityEngine;
 /// Tween the object's color.
 /// </summary>
 
-[AddComponentMenu("NGUI/Tween/Tween Color")]
+[AddComponentMenu( "NGUI/Tween/Tween Color" )]
 public class TweenColor : UITweener
 {
-	public Color from = Color.white;
-	public Color to = Color.white;
+    public Color from = Color.white;
+    public Color to = Color.white;
 
-	bool mCached = false;
-	UIWidget mWidget;
-	Material mMat;
-	Light mLight;
+    private bool mCached = false;
+    private UIWidget mWidget;
+    private Material mMat;
+    private Light mLight;
 
-	void Cache ()
-	{
-		mCached = true;
-		mWidget = GetComponent<UIWidget>();
-		Renderer ren = renderer;
-		if (ren != null) mMat = ren.material;
-		mLight = light;
-		if (mWidget == null && mMat == null && mLight == null)
-			mWidget = GetComponentInChildren<UIWidget>();
-	}
+    private void Cache()
+    {
+        mCached = true;
+        mWidget = GetComponent<UIWidget>();
+        Renderer ren = renderer;
+        if ( ren != null ) mMat = ren.material;
+        mLight = light;
+        if ( mWidget == null && mMat == null && mLight == null )
+            mWidget = GetComponentInChildren<UIWidget>();
+    }
 
-	[System.Obsolete("Use 'value' instead")]
-	public Color color { get { return this.value; } set { this.value = value; } }
+    [System.Obsolete( "Use 'value' instead" )]
+    public Color color { get { return this.value; } set { this.value = value; } }
 
-	/// <summary>
-	/// Tween's current value.
-	/// </summary>
+    /// <summary>
+    /// Tween's current value.
+    /// </summary>
 
-	public Color value
-	{
-		get
-		{
-			if (!mCached) Cache();
-			if (mWidget != null) return mWidget.color;
-			if (mLight != null) return mLight.color;
-			if (mMat != null) return mMat.color;
-			return Color.black;
-		}
-		set
-		{
-			if (!mCached) Cache();
-			if (mWidget != null) mWidget.color = value;
-			if (mMat != null) mMat.color = value;
+    public Color value
+    {
+        get
+        {
+            if ( !mCached ) Cache();
+            if ( mWidget != null ) return mWidget.color;
+            if ( mLight != null ) return mLight.color;
+            if ( mMat != null ) return mMat.color;
+            return Color.black;
+        }
+        set
+        {
+            if ( !mCached ) Cache();
+            if ( mWidget != null ) mWidget.color = value;
+            if ( mMat != null ) mMat.color = value;
 
-			if (mLight != null)
-			{
-				mLight.color = value;
-				mLight.enabled = (value.r + value.g + value.b) > 0.01f;
-			}
-		}
-	}
+            if ( mLight != null )
+            {
+                mLight.color = value;
+                mLight.enabled = ( value.r + value.g + value.b ) > 0.01f;
+            }
+        }
+    }
 
-	/// <summary>
-	/// Tween the value.
-	/// </summary>
+    /// <summary>
+    /// Tween the value.
+    /// </summary>
 
-	protected override void OnUpdate (float factor, bool isFinished) { value = Color.Lerp(from, to, factor); }
+    protected override void OnUpdate( float factor, bool isFinished )
+    {
+        value = Color.Lerp( from, to, factor );
+    }
 
-	/// <summary>
-	/// Start the tweening operation.
-	/// </summary>
+    /// <summary>
+    /// Start the tweening operation.
+    /// </summary>
 
-	static public TweenColor Begin (GameObject go, float duration, Color color)
-	{
+    static public TweenColor Begin( GameObject go, float duration, Color color )
+    {
 #if UNITY_EDITOR
-		if (!Application.isPlaying) return null;
+        if ( !Application.isPlaying ) return null;
 #endif
-		TweenColor comp = UITweener.Begin<TweenColor>(go, duration);
-		comp.from = comp.value;
-		comp.to = color;
+        TweenColor comp = UITweener.Begin<TweenColor>( go, duration );
+        comp.from = comp.value;
+        comp.to = color;
 
-		if (duration <= 0f)
-		{
-			comp.Sample(1f, true);
-			comp.enabled = false;
-		}
-		return comp;
-	}
+        if ( duration <= 0f )
+        {
+            comp.Sample( 1f, true );
+            comp.enabled = false;
+        }
+        return comp;
+    }
 
-	[ContextMenu("Set 'From' to current value")]
-	public override void SetStartToCurrentValue () { from = value; }
+    [ContextMenu( "Set 'From' to current value" )]
+    public override void SetStartToCurrentValue() { from = value; }
 
-	[ContextMenu("Set 'To' to current value")]
-	public override void SetEndToCurrentValue () { to = value; }
+    [ContextMenu( "Set 'To' to current value" )]
+    public override void SetEndToCurrentValue() { to = value; }
 
-	[ContextMenu("Assume value of 'From'")]
-	void SetCurrentValueToStart () { value = from; }
+    [ContextMenu( "Assume value of 'From'" )]
+    private void SetCurrentValueToStart() { value = from; }
 
-	[ContextMenu("Assume value of 'To'")]
-	void SetCurrentValueToEnd () { value = to; }
+    [ContextMenu( "Assume value of 'To'" )]
+    private void SetCurrentValueToEnd() { value = to; }
 }

@@ -11,11 +11,18 @@ using UnityEngine;
 /// it can be dragged outside.
 /// </summary>
 
-[AddComponentMenu("NGUI/Interaction/Drag and Drop Root")]
+[AddComponentMenu( "NGUI/Interaction/Drag and Drop Root" )]
 public class UIDragDropRoot : MonoBehaviour
 {
-	static public Transform root;
+    static public Transform root;
 
-	void OnEnable () { root = transform; }
-	void OnDisable () { if (root == transform) root = null; }
+    private void OnEnable()
+    {
+        root = transform;
+    }
+
+    private void OnDisable()
+    {
+        if ( root == transform ) root = null;
+    }
 }

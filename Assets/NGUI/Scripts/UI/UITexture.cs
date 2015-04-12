@@ -4,7 +4,6 @@
 //----------------------------------------------
 
 using UnityEngine;
-using System.Collections.Generic;
 
 /// <summary>
 /// If you don't have or don't wish to create an atlas, you can simply use this script to draw a texture.
@@ -13,271 +12,285 @@ using System.Collections.Generic;
 /// </summary>
 
 [ExecuteInEditMode]
-[AddComponentMenu("NGUI/UI/NGUI Texture")]
+[AddComponentMenu( "NGUI/UI/NGUI Texture" )]
 public class UITexture : UIBasicSprite
 {
-	[HideInInspector][SerializeField] Rect mRect = new Rect(0f, 0f, 1f, 1f);
-	[HideInInspector][SerializeField] Texture mTexture;
-	[HideInInspector][SerializeField] Material mMat;
-	[HideInInspector][SerializeField] Shader mShader;
-	[HideInInspector][SerializeField] Vector4 mBorder = Vector4.zero;
+    [HideInInspector]
+    [SerializeField]
+    private Rect mRect = new Rect( 0f, 0f, 1f, 1f );
 
-	[System.NonSerialized] int mPMA = -1;
+    [HideInInspector]
+    [SerializeField]
+    private Texture mTexture;
 
-	/// <summary>
-	/// Texture used by the UITexture. You can set it directly, without the need to specify a material.
-	/// </summary>
+    [HideInInspector]
+    [SerializeField]
+    private Material mMat;
 
-	public override Texture mainTexture
-	{
-		get
-		{
-			if (mTexture != null) return mTexture;
-			if (mMat != null) return mMat.mainTexture;
-			return null;
-		}
-		set
-		{
-			if (mTexture != value)
-			{
-				RemoveFromPanel();
-				mTexture = value;
-				mPMA = -1;
-				MarkAsChanged();
-			}
-		}
-	}
+    [HideInInspector]
+    [SerializeField]
+    private Shader mShader;
 
-	/// <summary>
-	/// Material used by the widget.
-	/// </summary>
+    [HideInInspector]
+    [SerializeField]
+    private Vector4 mBorder = Vector4.zero;
 
-	public override Material material
-	{
-		get
-		{
-			return mMat;
-		}
-		set
-		{
-			if (mMat != value)
-			{
-				RemoveFromPanel();
-				mShader = null;
-				mMat = value;
-				mPMA = -1;
-				MarkAsChanged();
-			}
-		}
-	}
+    [System.NonSerialized]
+    private int mPMA = -1;
 
-	/// <summary>
-	/// Shader used by the texture when creating a dynamic material (when the texture was specified, but the material was not).
-	/// </summary>
+    /// <summary>
+    /// Texture used by the UITexture. You can set it directly, without the need to specify a material.
+    /// </summary>
 
-	public override Shader shader
-	{
-		get
-		{
-			if (mMat != null) return mMat.shader;
-			if (mShader == null) mShader = Shader.Find("Unlit/Transparent Colored");
-			return mShader;
-		}
-		set
-		{
-			if (mShader != value)
-			{
-				RemoveFromPanel();
-				mShader = value;
-				mPMA = -1;
-				mMat = null;
-				MarkAsChanged();
-			}
-		}
-	}
+    public override Texture mainTexture
+    {
+        get
+        {
+            if ( mTexture != null ) return mTexture;
+            if ( mMat != null ) return mMat.mainTexture;
+            return null;
+        }
+        set
+        {
+            if ( mTexture != value )
+            {
+                RemoveFromPanel();
+                mTexture = value;
+                mPMA = -1;
+                MarkAsChanged();
+            }
+        }
+    }
 
-	/// <summary>
-	/// Whether the texture is using a premultiplied alpha material.
-	/// </summary>
+    /// <summary>
+    /// Material used by the widget.
+    /// </summary>
 
-	public override bool premultipliedAlpha
-	{
-		get
-		{
-			if (mPMA == -1)
-			{
-				Material mat = material;
-				mPMA = (mat != null && mat.shader != null && mat.shader.name.Contains("Premultiplied")) ? 1 : 0;
-			}
-			return (mPMA == 1);
-		}
-	}
+    public override Material material
+    {
+        get
+        {
+            return mMat;
+        }
+        set
+        {
+            if ( mMat != value )
+            {
+                RemoveFromPanel();
+                mShader = null;
+                mMat = value;
+                mPMA = -1;
+                MarkAsChanged();
+            }
+        }
+    }
 
+    /// <summary>
+    /// Shader used by the texture when creating a dynamic material (when the texture was specified, but the material was not).
+    /// </summary>
 
-	/// <summary>
-	/// Sprite's border. X = left, Y = bottom, Z = right, W = top.
-	/// </summary>
+    public override Shader shader
+    {
+        get
+        {
+            if ( mMat != null ) return mMat.shader;
+            if ( mShader == null ) mShader = Shader.Find( "Unlit/Transparent Colored" );
+            return mShader;
+        }
+        set
+        {
+            if ( mShader != value )
+            {
+                RemoveFromPanel();
+                mShader = value;
+                mPMA = -1;
+                mMat = null;
+                MarkAsChanged();
+            }
+        }
+    }
 
-	public override Vector4 border
-	{
-		get
-		{
-			return mBorder;
-		}
-		set
-		{
-			if (mBorder != value)
-			{
-				mBorder = value;
-				MarkAsChanged();
-			}
-		}
-	}
+    /// <summary>
+    /// Whether the texture is using a premultiplied alpha material.
+    /// </summary>
 
-	/// <summary>
-	/// UV rectangle used by the texture.
-	/// </summary>
+    public override bool premultipliedAlpha
+    {
+        get
+        {
+            if ( mPMA == -1 )
+            {
+                Material mat = material;
+                mPMA = ( mat != null && mat.shader != null && mat.shader.name.Contains( "Premultiplied" ) ) ? 1 : 0;
+            }
+            return ( mPMA == 1 );
+        }
+    }
 
-	public Rect uvRect
-	{
-		get
-		{
-			return mRect;
-		}
-		set
-		{
-			if (mRect != value)
-			{
-				mRect = value;
-				MarkAsChanged();
-			}
-		}
-	}
+    /// <summary>
+    /// Sprite's border. X = left, Y = bottom, Z = right, W = top.
+    /// </summary>
 
-	/// <summary>
-	/// Widget's dimensions used for drawing. X = left, Y = bottom, Z = right, W = top.
-	/// This function automatically adds 1 pixel on the edge if the texture's dimensions are not even.
-	/// It's used to achieve pixel-perfect sprites even when an odd dimension widget happens to be centered.
-	/// </summary>
+    public override Vector4 border
+    {
+        get
+        {
+            return mBorder;
+        }
+        set
+        {
+            if ( mBorder != value )
+            {
+                mBorder = value;
+                MarkAsChanged();
+            }
+        }
+    }
 
-	public override Vector4 drawingDimensions
-	{
-		get
-		{
-			Vector2 offset = pivotOffset;
+    /// <summary>
+    /// UV rectangle used by the texture.
+    /// </summary>
 
-			float x0 = -offset.x * mWidth;
-			float y0 = -offset.y * mHeight;
-			float x1 = x0 + mWidth;
-			float y1 = y0 + mHeight;
+    public Rect uvRect
+    {
+        get
+        {
+            return mRect;
+        }
+        set
+        {
+            if ( mRect != value )
+            {
+                mRect = value;
+                MarkAsChanged();
+            }
+        }
+    }
 
-			if (mTexture != null && mType != UISprite.Type.Tiled)
-			{
-				int w = mTexture.width;
-				int h = mTexture.height;
-				int padRight = 0;
-				int padTop = 0;
+    /// <summary>
+    /// Widget's dimensions used for drawing. X = left, Y = bottom, Z = right, W = top.
+    /// This function automatically adds 1 pixel on the edge if the texture's dimensions are not even.
+    /// It's used to achieve pixel-perfect sprites even when an odd dimension widget happens to be centered.
+    /// </summary>
 
-				float px = 1f;
-				float py = 1f;
+    public override Vector4 drawingDimensions
+    {
+        get
+        {
+            Vector2 offset = pivotOffset;
 
-				if (w > 0 && h > 0 && (mType == UISprite.Type.Simple || mType == UISprite.Type.Filled))
-				{
-					if ((w & 1) != 0) ++padRight;
-					if ((h & 1) != 0) ++padTop;
+            float x0 = -offset.x * mWidth;
+            float y0 = -offset.y * mHeight;
+            float x1 = x0 + mWidth;
+            float y1 = y0 + mHeight;
 
-					px = (1f / w) * mWidth;
-					py = (1f / h) * mHeight;
-				}
+            if ( mTexture != null && mType != UISprite.Type.Tiled )
+            {
+                int w = mTexture.width;
+                int h = mTexture.height;
+                int padRight = 0;
+                int padTop = 0;
 
-				if (mFlip == UISprite.Flip.Horizontally || mFlip == UISprite.Flip.Both)
-				{
-					x0 += padRight * px;
-				}
-				else x1 -= padRight * px;
+                float px = 1f;
+                float py = 1f;
 
-				if (mFlip == UISprite.Flip.Vertically || mFlip == UISprite.Flip.Both)
-				{
-					y0 += padTop * py;
-				}
-				else y1 -= padTop * py;
-			}
+                if ( w > 0 && h > 0 && ( mType == UISprite.Type.Simple || mType == UISprite.Type.Filled ) )
+                {
+                    if ( ( w & 1 ) != 0 ) ++padRight;
+                    if ( ( h & 1 ) != 0 ) ++padTop;
 
-			Vector4 br = border;
+                    px = ( 1f / w ) * mWidth;
+                    py = ( 1f / h ) * mHeight;
+                }
 
-			float fw = br.x + br.z;
-			float fh = br.y + br.w;
-			float vx = Mathf.Lerp(x0, x1 - fw, mDrawRegion.x);
-			float vy = Mathf.Lerp(y0, y1 - fh, mDrawRegion.y);
-			float vz = Mathf.Lerp(x0 + fw, x1, mDrawRegion.z);
-			float vw = Mathf.Lerp(y0 + fh, y1, mDrawRegion.w);
+                if ( mFlip == UISprite.Flip.Horizontally || mFlip == UISprite.Flip.Both )
+                {
+                    x0 += padRight * px;
+                }
+                else x1 -= padRight * px;
 
-			return new Vector4(vx, vy, vz, vw);
-		}
-	}
+                if ( mFlip == UISprite.Flip.Vertically || mFlip == UISprite.Flip.Both )
+                {
+                    y0 += padTop * py;
+                }
+                else y1 -= padTop * py;
+            }
 
-	/// <summary>
-	/// Adjust the scale of the widget to make it pixel-perfect.
-	/// </summary>
+            Vector4 br = border;
 
-	public override void MakePixelPerfect ()
-	{
-		base.MakePixelPerfect();
-		if (mType == Type.Tiled) return;
+            float fw = br.x + br.z;
+            float fh = br.y + br.w;
+            float vx = Mathf.Lerp( x0, x1 - fw, mDrawRegion.x );
+            float vy = Mathf.Lerp( y0, y1 - fh, mDrawRegion.y );
+            float vz = Mathf.Lerp( x0 + fw, x1, mDrawRegion.z );
+            float vw = Mathf.Lerp( y0 + fh, y1, mDrawRegion.w );
 
-		Texture tex = mainTexture;
-		if (tex == null) return;
+            return new Vector4( vx, vy, vz, vw );
+        }
+    }
 
-		if (mType == Type.Simple || mType == Type.Filled || !hasBorder)
-		{
-			if (tex != null)
-			{
-				int w = tex.width;
-				int h = tex.height;
+    /// <summary>
+    /// Adjust the scale of the widget to make it pixel-perfect.
+    /// </summary>
 
-				if ((w & 1) == 1) ++w;
-				if ((h & 1) == 1) ++h;
+    public override void MakePixelPerfect()
+    {
+        base.MakePixelPerfect();
+        if ( mType == Type.Tiled ) return;
 
-				width = w;
-				height = h;
-			}
-		}
-	}
+        Texture tex = mainTexture;
+        if ( tex == null ) return;
 
-	/// <summary>
-	/// Virtual function called by the UIPanel that fills the buffers.
-	/// </summary>
+        if ( mType == Type.Simple || mType == Type.Filled || !hasBorder )
+        {
+            if ( tex != null )
+            {
+                int w = tex.width;
+                int h = tex.height;
 
-	public override void OnFill (BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
-	{
-		Texture tex = mainTexture;
-		if (tex == null) return;
+                if ( ( w & 1 ) == 1 ) ++w;
+                if ( ( h & 1 ) == 1 ) ++h;
 
-		Rect outer = new Rect(mRect.x * tex.width, mRect.y * tex.height, tex.width * mRect.width, tex.height * mRect.height);
-		Rect inner = outer;
-		Vector4 br = border;
-		inner.xMin += br.x;
-		inner.yMin += br.y;
-		inner.xMax -= br.z;
-		inner.yMax -= br.w;
+                width = w;
+                height = h;
+            }
+        }
+    }
 
-		float w = 1f / tex.width;
-		float h = 1f / tex.height;
+    /// <summary>
+    /// Virtual function called by the UIPanel that fills the buffers.
+    /// </summary>
 
-		outer.xMin *= w;
-		outer.xMax *= w;
-		outer.yMin *= h;
-		outer.yMax *= h;
+    public override void OnFill( BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols )
+    {
+        Texture tex = mainTexture;
+        if ( tex == null ) return;
 
-		inner.xMin *= w;
-		inner.xMax *= w;
-		inner.yMin *= h;
-		inner.yMax *= h;
+        Rect outer = new Rect( mRect.x * tex.width, mRect.y * tex.height, tex.width * mRect.width, tex.height * mRect.height );
+        Rect inner = outer;
+        Vector4 br = border;
+        inner.xMin += br.x;
+        inner.yMin += br.y;
+        inner.xMax -= br.z;
+        inner.yMax -= br.w;
 
-		int offset = verts.size;
-		Fill(verts, uvs, cols, outer, inner);
+        float w = 1f / tex.width;
+        float h = 1f / tex.height;
 
-		if (onPostFill != null)
-			onPostFill(this, offset, verts, uvs, cols);
-	}
+        outer.xMin *= w;
+        outer.xMax *= w;
+        outer.yMin *= h;
+        outer.yMax *= h;
+
+        inner.xMin *= w;
+        inner.xMax *= w;
+        inner.yMin *= h;
+        inner.yMax *= h;
+
+        int offset = verts.size;
+        Fill( verts, uvs, cols, outer, inner );
+
+        if ( onPostFill != null )
+            onPostFill( this, offset, verts, uvs, cols );
+    }
 }

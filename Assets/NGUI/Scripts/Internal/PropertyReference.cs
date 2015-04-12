@@ -8,8 +8,10 @@
 #endif
 
 #if REFLECTION_SUPPORT
+
 using System.Reflection;
 using System.Diagnostics;
+
 #endif
 
 using UnityEngine;
@@ -22,295 +24,308 @@ using System;
 [System.Serializable]
 public class PropertyReference
 {
-	[SerializeField] Component mTarget;
-	[SerializeField] string mName;
+    [SerializeField]
+    private Component mTarget;
+
+    [SerializeField]
+    private string mName;
 
 #if REFLECTION_SUPPORT
-	FieldInfo mField = null;
-	PropertyInfo mProperty = null;
+    private FieldInfo mField = null;
+    private PropertyInfo mProperty = null;
 #endif
 
-	/// <summary>
-	/// Event delegate's target object.
-	/// </summary>
+    /// <summary>
+    /// Event delegate's target object.
+    /// </summary>
 
-	public Component target
-	{
-		get
-		{
-			return mTarget;
-		}
-		set
-		{
-			mTarget = value;
+    public Component target
+    {
+        get
+        {
+            return mTarget;
+        }
+        set
+        {
+            mTarget = value;
 #if REFLECTION_SUPPORT
-			mProperty = null;
-			mField = null;
+            mProperty = null;
+            mField = null;
 #endif
-		}
-	}
+        }
+    }
 
-	/// <summary>
-	/// Event delegate's method name.
-	/// </summary>
+    /// <summary>
+    /// Event delegate's method name.
+    /// </summary>
 
-	public string name
-	{
-		get
-		{
-			return mName;
-		}
-		set
-		{
-			mName = value;
+    public string name
+    {
+        get
+        {
+            return mName;
+        }
+        set
+        {
+            mName = value;
 #if REFLECTION_SUPPORT
-			mProperty = null;
-			mField = null;
+            mProperty = null;
+            mField = null;
 #endif
-		}
-	}
+        }
+    }
 
-	/// <summary>
-	/// Whether this delegate's values have been set.
-	/// </summary>
+    /// <summary>
+    /// Whether this delegate's values have been set.
+    /// </summary>
 
-	public bool isValid { get { return (mTarget != null && !string.IsNullOrEmpty(mName)); } }
+    public bool isValid { get { return ( mTarget != null && !string.IsNullOrEmpty( mName ) ); } }
 
-	/// <summary>
-	/// Whether the target script is actually enabled.
-	/// </summary>
+    /// <summary>
+    /// Whether the target script is actually enabled.
+    /// </summary>
 
-	public bool isEnabled
-	{
-		get
-		{
-			if (mTarget == null) return false;
-			MonoBehaviour mb = (mTarget as MonoBehaviour);
-			return (mb == null || mb.enabled);
-		}
-	}
+    public bool isEnabled
+    {
+        get
+        {
+            if ( mTarget == null ) return false;
+            MonoBehaviour mb = ( mTarget as MonoBehaviour );
+            return ( mb == null || mb.enabled );
+        }
+    }
 
-	public PropertyReference () { }
-	public PropertyReference (Component target, string fieldName)
-	{
-		mTarget = target;
-		mName = fieldName;
-	}
+    public PropertyReference()
+    {
+    }
 
-	/// <summary>
-	/// Helper function that returns the property type.
-	/// </summary>
+    public PropertyReference( Component target, string fieldName )
+    {
+        mTarget = target;
+        mName = fieldName;
+    }
 
-	public Type GetPropertyType ()
-	{
+    /// <summary>
+    /// Helper function that returns the property type.
+    /// </summary>
+
+    public Type GetPropertyType()
+    {
 #if REFLECTION_SUPPORT
-		if (mProperty == null && mField == null && isValid) Cache();
-		if (mProperty != null) return mProperty.PropertyType;
-		if (mField != null) return mField.FieldType;
+        if ( mProperty == null && mField == null && isValid ) Cache();
+        if ( mProperty != null ) return mProperty.PropertyType;
+        if ( mField != null ) return mField.FieldType;
 #endif
 #if UNITY_EDITOR || !UNITY_FLASH
-		return typeof(void);
+        return typeof( void );
 #else
 		return null;
 #endif
-	}
+    }
 
-	/// <summary>
-	/// Equality operator.
-	/// </summary>
+    /// <summary>
+    /// Equality operator.
+    /// </summary>
 
-	public override bool Equals (object obj)
-	{
-		if (obj == null)
-		{
-			return !isValid;
-		}
-		
-		if (obj is PropertyReference)
-		{
-			PropertyReference pb = obj as PropertyReference;
-			return (mTarget == pb.mTarget && string.Equals(mName, pb.mName));
-		}
-		return false;
-	}
+    public override bool Equals( object obj )
+    {
+        if ( obj == null )
+        {
+            return !isValid;
+        }
 
-	static int s_Hash = "PropertyBinding".GetHashCode();
+        if ( obj is PropertyReference )
+        {
+            PropertyReference pb = obj as PropertyReference;
+            return ( mTarget == pb.mTarget && string.Equals( mName, pb.mName ) );
+        }
+        return false;
+    }
 
-	/// <summary>
-	/// Used in equality operators.
-	/// </summary>
+    private static int s_Hash = "PropertyBinding".GetHashCode();
 
-	public override int GetHashCode () { return s_Hash; }
+    /// <summary>
+    /// Used in equality operators.
+    /// </summary>
 
-	/// <summary>
-	/// Set the delegate callback using the target and method names.
-	/// </summary>
+    public override int GetHashCode()
+    {
+        return s_Hash;
+    }
 
-	public void Set (Component target, string methodName)
-	{
-		mTarget = target;
-		mName = methodName;
-	}
+    /// <summary>
+    /// Set the delegate callback using the target and method names.
+    /// </summary>
 
-	/// <summary>
-	/// Clear the event delegate.
-	/// </summary>
+    public void Set( Component target, string methodName )
+    {
+        mTarget = target;
+        mName = methodName;
+    }
 
-	public void Clear ()
-	{
-		mTarget = null;
-		mName = null;
-	}
+    /// <summary>
+    /// Clear the event delegate.
+    /// </summary>
 
-	/// <summary>
-	/// Reset the cached references.
-	/// </summary>
+    public void Clear()
+    {
+        mTarget = null;
+        mName = null;
+    }
 
-	public void Reset ()
-	{
+    /// <summary>
+    /// Reset the cached references.
+    /// </summary>
+
+    public void Reset()
+    {
 #if REFLECTION_SUPPORT
-		mField = null;
-		mProperty = null;
+        mField = null;
+        mProperty = null;
 #endif
-	}
+    }
 
-	/// <summary>
-	/// Convert the delegate to its string representation.
-	/// </summary>
+    /// <summary>
+    /// Convert the delegate to its string representation.
+    /// </summary>
 
-	public override string ToString () { return ToString(mTarget, name); }
+    public override string ToString()
+    {
+        return ToString( mTarget, name );
+    }
 
-	/// <summary>
-	/// Convenience function that converts the specified component + property pair into its string representation.
-	/// </summary>
+    /// <summary>
+    /// Convenience function that converts the specified component + property pair into its string representation.
+    /// </summary>
 
-	static public string ToString (Component comp, string property)
-	{
-		if (comp != null)
-		{
-			string typeName = comp.GetType().ToString();
-			int period = typeName.LastIndexOf('.');
-			if (period > 0) typeName = typeName.Substring(period + 1);
+    static public string ToString( Component comp, string property )
+    {
+        if ( comp != null )
+        {
+            string typeName = comp.GetType().ToString();
+            int period = typeName.LastIndexOf( '.' );
+            if ( period > 0 ) typeName = typeName.Substring( period + 1 );
 
-			if (!string.IsNullOrEmpty(property)) return typeName + "." + property;
-			else return typeName + ".[property]";
-		}
-		return null;
-	}
+            if ( !string.IsNullOrEmpty( property ) ) return typeName + "." + property;
+            else return typeName + ".[property]";
+        }
+        return null;
+    }
 
 #if REFLECTION_SUPPORT
-	/// <summary>
-	/// Retrieve the property's value.
-	/// </summary>
+    /// <summary>
+    /// Retrieve the property's value.
+    /// </summary>
 
-	[DebuggerHidden]
-	[DebuggerStepThrough]
-	public object Get ()
-	{
-		if (mProperty == null && mField == null && isValid) Cache();
+    [DebuggerHidden]
+    [DebuggerStepThrough]
+    public object Get()
+    {
+        if ( mProperty == null && mField == null && isValid ) Cache();
 
-		if (mProperty != null)
-		{
-			if (mProperty.CanRead)
-				return mProperty.GetValue(mTarget, null);
-		}
-		else if (mField != null)
-		{
-			return mField.GetValue(mTarget);
-		}
-		return null;
-	}
+        if ( mProperty != null )
+        {
+            if ( mProperty.CanRead )
+                return mProperty.GetValue( mTarget, null );
+        }
+        else if ( mField != null )
+        {
+            return mField.GetValue( mTarget );
+        }
+        return null;
+    }
 
-	/// <summary>
-	/// Assign the bound property's value.
-	/// </summary>
+    /// <summary>
+    /// Assign the bound property's value.
+    /// </summary>
 
-	[DebuggerHidden]
-	[DebuggerStepThrough]
-	public bool Set (object value)
-	{
-		if (mProperty == null && mField == null && isValid) Cache();
-		if (mProperty == null && mField == null) return false;
+    [DebuggerHidden]
+    [DebuggerStepThrough]
+    public bool Set( object value )
+    {
+        if ( mProperty == null && mField == null && isValid ) Cache();
+        if ( mProperty == null && mField == null ) return false;
 
-		if (value == null)
-		{
-			try
-			{
-				if (mProperty != null) mProperty.SetValue(mTarget, null, null);
-				else mField.SetValue(mTarget, null);
-			}
-			catch (Exception) { return false; }
-		}
+        if ( value == null )
+        {
+            try
+            {
+                if ( mProperty != null ) mProperty.SetValue( mTarget, null, null );
+                else mField.SetValue( mTarget, null );
+            }
+            catch ( Exception ) { return false; }
+        }
 
-		// Can we set the value?
-		if (!Convert(ref value))
-		{
-			if (Application.isPlaying)
-				UnityEngine.Debug.LogError("Unable to convert " + value.GetType() + " to " + GetPropertyType());
-		}
-		else if (mField != null)
-		{
-			mField.SetValue(mTarget, value);
-			return true;
-		}
-		else if (mProperty.CanWrite)
-		{
-			mProperty.SetValue(mTarget, value, null);
-			return true;
-		}
-		return false;
-	}
+        // Can we set the value?
+        if ( !Convert( ref value ) )
+        {
+            if ( Application.isPlaying )
+                UnityEngine.Debug.LogError( "Unable to convert " + value.GetType() + " to " + GetPropertyType() );
+        }
+        else if ( mField != null )
+        {
+            mField.SetValue( mTarget, value );
+            return true;
+        }
+        else if ( mProperty.CanWrite )
+        {
+            mProperty.SetValue( mTarget, value, null );
+            return true;
+        }
+        return false;
+    }
 
-	/// <summary>
-	/// Cache the field or property.
-	/// </summary>
+    /// <summary>
+    /// Cache the field or property.
+    /// </summary>
 
-	[DebuggerHidden]
-	[DebuggerStepThrough]
-	bool Cache ()
-	{
-		if (mTarget != null && !string.IsNullOrEmpty(mName))
-		{
-			Type type = mTarget.GetType();
+    [DebuggerHidden]
+    [DebuggerStepThrough]
+    private bool Cache()
+    {
+        if ( mTarget != null && !string.IsNullOrEmpty( mName ) )
+        {
+            Type type = mTarget.GetType();
 #if NETFX_CORE
 			mField = type.GetRuntimeField(mName);
 			mProperty = type.GetRuntimeProperty(mName);
 #else
-			mField = type.GetField(mName);
-			mProperty = type.GetProperty(mName);
+            mField = type.GetField( mName );
+            mProperty = type.GetProperty( mName );
 #endif
-		}
-		else
-		{
-			mField = null;
-			mProperty = null;
-		}
-		return (mField != null || mProperty != null);
-	}
+        }
+        else
+        {
+            mField = null;
+            mProperty = null;
+        }
+        return ( mField != null || mProperty != null );
+    }
 
-	/// <summary>
-	/// Whether we can assign the property using the specified value.
-	/// </summary>
+    /// <summary>
+    /// Whether we can assign the property using the specified value.
+    /// </summary>
 
-	bool Convert (ref object value)
-	{
-		if (mTarget == null) return false;
+    private bool Convert( ref object value )
+    {
+        if ( mTarget == null ) return false;
 
-		Type to = GetPropertyType();
-		Type from;
+        Type to = GetPropertyType();
+        Type from;
 
-		if (value == null)
-		{
+        if ( value == null )
+        {
 #if NETFX_CORE
 			if (!to.GetTypeInfo().IsClass) return false;
 #else
-			if (!to.IsClass) return false;
+            if ( !to.IsClass ) return false;
 #endif
-			from = to;
-		}
-		else from = value.GetType();
-		return Convert(ref value, from, to);
-	}
+            from = to;
+        }
+        else from = value.GetType();
+        return Convert( ref value, from, to );
+    }
+
 #else // Everything below = no reflection support
 	public object Get ()
 	{
@@ -328,88 +343,88 @@ public class PropertyReference
 	bool Convert (ref object value) { return false; }
 #endif
 
-	/// <summary>
-	/// Whether we can convert one type to another for assignment purposes.
-	/// </summary>
+    /// <summary>
+    /// Whether we can convert one type to another for assignment purposes.
+    /// </summary>
 
-	static public bool Convert (Type from, Type to)
-	{
-		object temp = null;
-		return Convert(ref temp, from, to);
-	}
+    static public bool Convert( Type from, Type to )
+    {
+        object temp = null;
+        return Convert( ref temp, from, to );
+    }
 
-	/// <summary>
-	/// Whether we can convert one type to another for assignment purposes.
-	/// </summary>
+    /// <summary>
+    /// Whether we can convert one type to another for assignment purposes.
+    /// </summary>
 
-	static public bool Convert (object value, Type to)
-	{
-		if (value == null)
-		{
-			value = null;
-			return Convert(ref value, to, to);
-		}
-		return Convert(ref value, value.GetType(), to);
-	}
+    static public bool Convert( object value, Type to )
+    {
+        if ( value == null )
+        {
+            value = null;
+            return Convert( ref value, to, to );
+        }
+        return Convert( ref value, value.GetType(), to );
+    }
 
-	/// <summary>
-	/// Whether we can convert one type to another for assignment purposes.
-	/// </summary>
+    /// <summary>
+    /// Whether we can convert one type to another for assignment purposes.
+    /// </summary>
 
-	static public bool Convert (ref object value, Type from, Type to)
-	{
+    static public bool Convert( ref object value, Type from, Type to )
+    {
 #if REFLECTION_SUPPORT
-		// If the value can be assigned as-is, we're done
+        // If the value can be assigned as-is, we're done
 #if NETFX_CORE
 		if (to.GetTypeInfo().IsAssignableFrom(from.GetTypeInfo())) return true;
 #else
-		if (to.IsAssignableFrom(from)) return true;
+        if ( to.IsAssignableFrom( from ) ) return true;
 #endif
 
 #else
 		if (from == to) return true;
 #endif
-		// If the target type is a string, just convert the value
-		if (to == typeof(string))
-		{
-			value = (value != null) ? value.ToString() : "null";
-			return true;
-		}
+        // If the target type is a string, just convert the value
+        if ( to == typeof( string ) )
+        {
+            value = ( value != null ) ? value.ToString() : "null";
+            return true;
+        }
 
-		// If the value is null we should not proceed further
-		if (value == null) return false;
+        // If the value is null we should not proceed further
+        if ( value == null ) return false;
 
-		if (to == typeof(int))
-		{
-			if (from == typeof(string))
-			{
-				int val;
+        if ( to == typeof( int ) )
+        {
+            if ( from == typeof( string ) )
+            {
+                int val;
 
-				if (int.TryParse((string)value, out val))
-				{
-					value = val;
-					return true;
-				}
-			}
-			else if (from == typeof(float))
-			{
-				value = Mathf.RoundToInt((float)value);
-				return true;
-			}
-		}
-		else if (to == typeof(float))
-		{
-			if (from == typeof(string))
-			{
-				float val;
+                if ( int.TryParse( (string) value, out val ) )
+                {
+                    value = val;
+                    return true;
+                }
+            }
+            else if ( from == typeof( float ) )
+            {
+                value = Mathf.RoundToInt( (float) value );
+                return true;
+            }
+        }
+        else if ( to == typeof( float ) )
+        {
+            if ( from == typeof( string ) )
+            {
+                float val;
 
-				if (float.TryParse((string)value, out val))
-				{
-					value = val;
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+                if ( float.TryParse( (string) value, out val ) )
+                {
+                    value = val;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -1,15 +1,22 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿/**
+ * @file CameraControl.cs
+ * @brief
+ * @details
+ * @author ddayin
+ * @date 2014-11-12
+ */
 
-public class GameObjectFactory : MonoBehaviour {
+using UnityEngine;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+public class GameObjectFactory : MonoBehaviour
+{
+    // Use this for initialization
+    private void Start()
+    {
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+    }
 }

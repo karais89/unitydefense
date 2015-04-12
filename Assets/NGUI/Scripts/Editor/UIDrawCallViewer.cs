@@ -5,7 +5,6 @@
 
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
 
 /// <summary>
 /// Draw Call Viewer shows a list of draw calls created by NGUI and lets you hide them selectively.
@@ -13,202 +12,213 @@ using System.Collections.Generic;
 
 public class UIDrawCallViewer : EditorWindow
 {
-	static public UIDrawCallViewer instance;
+    static public UIDrawCallViewer instance;
 
-	enum Visibility
-	{
-		Visible,
-		Hidden,
-	}
+    private enum Visibility
+    {
+        Visible,
+        Hidden,
+    }
 
-	enum ShowFilter
-	{
-		AllPanels,
-		SelectedPanel,
-	}
+    private enum ShowFilter
+    {
+        AllPanels,
+        SelectedPanel,
+    }
 
-	Vector2 mScroll = Vector2.zero;
+    private Vector2 mScroll = Vector2.zero;
 
-	void OnEnable () { instance = this; }
-	void OnDisable () { instance = null; }
-	void OnSelectionChange () { Repaint(); }
+    private void OnEnable()
+    {
+        instance = this;
+    }
 
-	/// <summary>
-	/// Draw the custom wizard.
-	/// </summary>
+    private void OnDisable()
+    {
+        instance = null;
+    }
 
-	void OnGUI ()
-	{
-		BetterList<UIDrawCall> dcs = UIDrawCall.activeList;
+    private void OnSelectionChange()
+    {
+        Repaint();
+    }
 
-		dcs.Sort(delegate(UIDrawCall a, UIDrawCall b)
-		{
-			return a.finalRenderQueue.CompareTo(b.finalRenderQueue);
-		});
+    /// <summary>
+    /// Draw the custom wizard.
+    /// </summary>
 
-		if (dcs.size == 0)
-		{
-			EditorGUILayout.HelpBox("No NGUI draw calls present in the scene", MessageType.Info);
-			return;
-		}
+    private void OnGUI()
+    {
+        BetterList<UIDrawCall> dcs = UIDrawCall.activeList;
 
-		UIPanel selectedPanel = NGUITools.FindInParents<UIPanel>(Selection.activeGameObject);
+        dcs.Sort( delegate( UIDrawCall a, UIDrawCall b )
+        {
+            return a.finalRenderQueue.CompareTo( b.finalRenderQueue );
+        } );
 
-		GUILayout.Space(12f);
+        if ( dcs.size == 0 )
+        {
+            EditorGUILayout.HelpBox( "No NGUI draw calls present in the scene", MessageType.Info );
+            return;
+        }
 
-		NGUIEditorTools.SetLabelWidth(100f);
-		ShowFilter show = (NGUISettings.showAllDCs ? ShowFilter.AllPanels : ShowFilter.SelectedPanel);
+        UIPanel selectedPanel = NGUITools.FindInParents<UIPanel>( Selection.activeGameObject );
 
-		if ((ShowFilter)EditorGUILayout.EnumPopup("Draw Call Filter", show) != show)
-			NGUISettings.showAllDCs = !NGUISettings.showAllDCs;
+        GUILayout.Space( 12f );
 
-		GUILayout.Space(6f);
+        NGUIEditorTools.SetLabelWidth( 100f );
+        ShowFilter show = ( NGUISettings.showAllDCs ? ShowFilter.AllPanels : ShowFilter.SelectedPanel );
 
-		if (selectedPanel == null && !NGUISettings.showAllDCs)
-		{
-			EditorGUILayout.HelpBox("No panel selected", MessageType.Info);
-			return;
-		}
+        if ( (ShowFilter) EditorGUILayout.EnumPopup( "Draw Call Filter", show ) != show )
+            NGUISettings.showAllDCs = !NGUISettings.showAllDCs;
 
-		NGUIEditorTools.SetLabelWidth(80f);
-		mScroll = GUILayout.BeginScrollView(mScroll);
+        GUILayout.Space( 6f );
 
-		int dcCount = 0;
+        if ( selectedPanel == null && !NGUISettings.showAllDCs )
+        {
+            EditorGUILayout.HelpBox( "No panel selected", MessageType.Info );
+            return;
+        }
 
-		for (int i = 0; i < dcs.size; ++i)
-		{
-			UIDrawCall dc = dcs[i];
-			string key = "Draw Call " + (i + 1);
-			bool highlight = (selectedPanel == null || selectedPanel == dc.manager);
+        NGUIEditorTools.SetLabelWidth( 80f );
+        mScroll = GUILayout.BeginScrollView( mScroll );
 
-			if (!highlight)
-			{
-				if (!NGUISettings.showAllDCs) continue;
-				
-				if (UnityEditor.EditorPrefs.GetBool(key, true))
-				{
-					GUI.color = new Color(0.85f, 0.85f, 0.85f);
-				}
-				else
-				{
-					GUI.contentColor = new Color(0.85f, 0.85f, 0.85f);
-				}
-			}
-			else GUI.contentColor = Color.white;
+        int dcCount = 0;
 
-			++dcCount;
-			string name = key + " of " + dcs.size;
-			if (!dc.isActive) name = name + " (HIDDEN)";
-			else if (!highlight) name = name + " (" + dc.manager.name + ")";
+        for ( int i = 0; i < dcs.size; ++i )
+        {
+            UIDrawCall dc = dcs[i];
+            string key = "Draw Call " + ( i + 1 );
+            bool highlight = ( selectedPanel == null || selectedPanel == dc.manager );
 
-			if (NGUIEditorTools.DrawHeader(name, key))
-			{
-				GUI.color = highlight ? Color.white : new Color(0.8f, 0.8f, 0.8f);
+            if ( !highlight )
+            {
+                if ( !NGUISettings.showAllDCs ) continue;
 
-				NGUIEditorTools.BeginContents();
-				EditorGUILayout.ObjectField("Material", dc.dynamicMaterial, typeof(Material), false);
+                if ( UnityEditor.EditorPrefs.GetBool( key, true ) )
+                {
+                    GUI.color = new Color( 0.85f, 0.85f, 0.85f );
+                }
+                else
+                {
+                    GUI.contentColor = new Color( 0.85f, 0.85f, 0.85f );
+                }
+            }
+            else GUI.contentColor = Color.white;
 
-				int count = 0;
+            ++dcCount;
+            string name = key + " of " + dcs.size;
+            if ( !dc.isActive ) name = name + " (HIDDEN)";
+            else if ( !highlight ) name = name + " (" + dc.manager.name + ")";
 
-				for (int a = 0; a < UIPanel.list.Count; ++a)
-				{
-					UIPanel p = UIPanel.list[a];
+            if ( NGUIEditorTools.DrawHeader( name, key ) )
+            {
+                GUI.color = highlight ? Color.white : new Color( 0.8f, 0.8f, 0.8f );
 
-					for (int b = 0; b < p.widgets.Count; ++b)
-					{
-						UIWidget w = p.widgets[b];
-						if (w.drawCall == dc) ++count;
-					}
-				}
+                NGUIEditorTools.BeginContents();
+                EditorGUILayout.ObjectField( "Material", dc.dynamicMaterial, typeof( Material ), false );
 
-				string myPath = NGUITools.GetHierarchy(dc.manager.cachedGameObject);
-				string remove = myPath + "\\";
-				string[] list = new string[count + 1];
-				list[0] = count.ToString();
-				count = 0;
+                int count = 0;
 
-				for (int a = 0; a < UIPanel.list.Count; ++a)
-				{
-					UIPanel p = UIPanel.list[a];
+                for ( int a = 0; a < UIPanel.list.Count; ++a )
+                {
+                    UIPanel p = UIPanel.list[a];
 
-					for (int b = 0; b < p.widgets.Count; ++b)
-					{
-						UIWidget w = p.widgets[b];
+                    for ( int b = 0; b < p.widgets.Count; ++b )
+                    {
+                        UIWidget w = p.widgets[b];
+                        if ( w.drawCall == dc ) ++count;
+                    }
+                }
 
-						if (w.drawCall == dc)
-						{
-							string path = NGUITools.GetHierarchy(w.cachedGameObject);
-							list[++count] = count + ". " + (string.Equals(path, myPath) ? w.name : path.Replace(remove, ""));
-						}
-					}
-				}
+                string myPath = NGUITools.GetHierarchy( dc.manager.cachedGameObject );
+                string remove = myPath + "\\";
+                string[] list = new string[count + 1];
+                list[0] = count.ToString();
+                count = 0;
 
-				GUILayout.BeginHorizontal();
-				int sel = EditorGUILayout.Popup("Widgets", 0, list);
-				NGUIEditorTools.DrawPadding();
-				GUILayout.EndHorizontal();
+                for ( int a = 0; a < UIPanel.list.Count; ++a )
+                {
+                    UIPanel p = UIPanel.list[a];
 
-				if (sel != 0)
-				{
-					count = 0;
+                    for ( int b = 0; b < p.widgets.Count; ++b )
+                    {
+                        UIWidget w = p.widgets[b];
 
-					for (int a = 0; a < UIPanel.list.Count; ++a)
-					{
-						UIPanel p = UIPanel.list[a];
+                        if ( w.drawCall == dc )
+                        {
+                            string path = NGUITools.GetHierarchy( w.cachedGameObject );
+                            list[++count] = count + ". " + ( string.Equals( path, myPath ) ? w.name : path.Replace( remove, "" ) );
+                        }
+                    }
+                }
 
-						for (int b = 0; b < p.widgets.Count; ++b)
-						{
-							UIWidget w = p.widgets[b];
+                GUILayout.BeginHorizontal();
+                int sel = EditorGUILayout.Popup( "Widgets", 0, list );
+                NGUIEditorTools.DrawPadding();
+                GUILayout.EndHorizontal();
 
-							if (w.drawCall == dc && ++count == sel)
-							{
-								Selection.activeGameObject = w.gameObject;
-								break;
-							}
-						}
-					}
-				}
+                if ( sel != 0 )
+                {
+                    count = 0;
 
-				GUILayout.BeginHorizontal();
-				EditorGUILayout.LabelField("Render Q", dc.finalRenderQueue.ToString(), GUILayout.Width(120f));
-				bool draw = (Visibility)EditorGUILayout.EnumPopup(dc.isActive ? Visibility.Visible : Visibility.Hidden) == Visibility.Visible;
-				NGUIEditorTools.DrawPadding();
-				GUILayout.EndHorizontal();
+                    for ( int a = 0; a < UIPanel.list.Count; ++a )
+                    {
+                        UIPanel p = UIPanel.list[a];
 
-				if (dc.isActive != draw)
-				{
-					dc.isActive = draw;
-					NGUITools.SetDirty(dc.manager);
-				}
+                        for ( int b = 0; b < p.widgets.Count; ++b )
+                        {
+                            UIWidget w = p.widgets[b];
 
-				GUILayout.BeginHorizontal();
-				EditorGUILayout.LabelField("Triangles", dc.triangles.ToString(), GUILayout.Width(120f));
+                            if ( w.drawCall == dc && ++count == sel )
+                            {
+                                Selection.activeGameObject = w.gameObject;
+                                break;
+                            }
+                        }
+                    }
+                }
 
-				if (dc.manager != selectedPanel)
-				{
-					if (GUILayout.Button("Select the Panel"))
-					{
-						Selection.activeGameObject = dc.manager.gameObject;
-					}
-					NGUIEditorTools.DrawPadding();
-				}
-				GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField( "Render Q", dc.finalRenderQueue.ToString(), GUILayout.Width( 120f ) );
+                bool draw = (Visibility) EditorGUILayout.EnumPopup( dc.isActive ? Visibility.Visible : Visibility.Hidden ) == Visibility.Visible;
+                NGUIEditorTools.DrawPadding();
+                GUILayout.EndHorizontal();
 
-				if (dc.manager.clipping != UIDrawCall.Clipping.None && !dc.isClipped)
-				{
-					EditorGUILayout.HelpBox("You must switch this material's shader to Unlit/Transparent Colored or Unlit/Premultiplied Colored in order for clipping to work.",
-						MessageType.Warning);
-				}
+                if ( dc.isActive != draw )
+                {
+                    dc.isActive = draw;
+                    NGUITools.SetDirty( dc.manager );
+                }
 
-				NGUIEditorTools.EndContents();
-				GUI.color = Color.white;
-			}
-		}
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField( "Triangles", dc.triangles.ToString(), GUILayout.Width( 120f ) );
 
-		if (dcCount == 0)
-		{
-			EditorGUILayout.HelpBox("No draw calls found", MessageType.Info);
-		}
-		GUILayout.EndScrollView();
-	}
+                if ( dc.manager != selectedPanel )
+                {
+                    if ( GUILayout.Button( "Select the Panel" ) )
+                    {
+                        Selection.activeGameObject = dc.manager.gameObject;
+                    }
+                    NGUIEditorTools.DrawPadding();
+                }
+                GUILayout.EndHorizontal();
+
+                if ( dc.manager.clipping != UIDrawCall.Clipping.None && !dc.isClipped )
+                {
+                    EditorGUILayout.HelpBox( "You must switch this material's shader to Unlit/Transparent Colored or Unlit/Premultiplied Colored in order for clipping to work.",
+                        MessageType.Warning );
+                }
+
+                NGUIEditorTools.EndContents();
+                GUI.color = Color.white;
+            }
+        }
+
+        if ( dcCount == 0 )
+        {
+            EditorGUILayout.HelpBox( "No draw calls found", MessageType.Info );
+        }
+        GUILayout.EndScrollView();
+    }
 }

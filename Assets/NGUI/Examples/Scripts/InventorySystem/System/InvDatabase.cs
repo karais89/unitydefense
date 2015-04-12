@@ -1,139 +1,146 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 [ExecuteInEditMode]
-[AddComponentMenu("NGUI/Examples/Item Database")]
+[AddComponentMenu( "NGUI/Examples/Item Database" )]
 public class InvDatabase : MonoBehaviour
 {
-	// Cached list of all available item databases
-	static InvDatabase[] mList;
-	static bool mIsDirty = true;
+    // Cached list of all available item databases
+    private static InvDatabase[] mList;
 
-	/// <summary>
-	/// Retrieves the list of item databases, finding all instances if necessary.
-	/// </summary>
+    private static bool mIsDirty = true;
 
-	static public InvDatabase[] list
-	{
-		get
-		{
-			if (mIsDirty)
-			{
-				mIsDirty = false;
-				mList = NGUITools.FindActive<InvDatabase>();
-			}
-			return mList;
-		}
-	}
+    /// <summary>
+    /// Retrieves the list of item databases, finding all instances if necessary.
+    /// </summary>
 
-	/// <summary>
-	/// Each database should have a unique 16-bit ID. When the items are saved, database IDs
-	/// get combined with item IDs to create 32-bit IDs containing both values.
-	/// </summary>
+    static public InvDatabase[] list
+    {
+        get
+        {
+            if ( mIsDirty )
+            {
+                mIsDirty = false;
+                mList = NGUITools.FindActive<InvDatabase>();
+            }
+            return mList;
+        }
+    }
 
-	public int databaseID = 0;
+    /// <summary>
+    /// Each database should have a unique 16-bit ID. When the items are saved, database IDs
+    /// get combined with item IDs to create 32-bit IDs containing both values.
+    /// </summary>
 
-	/// <summary>
-	/// List of items in this database.
-	/// </summary>
+    public int databaseID = 0;
 
-	public List<InvBaseItem> items = new List<InvBaseItem>();
+    /// <summary>
+    /// List of items in this database.
+    /// </summary>
 
-	/// <summary>
-	/// UI atlas used for icons.
-	/// </summary>
+    public List<InvBaseItem> items = new List<InvBaseItem>();
 
-	public UIAtlas iconAtlas;
+    /// <summary>
+    /// UI atlas used for icons.
+    /// </summary>
 
-	/// <summary>
-	/// Add this database to the list.
-	/// </summary>
+    public UIAtlas iconAtlas;
 
-	void OnEnable () { mIsDirty = true; }
+    /// <summary>
+    /// Add this database to the list.
+    /// </summary>
 
-	/// <summary>
-	/// Remove this database from the list.
-	/// </summary>
+    private void OnEnable()
+    {
+        mIsDirty = true;
+    }
 
-	void OnDisable () { mIsDirty = true; }
+    /// <summary>
+    /// Remove this database from the list.
+    /// </summary>
 
-	/// <summary>
-	/// Find an item by its 16-bit ID.
-	/// </summary>
+    private void OnDisable()
+    {
+        mIsDirty = true;
+    }
 
-	InvBaseItem GetItem (int id16)
-	{
-		for (int i = 0, imax = items.Count; i < imax; ++i)
-		{
-			InvBaseItem item = items[i];
-			if (item.id16 == id16) return item;
-		}
-		return null;
-	}
+    /// <summary>
+    /// Find an item by its 16-bit ID.
+    /// </summary>
 
-	/// <summary>
-	/// Find a database given its ID.
-	/// </summary>
+    private InvBaseItem GetItem( int id16 )
+    {
+        for ( int i = 0, imax = items.Count; i < imax; ++i )
+        {
+            InvBaseItem item = items[i];
+            if ( item.id16 == id16 ) return item;
+        }
+        return null;
+    }
 
-	static InvDatabase GetDatabase (int dbID)
-	{
-		for (int i = 0, imax = list.Length; i < imax; ++i)
-		{
-			InvDatabase db = list[i];
-			if (db.databaseID == dbID) return db;
-		}
-		return null;
-	}
+    /// <summary>
+    /// Find a database given its ID.
+    /// </summary>
 
-	/// <summary>
-	/// Find the specified item given its full 32-bit ID (not to be confused with individual 16-bit item IDs).
-	/// </summary>
+    private static InvDatabase GetDatabase( int dbID )
+    {
+        for ( int i = 0, imax = list.Length; i < imax; ++i )
+        {
+            InvDatabase db = list[i];
+            if ( db.databaseID == dbID ) return db;
+        }
+        return null;
+    }
 
-	static public InvBaseItem FindByID (int id32)
-	{
-		InvDatabase db = GetDatabase(id32 >> 16);
-		return (db != null) ? db.GetItem(id32 & 0xFFFF) : null;
-	}
+    /// <summary>
+    /// Find the specified item given its full 32-bit ID (not to be confused with individual 16-bit item IDs).
+    /// </summary>
 
-	/// <summary>
-	/// Find the item with the specified name.
-	/// </summary>
+    static public InvBaseItem FindByID( int id32 )
+    {
+        InvDatabase db = GetDatabase( id32 >> 16 );
+        return ( db != null ) ? db.GetItem( id32 & 0xFFFF ) : null;
+    }
 
-	static public InvBaseItem FindByName (string exact)
-	{
-		for (int i = 0, imax = list.Length; i < imax; ++i)
-		{
-			InvDatabase db = list[i];
+    /// <summary>
+    /// Find the item with the specified name.
+    /// </summary>
 
-			for (int b = 0, bmax = db.items.Count; b < bmax; ++b)
-			{
-				InvBaseItem item = db.items[b];
+    static public InvBaseItem FindByName( string exact )
+    {
+        for ( int i = 0, imax = list.Length; i < imax; ++i )
+        {
+            InvDatabase db = list[i];
 
-				if (item.name == exact)
-				{
-					return item;
-				}
-			}
-		}
-		return null;
-	}
+            for ( int b = 0, bmax = db.items.Count; b < bmax; ++b )
+            {
+                InvBaseItem item = db.items[b];
 
-	/// <summary>
-	/// Get the full 32-bit ID of the specified item.
-	/// Use this to get a list of items on the character that can get saved out to an external database or file.
-	/// </summary>
+                if ( item.name == exact )
+                {
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
 
-	static public int FindItemID (InvBaseItem item)
-	{
-		for (int i = 0, imax = list.Length; i < imax; ++i)
-		{
-			InvDatabase db = list[i];
+    /// <summary>
+    /// Get the full 32-bit ID of the specified item.
+    /// Use this to get a list of items on the character that can get saved out to an external database or file.
+    /// </summary>
 
-			if (db.items.Contains(item))
-			{
-				return (db.databaseID << 16) | item.id16;
-			}
-		}
-		return -1;
-	}
+    static public int FindItemID( InvBaseItem item )
+    {
+        for ( int i = 0, imax = list.Length; i < imax; ++i )
+        {
+            InvDatabase db = list[i];
+
+            if ( db.items.Contains( item ) )
+            {
+                return ( db.databaseID << 16 ) | item.id16;
+            }
+        }
+        return -1;
+    }
 }

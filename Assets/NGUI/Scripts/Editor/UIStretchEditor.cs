@@ -3,11 +3,10 @@
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
-using UnityEngine;
 using UnityEditor;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(UIStretch))]
+[CustomEditor( typeof( UIStretch ) )]
 public class UIStretchEditor : Editor
 {
 }

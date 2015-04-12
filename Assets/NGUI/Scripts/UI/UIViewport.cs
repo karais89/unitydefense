@@ -10,37 +10,37 @@ using UnityEngine;
 /// </summary>
 
 [ExecuteInEditMode]
-[RequireComponent(typeof(Camera))]
-[AddComponentMenu("NGUI/UI/Viewport Camera")]
+[RequireComponent( typeof( Camera ) )]
+[AddComponentMenu( "NGUI/UI/Viewport Camera" )]
 public class UIViewport : MonoBehaviour
 {
-	public Camera sourceCamera;
-	public Transform topLeft;
-	public Transform bottomRight;
-	public float fullSize = 1f;
+    public Camera sourceCamera;
+    public Transform topLeft;
+    public Transform bottomRight;
+    public float fullSize = 1f;
 
-	Camera mCam;
+    private Camera mCam;
 
-	void Start ()
-	{
-		mCam = camera;
-		if (sourceCamera == null) sourceCamera = Camera.main;
-	}
+    private void Start()
+    {
+        mCam = camera;
+        if ( sourceCamera == null ) sourceCamera = Camera.main;
+    }
 
-	void LateUpdate ()
-	{
-		if (topLeft != null && bottomRight != null)
-		{
-			Vector3 tl = sourceCamera.WorldToScreenPoint(topLeft.position);
-			Vector3 br = sourceCamera.WorldToScreenPoint(bottomRight.position);
+    private void LateUpdate()
+    {
+        if ( topLeft != null && bottomRight != null )
+        {
+            Vector3 tl = sourceCamera.WorldToScreenPoint( topLeft.position );
+            Vector3 br = sourceCamera.WorldToScreenPoint( bottomRight.position );
 
-			Rect rect = new Rect(tl.x / Screen.width, br.y / Screen.height,
-				(br.x - tl.x) / Screen.width, (tl.y - br.y) / Screen.height);
+            Rect rect = new Rect( tl.x / Screen.width, br.y / Screen.height,
+                ( br.x - tl.x ) / Screen.width, ( tl.y - br.y ) / Screen.height );
 
-			float size = fullSize * rect.height;
+            float size = fullSize * rect.height;
 
-			if (rect != mCam.rect) mCam.rect = rect;
-			if (mCam.orthographicSize != size) mCam.orthographicSize = size;
-		}
-	}
+            if ( rect != mCam.rect ) mCam.rect = rect;
+            if ( mCam.orthographicSize != size ) mCam.orthographicSize = size;
+        }
+    }
 }

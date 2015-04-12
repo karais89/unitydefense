@@ -10,21 +10,21 @@ using UnityEngine;
 /// which includes all of UI's sounds.
 /// </summary>
 
-[RequireComponent(typeof(UISlider))]
-[AddComponentMenu("NGUI/Interaction/Sound Volume")]
+[RequireComponent( typeof( UISlider ) )]
+[AddComponentMenu( "NGUI/Interaction/Sound Volume" )]
 public class UISoundVolume : MonoBehaviour
 {
-	UISlider mSlider;
+    private UISlider mSlider;
 
-	void Awake ()
-	{
-		mSlider = GetComponent<UISlider>();
-		mSlider.value = NGUITools.soundVolume;
-		EventDelegate.Add(mSlider.onChange, OnChange);
-	}
+    private void Awake()
+    {
+        mSlider = GetComponent<UISlider>();
+        mSlider.value = NGUITools.soundVolume;
+        EventDelegate.Add( mSlider.onChange, OnChange );
+    }
 
-	void OnChange ()
-	{
-		NGUITools.soundVolume = UISlider.current.value;
-	}
+    private void OnChange()
+    {
+        NGUITools.soundVolume = UISlider.current.value;
+    }
 }

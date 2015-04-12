@@ -3,36 +3,36 @@
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
-[CustomEditor(typeof(TweenWidth))]
+[CustomEditor( typeof( TweenWidth ) )]
 public class TweenWidthEditor : UITweenerEditor
 {
-	public override void OnInspectorGUI ()
-	{
-		GUILayout.Space(6f);
-		NGUIEditorTools.SetLabelWidth(120f);
+    public override void OnInspectorGUI()
+    {
+        GUILayout.Space( 6f );
+        NGUIEditorTools.SetLabelWidth( 120f );
 
-		TweenWidth tw = target as TweenWidth;
-		GUI.changed = false;
+        TweenWidth tw = target as TweenWidth;
+        GUI.changed = false;
 
-		int from = EditorGUILayout.IntField("From", tw.from);
-		int to = EditorGUILayout.IntField("To", tw.to);
-		bool table = EditorGUILayout.Toggle("Update Table", tw.updateTable);
+        int from = EditorGUILayout.IntField( "From", tw.from );
+        int to = EditorGUILayout.IntField( "To", tw.to );
+        bool table = EditorGUILayout.Toggle( "Update Table", tw.updateTable );
 
-		if (from < 0) from = 0;
-		if (to < 0) to = 0;
+        if ( from < 0 ) from = 0;
+        if ( to < 0 ) to = 0;
 
-		if (GUI.changed)
-		{
-			NGUIEditorTools.RegisterUndo("Tween Change", tw);
-			tw.from = from;
-			tw.to = to;
-			tw.updateTable = table;
-			NGUITools.SetDirty(tw);
-		}
+        if ( GUI.changed )
+        {
+            NGUIEditorTools.RegisterUndo( "Tween Change", tw );
+            tw.from = from;
+            tw.to = to;
+            tw.updateTable = table;
+            NGUITools.SetDirty( tw );
+        }
 
-		DrawCommonProperties();
-	}
+        DrawCommonProperties();
+    }
 }

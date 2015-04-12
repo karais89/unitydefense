@@ -3,31 +3,31 @@
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
-[CustomEditor(typeof(TweenColor))]
+[CustomEditor( typeof( TweenColor ) )]
 public class TweenColorEditor : UITweenerEditor
 {
-	public override void OnInspectorGUI ()
-	{
-		GUILayout.Space(6f);
-		NGUIEditorTools.SetLabelWidth(120f);
+    public override void OnInspectorGUI()
+    {
+        GUILayout.Space( 6f );
+        NGUIEditorTools.SetLabelWidth( 120f );
 
-		TweenColor tw = target as TweenColor;
-		GUI.changed = false;
+        TweenColor tw = target as TweenColor;
+        GUI.changed = false;
 
-		Color from = EditorGUILayout.ColorField("From", tw.from);
-		Color to = EditorGUILayout.ColorField("To", tw.to);
+        Color from = EditorGUILayout.ColorField( "From", tw.from );
+        Color to = EditorGUILayout.ColorField( "To", tw.to );
 
-		if (GUI.changed)
-		{
-			NGUIEditorTools.RegisterUndo("Tween Change", tw);
-			tw.from = from;
-			tw.to = to;
-			NGUITools.SetDirty(tw);
-		}
+        if ( GUI.changed )
+        {
+            NGUIEditorTools.RegisterUndo( "Tween Change", tw );
+            tw.from = from;
+            tw.to = to;
+            NGUITools.SetDirty( tw );
+        }
 
-		DrawCommonProperties();
-	}
+        DrawCommonProperties();
+    }
 }

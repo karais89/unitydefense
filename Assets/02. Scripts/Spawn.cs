@@ -1,24 +1,32 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿/**
+ * @file Spawn.cs
+ * @brief
+ * @details
+ * @author ddayin
+ * @date 2014-11-12
+ */
 
-public class Spawn : MonoBehaviour {
+using UnityEngine;
+
+public class Spawn : MonoBehaviour
+{
     public int indexX;
     public int indexY;
 
-    void Awake()
+    private void Awake()
     {
         Color spawnColor = Color.blue;
         spawnColor.a = 0.5f;
         renderer.material.color = spawnColor;
     }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    // Use this for initialization
+    private void Start()
+    {
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+    }
 }

@@ -5,19 +5,19 @@ using UnityEngine;
 /// </summary>
 
 [ExecuteInEditMode]
-[AddComponentMenu("NGUI/Examples/Shader Quality")]
+[AddComponentMenu( "NGUI/Examples/Shader Quality" )]
 public class ShaderQuality : MonoBehaviour
 {
-	int mCurrent = 600;
+    private int mCurrent = 600;
 
-	void Update ()
-	{
-		int current = (QualitySettings.GetQualityLevel() + 1) * 100;
+    private void Update()
+    {
+        int current = ( QualitySettings.GetQualityLevel() + 1 ) * 100;
 
-		if (mCurrent != current)
-		{
-			mCurrent = current;
-			Shader.globalMaximumLOD = mCurrent;
-		}
-	}
+        if ( mCurrent != current )
+        {
+            mCurrent = current;
+            Shader.globalMaximumLOD = mCurrent;
+        }
+    }
 }

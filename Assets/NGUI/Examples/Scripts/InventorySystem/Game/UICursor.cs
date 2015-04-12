@@ -9,106 +9,113 @@ using UnityEngine;
 /// Selectable sprite that follows the mouse.
 /// </summary>
 
-[RequireComponent(typeof(UISprite))]
-[AddComponentMenu("NGUI/Examples/UI Cursor")]
+[RequireComponent( typeof( UISprite ) )]
+[AddComponentMenu( "NGUI/Examples/UI Cursor" )]
 public class UICursor : MonoBehaviour
 {
-	static public UICursor instance;
+    static public UICursor instance;
 
-	// Camera used to draw this cursor
-	public Camera uiCamera;
+    // Camera used to draw this cursor
+    public Camera uiCamera;
 
-	Transform mTrans;
-	UISprite mSprite;
+    private Transform mTrans;
+    private UISprite mSprite;
 
-	UIAtlas mAtlas;
-	string mSpriteName;
+    private UIAtlas mAtlas;
+    private string mSpriteName;
 
-	/// <summary>
-	/// Keep an instance reference so this class can be easily found.
-	/// </summary>
+    /// <summary>
+    /// Keep an instance reference so this class can be easily found.
+    /// </summary>
 
-	void Awake () { instance = this; }
-	void OnDestroy () { instance = null; }
+    private void Awake()
+    {
+        instance = this;
+    }
 
-	/// <summary>
-	/// Cache the expected components and starting values.
-	/// </summary>
+    private void OnDestroy()
+    {
+        instance = null;
+    }
 
-	void Start ()
-	{
-		mTrans = transform;
-		mSprite = GetComponentInChildren<UISprite>();
-		
-		if (uiCamera == null)
-			uiCamera = NGUITools.FindCameraForLayer(gameObject.layer);
-		
-		if (mSprite != null)
-		{
-			mAtlas = mSprite.atlas;
-			mSpriteName = mSprite.spriteName;
-			if (mSprite.depth < 100) mSprite.depth = 100;
-		}
-	}
+    /// <summary>
+    /// Cache the expected components and starting values.
+    /// </summary>
 
-	/// <summary>
-	/// Reposition the widget.
-	/// </summary>
+    private void Start()
+    {
+        mTrans = transform;
+        mSprite = GetComponentInChildren<UISprite>();
 
-	void Update ()
-	{
-		Vector3 pos = Input.mousePosition;
+        if ( uiCamera == null )
+            uiCamera = NGUITools.FindCameraForLayer( gameObject.layer );
 
-		if (uiCamera != null)
-		{
-			// Since the screen can be of different than expected size, we want to convert
-			// mouse coordinates to view space, then convert that to world position.
-			pos.x = Mathf.Clamp01(pos.x / Screen.width);
-			pos.y = Mathf.Clamp01(pos.y / Screen.height);
-			mTrans.position = uiCamera.ViewportToWorldPoint(pos);
+        if ( mSprite != null )
+        {
+            mAtlas = mSprite.atlas;
+            mSpriteName = mSprite.spriteName;
+            if ( mSprite.depth < 100 ) mSprite.depth = 100;
+        }
+    }
 
-			// For pixel-perfect results
-			if (uiCamera.isOrthoGraphic)
-			{
-				Vector3 lp = mTrans.localPosition;
-				lp.x = Mathf.Round(lp.x);
-				lp.y = Mathf.Round(lp.y);
-				mTrans.localPosition = lp;
-			}
-		}
-		else
-		{
-			// Simple calculation that assumes that the camera is of fixed size
-			pos.x -= Screen.width * 0.5f;
-			pos.y -= Screen.height * 0.5f;
-			pos.x = Mathf.Round(pos.x);
-			pos.y = Mathf.Round(pos.y);
-			mTrans.localPosition = pos;
-		}
-	}
+    /// <summary>
+    /// Reposition the widget.
+    /// </summary>
 
-	/// <summary>
-	/// Clear the cursor back to its original value.
-	/// </summary>
+    private void Update()
+    {
+        Vector3 pos = Input.mousePosition;
 
-	static public void Clear ()
-	{
-		if (instance != null && instance.mSprite != null)
-			Set(instance.mAtlas, instance.mSpriteName);
-	}
+        if ( uiCamera != null )
+        {
+            // Since the screen can be of different than expected size, we want to convert
+            // mouse coordinates to view space, then convert that to world position.
+            pos.x = Mathf.Clamp01( pos.x / Screen.width );
+            pos.y = Mathf.Clamp01( pos.y / Screen.height );
+            mTrans.position = uiCamera.ViewportToWorldPoint( pos );
 
-	/// <summary>
-	/// Override the cursor with the specified sprite.
-	/// </summary>
+            // For pixel-perfect results
+            if ( uiCamera.isOrthoGraphic )
+            {
+                Vector3 lp = mTrans.localPosition;
+                lp.x = Mathf.Round( lp.x );
+                lp.y = Mathf.Round( lp.y );
+                mTrans.localPosition = lp;
+            }
+        }
+        else
+        {
+            // Simple calculation that assumes that the camera is of fixed size
+            pos.x -= Screen.width * 0.5f;
+            pos.y -= Screen.height * 0.5f;
+            pos.x = Mathf.Round( pos.x );
+            pos.y = Mathf.Round( pos.y );
+            mTrans.localPosition = pos;
+        }
+    }
 
-	static public void Set (UIAtlas atlas, string sprite)
-	{
-		if (instance != null && instance.mSprite)
-		{
-			instance.mSprite.atlas = atlas;
-			instance.mSprite.spriteName = sprite;
-			instance.mSprite.MakePixelPerfect();
-			instance.Update();
-		}
-	}
+    /// <summary>
+    /// Clear the cursor back to its original value.
+    /// </summary>
+
+    static public void Clear()
+    {
+        if ( instance != null && instance.mSprite != null )
+            Set( instance.mAtlas, instance.mSpriteName );
+    }
+
+    /// <summary>
+    /// Override the cursor with the specified sprite.
+    /// </summary>
+
+    static public void Set( UIAtlas atlas, string sprite )
+    {
+        if ( instance != null && instance.mSprite )
+        {
+            instance.mSprite.atlas = atlas;
+            instance.mSprite.spriteName = sprite;
+            instance.mSprite.MakePixelPerfect();
+            instance.Update();
+        }
+    }
 }

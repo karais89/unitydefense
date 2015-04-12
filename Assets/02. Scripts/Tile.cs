@@ -1,11 +1,19 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿/**
+ * @file Tile.cs
+ * @brief
+ * @details
+ * @author ddayin
+ * @date 2014-10-29
+ */
 
-public class Tile : MonoBehaviour {
+using UnityEngine;
 
-	// public Color highlightColor;
-	// private Color normalColor;
+public class Tile : MonoBehaviour
+{
+    // public Color highlightColor;
+    // private Color normalColor;
     public enum TileType { walkable = 0, obstacle = 1, spawn = 11, hero = 111 };
+
     public TileType type = TileType.walkable;
     public int indexX = 0;
     public int indexY = 0;
@@ -15,35 +23,36 @@ public class Tile : MonoBehaviour {
     private GameObject tileLabel;
     private bool isVisibleLabel = false;
 
-	// Use this for initialization
-	void Awake () {
-		// normalColor = renderer.material.color;
+    // Use this for initialization
+    private void Awake()
+    {
+        // normalColor = renderer.material.color;
 
-        tileLabel = (GameObject)Instantiate(Resources.Load("Prefabs/TileWidget") as GameObject);
+        tileLabel = (GameObject) Instantiate( Resources.Load( "Prefabs/TileWidget" ) as GameObject );
         tileLabel.transform.parent = this.transform;
-        tileLabel.SetActive(false);
-	}
-	
-	// Update is called once per frame
-	void Update () 
+        tileLabel.SetActive( false );
+    }
+
+    // Update is called once per frame
+    private void Update()
     {
         if ( isVisibleLabel == true )
         {
-            int iType = (int)type;
-            tileLabel.transform.GetChild(0).GetComponent<UILabel>().text = iType.ToString();
-        }        
-	}
+            int iType = (int) type;
+            tileLabel.transform.GetChild( 0 ).GetComponent<UILabel>().text = iType.ToString();
+        }
+    }
 
     public void SetTileLabelAnchor()
     {
-        tileLabel.GetComponent<UIWidget>().SetAnchor(this.transform);
+        tileLabel.GetComponent<UIWidget>().SetAnchor( this.transform );
 
-        tileLabel.GetComponent<UIWidget>().topAnchor.SetHorizontal(this.transform, 20);
+        tileLabel.GetComponent<UIWidget>().topAnchor.SetHorizontal( this.transform, 20 );
     }
 
     public void SetTileLabel( string s )
     {
-        tileLabel.transform.GetChild(0).GetComponent<UILabel>().text = s;
+        tileLabel.transform.GetChild( 0 ).GetComponent<UILabel>().text = s;
     }
 
     public void SetVisibleLabel( bool visible )
@@ -51,11 +60,11 @@ public class Tile : MonoBehaviour {
         isVisibleLabel = visible;
         if ( isVisibleLabel == true )
         {
-            tileLabel.SetActive(true);
+            tileLabel.SetActive( true );
         }
         else if ( isVisibleLabel == false )
         {
-            tileLabel.SetActive(false);
+            tileLabel.SetActive( false );
         }
     }
 }

@@ -3,134 +3,147 @@
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Very simple sprite animation. Attach to a sprite and specify a common prefix such as "idle" and it will cycle through them.
 /// </summary>
 
 [ExecuteInEditMode]
-[RequireComponent(typeof(UISprite))]
-[AddComponentMenu("NGUI/UI/Sprite Animation")]
+[RequireComponent( typeof( UISprite ) )]
+[AddComponentMenu( "NGUI/UI/Sprite Animation" )]
 public class UISpriteAnimation : MonoBehaviour
 {
-	[HideInInspector][SerializeField] protected int mFPS = 30;
-	[HideInInspector][SerializeField] protected string mPrefix = "";
-	[HideInInspector][SerializeField] protected bool mLoop = true;
-	[HideInInspector][SerializeField] protected bool mSnap = true;
+    [HideInInspector]
+    [SerializeField]
+    protected int mFPS = 30;
 
-	protected UISprite mSprite;
-	protected float mDelta = 0f;
-	protected int mIndex = 0;
-	protected bool mActive = true;
-	protected List<string> mSpriteNames = new List<string>();
+    [HideInInspector]
+    [SerializeField]
+    protected string mPrefix = "";
 
-	/// <summary>
-	/// Number of frames in the animation.
-	/// </summary>
+    [HideInInspector]
+    [SerializeField]
+    protected bool mLoop = true;
 
-	public int frames { get { return mSpriteNames.Count; } }
+    [HideInInspector]
+    [SerializeField]
+    protected bool mSnap = true;
 
-	/// <summary>
-	/// Animation framerate.
-	/// </summary>
+    protected UISprite mSprite;
+    protected float mDelta = 0f;
+    protected int mIndex = 0;
+    protected bool mActive = true;
+    protected List<string> mSpriteNames = new List<string>();
 
-	public int framesPerSecond { get { return mFPS; } set { mFPS = value; } }
+    /// <summary>
+    /// Number of frames in the animation.
+    /// </summary>
 
-	/// <summary>
-	/// Set the name prefix used to filter sprites from the atlas.
-	/// </summary>
+    public int frames { get { return mSpriteNames.Count; } }
 
-	public string namePrefix { get { return mPrefix; } set { if (mPrefix != value) { mPrefix = value; RebuildSpriteList(); } } }
+    /// <summary>
+    /// Animation framerate.
+    /// </summary>
 
-	/// <summary>
-	/// Set the animation to be looping or not
-	/// </summary>
+    public int framesPerSecond { get { return mFPS; } set { mFPS = value; } }
 
-	public bool loop { get { return mLoop; } set { mLoop = value; } }
+    /// <summary>
+    /// Set the name prefix used to filter sprites from the atlas.
+    /// </summary>
 
-	/// <summary>
-	/// Returns is the animation is still playing or not
-	/// </summary>
+    public string namePrefix { get { return mPrefix; } set { if ( mPrefix != value ) { mPrefix = value; RebuildSpriteList(); } } }
 
-	public bool isPlaying { get { return mActive; } }
+    /// <summary>
+    /// Set the animation to be looping or not
+    /// </summary>
 
-	/// <summary>
-	/// Rebuild the sprite list first thing.
-	/// </summary>
+    public bool loop { get { return mLoop; } set { mLoop = value; } }
 
-	protected virtual void Start () { RebuildSpriteList(); }
+    /// <summary>
+    /// Returns is the animation is still playing or not
+    /// </summary>
 
-	/// <summary>
-	/// Advance the sprite animation process.
-	/// </summary>
+    public bool isPlaying { get { return mActive; } }
 
-	protected virtual void Update ()
-	{
-		if (mActive && mSpriteNames.Count > 1 && Application.isPlaying && mFPS > 0f)
-		{
-			mDelta += RealTime.deltaTime;
-			float rate = 1f / mFPS;
+    /// <summary>
+    /// Rebuild the sprite list first thing.
+    /// </summary>
 
-			if (rate < mDelta)
-			{
-				
-				mDelta = (rate > 0f) ? mDelta - rate : 0f;
-				if (++mIndex >= mSpriteNames.Count)
-				{
-					mIndex = 0;
-					mActive = loop;
-				}
+    protected virtual void Start()
+    {
+        RebuildSpriteList();
+    }
 
-				if (mActive)
-				{
-					mSprite.spriteName = mSpriteNames[mIndex];
-					if (mSnap) mSprite.MakePixelPerfect();
-				}
-			}
-		}
-	}
+    /// <summary>
+    /// Advance the sprite animation process.
+    /// </summary>
 
-	/// <summary>
-	/// Rebuild the sprite list after changing the sprite name.
-	/// </summary>
+    protected virtual void Update()
+    {
+        if ( mActive && mSpriteNames.Count > 1 && Application.isPlaying && mFPS > 0f )
+        {
+            mDelta += RealTime.deltaTime;
+            float rate = 1f / mFPS;
 
-	public void RebuildSpriteList ()
-	{
-		if (mSprite == null) mSprite = GetComponent<UISprite>();
-		mSpriteNames.Clear();
+            if ( rate < mDelta )
+            {
+                mDelta = ( rate > 0f ) ? mDelta - rate : 0f;
+                if ( ++mIndex >= mSpriteNames.Count )
+                {
+                    mIndex = 0;
+                    mActive = loop;
+                }
 
-		if (mSprite != null && mSprite.atlas != null)
-		{
-			List<UISpriteData> sprites = mSprite.atlas.spriteList;
+                if ( mActive )
+                {
+                    mSprite.spriteName = mSpriteNames[mIndex];
+                    if ( mSnap ) mSprite.MakePixelPerfect();
+                }
+            }
+        }
+    }
 
-			for (int i = 0, imax = sprites.Count; i < imax; ++i)
-			{
-				UISpriteData sprite = sprites[i];
+    /// <summary>
+    /// Rebuild the sprite list after changing the sprite name.
+    /// </summary>
 
-				if (string.IsNullOrEmpty(mPrefix) || sprite.name.StartsWith(mPrefix))
-				{
-					mSpriteNames.Add(sprite.name);
-				}
-			}
-			mSpriteNames.Sort();
-		}
-	}
-	
-	/// <summary>
-	/// Reset the animation to frame 0 and activate it.
-	/// </summary>
-	
-	public void Reset()
-	{
-		mActive = true;
-		mIndex = 0;
+    public void RebuildSpriteList()
+    {
+        if ( mSprite == null ) mSprite = GetComponent<UISprite>();
+        mSpriteNames.Clear();
 
-		if (mSprite != null && mSpriteNames.Count > 0)
-		{
-			mSprite.spriteName = mSpriteNames[mIndex];
-			if (mSnap) mSprite.MakePixelPerfect();
-		}
-	}
+        if ( mSprite != null && mSprite.atlas != null )
+        {
+            List<UISpriteData> sprites = mSprite.atlas.spriteList;
+
+            for ( int i = 0, imax = sprites.Count; i < imax; ++i )
+            {
+                UISpriteData sprite = sprites[i];
+
+                if ( string.IsNullOrEmpty( mPrefix ) || sprite.name.StartsWith( mPrefix ) )
+                {
+                    mSpriteNames.Add( sprite.name );
+                }
+            }
+            mSpriteNames.Sort();
+        }
+    }
+
+    /// <summary>
+    /// Reset the animation to frame 0 and activate it.
+    /// </summary>
+
+    public void Reset()
+    {
+        mActive = true;
+        mIndex = 0;
+
+        if ( mSprite != null && mSpriteNames.Count > 0 )
+        {
+            mSprite.spriteName = mSpriteNames[mIndex];
+            if ( mSnap ) mSprite.MakePixelPerfect();
+        }
+    }
 }

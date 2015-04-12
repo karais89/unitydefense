@@ -5,8 +5,8 @@
 
 using UnityEngine;
 
-[AddComponentMenu("NGUI/Interaction/Drag and Drop Container")]
+[AddComponentMenu( "NGUI/Interaction/Drag and Drop Container" )]
 public class UIDragDropContainer : MonoBehaviour
 {
-	public Transform reparentTarget;
+    public Transform reparentTarget;
 }

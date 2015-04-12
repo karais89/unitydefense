@@ -3,34 +3,34 @@
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
-[CustomEditor(typeof(TweenOrthoSize))]
+[CustomEditor( typeof( TweenOrthoSize ) )]
 public class TweenOrthoSizeEditor : UITweenerEditor
 {
-	public override void OnInspectorGUI ()
-	{
-		GUILayout.Space(6f);
-		NGUIEditorTools.SetLabelWidth(120f);
+    public override void OnInspectorGUI()
+    {
+        GUILayout.Space( 6f );
+        NGUIEditorTools.SetLabelWidth( 120f );
 
-		TweenOrthoSize tw = target as TweenOrthoSize;
-		GUI.changed = false;
+        TweenOrthoSize tw = target as TweenOrthoSize;
+        GUI.changed = false;
 
-		float from = EditorGUILayout.FloatField("From", tw.from);
-		float to = EditorGUILayout.FloatField("To", tw.to);
+        float from = EditorGUILayout.FloatField( "From", tw.from );
+        float to = EditorGUILayout.FloatField( "To", tw.to );
 
-		if (from < 0f) from = 0f;
-		if (to < 0f) to = 0f;
+        if ( from < 0f ) from = 0f;
+        if ( to < 0f ) to = 0f;
 
-		if (GUI.changed)
-		{
-			NGUIEditorTools.RegisterUndo("Tween Change", tw);
-			tw.from = from;
-			tw.to = to;
-			NGUITools.SetDirty(tw);
-		}
+        if ( GUI.changed )
+        {
+            NGUIEditorTools.RegisterUndo( "Tween Change", tw );
+            tw.from = from;
+            tw.to = to;
+            NGUITools.SetDirty( tw );
+        }
 
-		DrawCommonProperties();
-	}
+        DrawCommonProperties();
+    }
 }

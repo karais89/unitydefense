@@ -25,9 +25,9 @@ public class RealTime : MonoBehaviour
 	{
 		get
 		{
- #if UNITY_EDITOR
+#if UNITY_EDITOR
 			if (!Application.isPlaying) return Time.realtimeSinceStartup;
- #endif
+#endif
 			if (mInst == null) Spawn();
 			return mInst.mRealTime;
 		}
@@ -41,9 +41,9 @@ public class RealTime : MonoBehaviour
 	{
 		get
 		{
- #if UNITY_EDITOR
+#if UNITY_EDITOR
 			if (!Application.isPlaying) return 0f;
- #endif
+#endif
 			if (mInst == null) Spawn();
 			return mInst.mRealDelta;
 		}
@@ -64,16 +64,17 @@ public class RealTime : MonoBehaviour
 		mRealTime = rt;
 	}
 #else
-	/// <summary>
-	/// Real time since startup.
-	/// </summary>
+    /// <summary>
+    /// Real time since startup.
+    /// </summary>
 
-	static public float time { get { return Time.unscaledTime; } }
+    static public float time { get { return Time.unscaledTime; } }
 
-	/// <summary>
-	/// Real delta time.
-	/// </summary>
+    /// <summary>
+    /// Real delta time.
+    /// </summary>
 
-	static public float deltaTime { get { return Time.unscaledDeltaTime; } }
+    static public float deltaTime { get { return Time.unscaledDeltaTime; } }
+
 #endif
 }

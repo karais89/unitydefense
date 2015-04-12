@@ -6,16 +6,20 @@
 using UnityEngine;
 
 [ExecuteInEditMode]
-[AddComponentMenu("NGUI/Internal/Snapshot Point")]
+[AddComponentMenu( "NGUI/Internal/Snapshot Point" )]
 public class UISnapshotPoint : MonoBehaviour
 {
-	public bool isOrthographic = true;
-	public float nearClip = -100f;
-	public float farClip = 100f;
+    public bool isOrthographic = true;
+    public float nearClip = -100f;
+    public float farClip = 100f;
 
-	[Range(10, 80)]
-	public int fieldOfView = 35;
-	public float orthoSize = 30f;
+    [Range( 10, 80 )]
+    public int fieldOfView = 35;
 
-	void Start () { if (tag != "EditorOnly") tag = "EditorOnly"; }
+    public float orthoSize = 30f;
+
+    private void Start()
+    {
+        if ( tag != "EditorOnly" ) tag = "EditorOnly";
+    }
 }

@@ -3,32 +3,32 @@
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 /// Inspector class used to edit UISpriteAnimations.
 /// </summary>
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(UISpriteAnimation))]
+[CustomEditor( typeof( UISpriteAnimation ) )]
 public class UISpriteAnimationInspector : Editor
 {
-	/// <summary>
-	/// Draw the inspector widget.
-	/// </summary>
+    /// <summary>
+    /// Draw the inspector widget.
+    /// </summary>
 
-	public override void OnInspectorGUI ()
-	{
-		GUILayout.Space(3f);
-		NGUIEditorTools.SetLabelWidth(80f);
-		serializedObject.Update();
+    public override void OnInspectorGUI()
+    {
+        GUILayout.Space( 3f );
+        NGUIEditorTools.SetLabelWidth( 80f );
+        serializedObject.Update();
 
-		NGUIEditorTools.DrawProperty("Framerate", serializedObject, "mFPS");
-		NGUIEditorTools.DrawProperty("Name Prefix", serializedObject, "mPrefix");
-		NGUIEditorTools.DrawProperty("Loop", serializedObject, "mLoop");
-		NGUIEditorTools.DrawProperty("Pixel Snap", serializedObject, "mSnap");
+        NGUIEditorTools.DrawProperty( "Framerate", serializedObject, "mFPS" );
+        NGUIEditorTools.DrawProperty( "Name Prefix", serializedObject, "mPrefix" );
+        NGUIEditorTools.DrawProperty( "Loop", serializedObject, "mLoop" );
+        NGUIEditorTools.DrawProperty( "Pixel Snap", serializedObject, "mSnap" );
 
-		serializedObject.ApplyModifiedProperties();
-	}
+        serializedObject.ApplyModifiedProperties();
+    }
 }
