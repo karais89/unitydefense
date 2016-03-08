@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright 짤 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using System.Collections.Generic;
@@ -95,7 +95,7 @@ public class UIButton : UIButtonColor
         get
         {
             if ( !enabled ) return false;
-            Collider col = collider;
+            Collider col = GetComponent<Collider>();
             if ( col && col.enabled ) return true;
             Collider2D c2d = GetComponent<Collider2D>();
             return ( c2d && c2d.enabled );
@@ -104,7 +104,7 @@ public class UIButton : UIButtonColor
         {
             if ( isEnabled != value )
             {
-                Collider col = collider;
+                Collider col = GetComponent<Collider>();
 
                 if ( col != null )
                 {

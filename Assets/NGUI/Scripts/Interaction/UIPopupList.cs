@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright 짤 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using System.Collections;
@@ -808,7 +808,7 @@ public class UIPopupList : UIWidgetContainer
                 else
                 {
                     BoxCollider2D b2d = lbl.GetComponent<BoxCollider2D>();
-                    b2d.center = bcCenter;
+                    b2d.offset = bcCenter;
                     b2d.size = bcSize;
                 }
             }

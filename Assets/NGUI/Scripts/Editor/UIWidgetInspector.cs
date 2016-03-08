@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright 짤 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using System.Collections.Generic;
@@ -334,9 +334,9 @@ public class UIWidgetInspector : UIRectEditor
         {
             sides = anchor.rect.worldCorners;
         }
-        else if ( anchor.target.camera != null )
+        else if ( anchor.target.GetComponent<Camera>() != null )
         {
-            sides = anchor.target.camera.GetWorldCorners();
+            sides = anchor.target.GetComponent<Camera>().GetWorldCorners();
         }
 
         Vector3 theirPos;

@@ -36,7 +36,7 @@ public class PerformenceTest : MonoBehaviour
             newColor.r = randomR * 0.1f;
             newColor.g = randomG * 0.1f;
             newColor.b = randomB * 0.1f;
-            sphere.renderer.material.color = newColor;
+            sphere.GetComponent<Renderer>().material.color = newColor;
 
             //sphere.renderer.material.color = Color.red;
         }

@@ -55,14 +55,14 @@ public class TowerManager : MonoBehaviour
         newTowerToBuild = (GameObject) Instantiate( tower, Vector3.zero, Quaternion.identity );
         Color newColor = Color.green;
         newColor.a = 0.1f;
-        newTowerToBuild.renderer.material.color = newColor;
+        newTowerToBuild.GetComponent<Renderer>().material.color = newColor;
 
         // 건설할 타워를 타워 관리자의 차일드로 추가
         newTowerToBuild.transform.parent = this.transform;
         newTowerToBuild.transform.position = new Vector3( 99, 0, 99 );
 
         //newTowerToBuild.SetActive(false);
-        newTowerToBuild.renderer.enabled = false;
+        newTowerToBuild.GetComponent<Renderer>().enabled = false;
     }
 
     // Update is called once per frame

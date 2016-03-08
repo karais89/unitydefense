@@ -17,7 +17,7 @@ public class Spawn : MonoBehaviour
     {
         Color spawnColor = Color.blue;
         spawnColor.a = 0.5f;
-        renderer.material.color = spawnColor;
+        GetComponent<Renderer>().material.color = spawnColor;
     }
 
     // Use this for initialization

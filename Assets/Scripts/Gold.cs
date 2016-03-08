@@ -86,7 +86,7 @@ public class CsScore : MonoBehaviour {
 
         for ( float a = 1; a >= 0; a -= 0.05f )
         {
-            transform.guiText.material.color = new Vector4( 1, 1, 1, a );
+            transform.GetComponent<GUIText>().material.color = new Vector4( 1, 1, 1, a );
             yield return new WaitForFixedUpdate();
         }
 

@@ -75,7 +75,7 @@ public class Monster : MonoBehaviour
         monsterState = MonsterState.walk;
 
         // 걷는 애니메이션 바로 시작
-        animation.Play( "Walk" );
+        GetComponent<Animation>().Play( "Walk" );
 
         HP = HP_Max;
     }
@@ -113,7 +113,7 @@ public class Monster : MonoBehaviour
                     }
                     else
                     {
-                        animation.CrossFade( "Attack_01" );
+                        GetComponent<Animation>().CrossFade( "Attack_01" );
                         monsterState = MonsterState.attack;
                     }
                 }
@@ -126,7 +126,7 @@ public class Monster : MonoBehaviour
 
             case MonsterState.die:
                 {
-                    if ( animation.isPlaying == false )
+                    if ( GetComponent<Animation>().isPlaying == false )
                     {
                         //사용이끝난 오브젝트 큐로 반환
                         GameManager.insertObjet( this.gameObject );
@@ -213,7 +213,7 @@ public class Monster : MonoBehaviour
 
     private void OnTriggerEnter( Collider coll )
     {
-        if ( coll.collider.tag == "BULLET" )
+        if ( coll.GetComponent<Collider>().tag == "BULLET" )
         {
             // HP -= Bullet.damage;
             HP -= GameObject.Find( "Tower(Clone)" ).GetComponent<Tower>().bulletDamage;
@@ -229,7 +229,7 @@ public class Monster : MonoBehaviour
                 GameManager.gold += earnGold;
 
                 // 죽는 애니메이션 재생
-                animation.CrossFade( "Die" );
+                GetComponent<Animation>().CrossFade( "Die" );
 
                 GameManager.insertObjet( HpBar );
                 HpBar = null;

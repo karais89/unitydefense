@@ -16,7 +16,7 @@ public class Spin : MonoBehaviour
     private void Start()
     {
         mTrans = transform;
-        mRb = rigidbody;
+        mRb = GetComponent<Rigidbody>();
     }
 
     private void Update()

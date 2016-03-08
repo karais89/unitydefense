@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright 짤 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -612,7 +612,7 @@ public class UIWidget : UIRect
     {
         get
         {
-            BoxCollider box = collider as BoxCollider;
+            BoxCollider box = GetComponent<Collider>() as BoxCollider;
             if ( box != null ) return true;
             return GetComponent<BoxCollider2D>() != null;
         }

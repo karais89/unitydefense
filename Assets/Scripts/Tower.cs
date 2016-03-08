@@ -53,10 +53,10 @@ public class Tower : MonoBehaviour
     private void Start()
     {
         // 공격 범위 표시
-        attackRangeSphere.renderer.enabled = false;
+        attackRangeSphere.GetComponent<Renderer>().enabled = false;
         Color rangeColor = Color.green;
         rangeColor.a = 0.3f;
-        attackRangeSphere.renderer.material.color = rangeColor;
+        attackRangeSphere.GetComponent<Renderer>().material.color = rangeColor;
     }
 
     // Update is called once per frame
@@ -68,11 +68,11 @@ public class Tower : MonoBehaviour
     {
         if ( visible == true )
         {
-            attackRangeSphere.renderer.enabled = true;
+            attackRangeSphere.GetComponent<Renderer>().enabled = true;
         }
         else if ( visible == false )
         {
-            attackRangeSphere.renderer.enabled = false;
+            attackRangeSphere.GetComponent<Renderer>().enabled = false;
         }
     }
 

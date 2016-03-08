@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright 짤 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEditor;
@@ -71,7 +71,7 @@ public class UIRectEditor : Editor
     {
         Transform target = sp.objectReferenceValue as Transform;
         if ( target == null ) return null;
-        return target.camera;
+        return target.GetComponent<Camera>();
     }
 
     /// <summary>
@@ -554,9 +554,9 @@ public class UIRectEditor : Editor
                 anchor.Set( anchor.relative, val );
             }
         }
-        else if ( anchor.target.camera != null )
+        else if ( anchor.target.GetComponent<Camera>() != null )
         {
-            Vector3[] sides = anchor.target.camera.GetSides( parent );
+            Vector3[] sides = anchor.target.GetComponent<Camera>().GetSides( parent );
             Vector3 side0 = sides[0];
             Vector3 side1 = sides[2];
 
@@ -633,9 +633,9 @@ public class UIRectEditor : Editor
                 anchor.Set( anchor.relative, val );
             }
         }
-        else if ( anchor.target.camera != null )
+        else if ( anchor.target.GetComponent<Camera>() != null )
         {
-            Vector3[] sides = anchor.target.camera.GetSides( parent );
+            Vector3[] sides = anchor.target.GetComponent<Camera>().GetSides( parent );
             Vector3 side0 = sides[3];
             Vector3 side1 = sides[1];
 

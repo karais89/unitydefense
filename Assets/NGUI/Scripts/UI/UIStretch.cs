@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright 짤 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -86,7 +86,7 @@ public class UIStretch : MonoBehaviour
 
     private void Awake()
     {
-        mAnim = animation;
+        mAnim = GetComponent<Animation>();
         mRect = new Rect();
         mTrans = transform;
         mWidget = GetComponent<UIWidget>();

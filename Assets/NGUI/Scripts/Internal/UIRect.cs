@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright 짤 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -128,7 +128,7 @@ public abstract class UIRect : MonoBehaviour
             if ( target != null )
             {
                 if ( rect != null ) return rect.GetSides( relativeTo );
-                if ( target.camera != null ) return target.camera.GetSides( relativeTo );
+                if ( target.GetComponent<Camera>() != null ) return target.GetComponent<Camera>().GetSides( relativeTo );
             }
             return null;
         }

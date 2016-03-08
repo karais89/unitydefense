@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright 짤 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -78,7 +78,7 @@ public class UIAnchor : MonoBehaviour
     private void Awake()
     {
         mTrans = transform;
-        mAnim = animation;
+        mAnim = GetComponent<Animation>();
         UICamera.onScreenResize += ScreenSizeChanged;
     }
 
