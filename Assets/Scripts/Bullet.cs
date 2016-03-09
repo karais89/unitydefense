@@ -22,21 +22,6 @@ public class Bullet : MonoBehaviour
     // Use this for initialization
     private void Awake()
     {
-        /*
-        rigidbody 적용해서 이동
-        Debug.Log ( "AddForceAtPosition x = " + nearMonster.transform.position.x + " y = " + nearMonster.transform.position.y + " z = " + nearMonster.transform.position.z );
-
-        // rigidbody.AddForce( nearMonster.transform.position * speed );
-        Vector3 direction = rigidbody.transform.position - nearMonster.transform.position;
-        rigidbody.AddForceAtPosition( direction.normalized, nearMonster.transform.position );
-
-        Vector3 directionNormalized = direction.normalized;
-        Debug.Log ( "direction x = " + directionNormalized.x + " y = " + directionNormalized.y + " z = " + directionNormalized.z );
-        transform.Rotate ( transform.rotation.x, directionNormalized.y, directionNormalized.z );
-        */
-
-        // Vector3 direction = transform.position - nearMonster.transform.position;
-        // transform.rotation = Quaternion.LookRotation( direction );
     }
 
     // Update is called once per frame

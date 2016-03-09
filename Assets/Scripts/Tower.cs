@@ -105,15 +105,6 @@ public class Tower : MonoBehaviour
                 newBullet.transform.rotation = Quaternion.identity;
                 newBullet.GetComponent<Bullet>().id = bulletCount;
                 newBullet.GetComponent<Bullet>().nearMonster = targetMonster;
-
-                // Vector3 targetDir = targetMonster.transform.position - transform.position;
-                // bullet.rigidbody.velocity = transform.TransformDirection(targetDir * 1.0f);
-
-                // 총알을 타워의 차일드로 추가
-                // newBullet.transform.parent = this.transform;
-
-                // Vector3 force = targetMonster.transform.position - transform.position;
-                // bullet.rigidbody.AddForce(targetMonster.transform.position);
             }
         }
     }

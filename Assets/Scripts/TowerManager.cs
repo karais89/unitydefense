@@ -22,9 +22,6 @@ public class TowerManager : MonoBehaviour
     public static List<GameObject> towerList = new List<GameObject>();
     private int towerCount = 0;
 
-    //사용안함
-    //private bool isVisibleMenu = false;
-
     ///타워UI
     public GameObject TowerUI = null;
 
@@ -36,21 +33,7 @@ public class TowerManager : MonoBehaviour
     {
         //최소안보이게
         TowerUI.SetActive( false );
-
-        // normalColor = GameObject.FindWithTag ( "TILE" ).GetComponent<Renderer>().material.color;
-
-        /*
-        // 다수의 타워 생성
-        for (int y = 0; y < sizeY; y++)
-        {
-            for (int x = 0; x < sizeX; x++)
-            {
-                Vector3 pos = new Vector3( x, 0.08f, y );
-                Instantiate ( tower, pos, Quaternion.identity);
-            }
-        }
-        */
-
+        
         // 건설할 타워를 미리 생성해두고 비활성화 시켜둔다
         newTowerToBuild = (GameObject) Instantiate( tower, Vector3.zero, Quaternion.identity );
         Color newColor = Color.green;
@@ -189,19 +172,7 @@ public class TowerManager : MonoBehaviour
 
                         selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( true );
                     }
-                    /*else
-                    {
-                        //맨땅선택시 ui제거
-
-                        //TowerUi활성화
-                        towerUI.SetActive(false);
-
-                        //범위취소
-                        selectTower.GetComponent<Tower>().DisplayAttackRangeSphere(false);
-
-                        //selectTower 비우기
-                        selectTower = null;
-                    }*/
+                    
                 }
             }
         }
@@ -243,15 +214,7 @@ public class TowerManager : MonoBehaviour
         // 골드 증가
         int sellGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
         GameManager.gold += sellGold;
-
-        // Destroy(rayCastHit.collider.gameObject);
-
-        //rayCastHit.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.walkable;
-        //rayCastHit.collider.gameObject.GetComponent<Tile>().hasObstacle = false;
-        //rayCastHit.collider.gameObject.GetComponent<Tile>().obstacleName = "";
-
-        // rayCastHit.collider.gameObject.SetActive(false);
-
+        
         Destroy( rayCastHit.collider.gameObject );
 
         selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
@@ -266,21 +229,5 @@ public class TowerManager : MonoBehaviour
         selectTower = null;
         TowerUI.SetActive( false );
     }
-
-    //그리드 단위로 이동 테스트
-    /*Vector3 gridSize = new Vector3(1,1,1);
-    Vector3 movementDirection  = new Vector3(0,0,1);
-    GameObject newTower = null;
-    newTower = (GameObject)Instantiate(tower, this.transform.position, Quaternion.identity);
-    InvokeRepeating("UpdatePosition", 1.0f, 1.0f);
-    void UpdatePosition () {
-        Vector3 newPos = newTower.transform.position + movementDirection;
-        newPos = new Vector3(Mathf.Round(newPos.x/gridSize.x)*gridSize.x,
-                         Mathf.Round(newPos.y/gridSize.y)*gridSize.y,
-                         Mathf.Round(newPos.z/gridSize.z)*gridSize.z);
-
-        newTower.transform.position = newPos;
-    }*/
-    //테스트결과 movementDirection인 z가1 즉 위쪽방향을 1초마다 이동하라고명령내린듯
-    //1칸씩 위로 계속이동함
+    
 }

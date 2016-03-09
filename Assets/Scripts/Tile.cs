@@ -10,8 +10,6 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    // public Color highlightColor;
-    // private Color normalColor;
     public enum TileType { walkable = 0, obstacle = 1, spawn = 11, hero = 111 };
 
     public TileType type = TileType.walkable;
@@ -26,8 +24,6 @@ public class Tile : MonoBehaviour
     // Use this for initialization
     private void Awake()
     {
-        // normalColor = renderer.material.color;
-
         tileLabel = (GameObject) Instantiate( Resources.Load( "Prefabs/TileWidget" ) as GameObject );
         tileLabel.transform.parent = this.transform;
         tileLabel.SetActive( false );

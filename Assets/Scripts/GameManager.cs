@@ -12,25 +12,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    //사용안함
-    //private GameObject monsterPrefab = null;
-
     public float createTime = 2.0f;
     private int monsterCount = 0;
     private Transform[] spawnTransform = new Transform[16];
     public static bool isGameOver = false;
 
     private System.Random rand = new System.Random();
-
-    /*private static GameManager _instance;
-
-    public static GameManager get(){
-        if(_instance == null)
-            _instance = GameManager.FindObjectOfType(typeof(GameManager)) as GameManager;
-
-        return _instance;
-    }*/
-
+    
     //큐 선언 - 프리팹을 재활용할 용도
     //개인적으론 static 보단 싱글톤이 좋은뎀 ㅋㅋ static다 달아줘야함 ㅠ
     ///몬스터큐
@@ -109,11 +97,6 @@ public class GameManager : MonoBehaviour
     {
         //팝업창 꺼두기
         StopPopup.SetActive( false );
-
-        //씬 변경시 제거안되게
-        //DontDestroyOnLoad (this.gameObject);
-
-        //GameObject.Find("Map").SetActive(false);
         GameObject.Find( "MapFilled" ).SetActive( false );
 
         GameObject.Find( "Map" ).GetComponent<TileMap>().LoadResources();
@@ -134,21 +117,13 @@ public class GameManager : MonoBehaviour
         // waypoint에 일정 시간 간격으로 캐릭터 생성
         StartCoroutine( this.CreateMonster() );
         gold = initialGold;
-
-        //사용안함
-        //goldText.text = gold.ToString();
-        //scoreText.text = "Score: " + score;
+        
 
         //몬스터를담을 폴더지정
         enemyFolder = GameObject.Find( "Enemy" ).transform;
         bulletFolder = GameObject.Find( "Bullet" ).transform;
         hpBarFolder = GameObject.Find( "HpBarUI" ).transform;
-
-        //사용안함
-        /* monsterPrefab = (GameObject)Resources.Load("Prefabs/Troll", typeof(GameObject));
-
-         pool.Create(monsterPrefab, monsterNumPerWave);
-         pool.SetParent(GameObject.Find("Enemy").transform);*/
+        
     }
 
     public static void reSetList()
