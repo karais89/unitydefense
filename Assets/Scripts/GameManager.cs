@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DefenseFramework;
 
 public class GameManager : MonoBehaviour
 {

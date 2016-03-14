@@ -9,225 +9,230 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerManager : MonoBehaviour
+namespace DefenseFramework
 {
-    public int sizeX = 64;
-    public int sizeY = 64;
-    public GameObject tower;
-    public bool isTileBuildMode = false;
-    public Color highlightColor;
-    private Color normalColor;
-    private GameObject newTowerToBuild;
-    private RaycastHit rayCastHit;
-    public static List<GameObject> towerList = new List<GameObject>();
-    private int towerCount = 0;
-
-    ///타워UI
-    public GameObject TowerUI = null;
-
-    //select된 tower
-    private GameObject selectTower = null;
-
-    // Use this for initialization
-    private void Awake()
+    public class TowerManager : MonoBehaviour
     {
-        //최소안보이게
-        TowerUI.SetActive( false );
-        
-        // 건설할 타워를 미리 생성해두고 비활성화 시켜둔다
-        newTowerToBuild = (GameObject) Instantiate( tower, Vector3.zero, Quaternion.identity );
-        Color newColor = Color.green;
-        newColor.a = 0.1f;
-        newTowerToBuild.GetComponent<Renderer>().material.color = newColor;
+        public int sizeX = 64;
+        public int sizeY = 64;
+        public GameObject tower;
+        public bool isTileBuildMode = false;
+        public Color highlightColor;
+        private Color normalColor;
+        private GameObject newTowerToBuild;
+        private RaycastHit rayCastHit;
+        public static List<GameObject> towerList = new List<GameObject>();
+        private int towerCount = 0;
 
-        // 건설할 타워를 타워 관리자의 차일드로 추가
-        newTowerToBuild.transform.parent = this.transform;
-        newTowerToBuild.transform.position = new Vector3( 99, 0, 99 );
+        ///타워UI
+        public GameObject TowerUI = null;
 
-        //newTowerToBuild.SetActive(false);
-        newTowerToBuild.GetComponent<Renderer>().enabled = false;
-    }
+        //select된 tower
+        private GameObject selectTower = null;
 
-    // Update is called once per frame
-    private void Update()
-    {
-        if ( isTileBuildMode == true )
+        // Use this for initialization
+        private void Awake()
         {
-            // FIXIT
-            /*
-			// 마우스 커서를 따라 생성할 타워를 위치시킨다
-			Vector3 targetPosition = Camera.main.ScreenToWorldPoint( Input.mousePosition );
+            //최소안보이게
+            TowerUI.SetActive( false );
 
-            targetPosition.z = targetPosition.y;
-            targetPosition.y = 0.0f;
-			newTowerToBuild.transform.Translate( targetPosition, Space.World );
-            */
+            // 건설할 타워를 미리 생성해두고 비활성화 시켜둔다
+            newTowerToBuild = (GameObject) Instantiate( tower, Vector3.zero, Quaternion.identity );
+            Color newColor = Color.green;
+            newColor.a = 0.1f;
+            newTowerToBuild.GetComponent<Renderer>().material.color = newColor;
 
-            // TODO
-            // 타일 단위로 생성할 타워 위치
-            /*
-             *
-             * var gridSize : Vector3 = new Vector3(1,1,1);
-            var movementDirection : Vector3 = new Vector3(0,0,1);
+            // 건설할 타워를 타워 관리자의 차일드로 추가
+            newTowerToBuild.transform.parent = this.transform;
+            newTowerToBuild.transform.position = new Vector3( 99, 0, 99 );
 
-            function Start () {
-             InvokeRepeating("UpdatePosition", 1.0, 1.0);
-            }
+            //newTowerToBuild.SetActive(false);
+            newTowerToBuild.GetComponent<Renderer>().enabled = false;
+        }
 
-            function UpdatePosition () {
-             var newPos : Vector3 = transform.position+movementDirection;
-             newPos = Vector3(Mathf.Round(newPos.x/gridSize.x)*gridSize.x,
-             Mathf.Round(newPos.y/gridSize.y)*gridSize.y,
-             Mathf.Round(newPos.z/gridSize.z)*gridSize.z);
-             transform.position = newPos;
-            }
-            */
-
-            // FIXIT
-            // 마우스 커서가 가리키는 타일에 하이라이트 색상 변경
-            /*Ray ray1 = Camera.mainCamera.ScreenPointToRay( Input.mousePosition );
-            RaycastHit hitInfo1;
-
-            if( Physics.Raycast( ray1, out hitInfo1, 100.0f ) ) {
-                // normalColor = hitInfo1.collider.renderer.material.color;
-                hitInfo1.collider.renderer.material.color = highlightColor;
-            }
-            else {
-                hitInfo1.collider.renderer.material.color = normalColor;
-            }
-            */
-
-            // TODO
-            // 마우스 클릭한 지점의 바닥 타일 이차원 배열에서 가져오기
-
-            // 마우스 클릭한 지점에 타워 생성
-            if ( Input.GetMouseButtonDown( 0 ) )
+        // Update is called once per frame
+        private void Update()
+        {
+            if ( isTileBuildMode == true )
             {
-                Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
-                RaycastHit hitInfo;
+                // FIXIT
+                /*
+                // 마우스 커서를 따라 생성할 타워를 위치시킨다
+                Vector3 targetPosition = Camera.main.ScreenToWorldPoint( Input.mousePosition );
 
-                if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
+                targetPosition.z = targetPosition.y;
+                targetPosition.y = 0.0f;
+                newTowerToBuild.transform.Translate( targetPosition, Space.World );
+                */
+
+                // TODO
+                // 타일 단위로 생성할 타워 위치
+                /*
+                 *
+                 * var gridSize : Vector3 = new Vector3(1,1,1);
+                var movementDirection : Vector3 = new Vector3(0,0,1);
+
+                function Start () {
+                 InvokeRepeating("UpdatePosition", 1.0, 1.0);
+                }
+
+                function UpdatePosition () {
+                 var newPos : Vector3 = transform.position+movementDirection;
+                 newPos = Vector3(Mathf.Round(newPos.x/gridSize.x)*gridSize.x,
+                 Mathf.Round(newPos.y/gridSize.y)*gridSize.y,
+                 Mathf.Round(newPos.z/gridSize.z)*gridSize.z);
+                 transform.position = newPos;
+                }
+                */
+
+                // FIXIT
+                // 마우스 커서가 가리키는 타일에 하이라이트 색상 변경
+                /*Ray ray1 = Camera.mainCamera.ScreenPointToRay( Input.mousePosition );
+                RaycastHit hitInfo1;
+
+                if( Physics.Raycast( ray1, out hitInfo1, 100.0f ) ) {
+                    // normalColor = hitInfo1.collider.renderer.material.color;
+                    hitInfo1.collider.renderer.material.color = highlightColor;
+                }
+                else {
+                    hitInfo1.collider.renderer.material.color = normalColor;
+                }
+                */
+
+                // TODO
+                // 마우스 클릭한 지점의 바닥 타일 이차원 배열에서 가져오기
+
+                // 마우스 클릭한 지점에 타워 생성
+                if ( Input.GetMouseButtonDown( 0 ) )
                 {
-                    // 타일을 선택한 경우에만 타워 생성
-                    if ( hitInfo.transform.tag == "TILE" )
+                    Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
+                    RaycastHit hitInfo;
+
+                    if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
                     {
-                        Debug.Log( "create new tower" );
+                        // 타일을 선택한 경우에만 타워 생성
+                        if ( hitInfo.transform.tag == "TILE" )
+                        {
+                            Debug.Log( "create new tower" );
 
-                        GameObject newTower = (GameObject) Instantiate( tower, hitInfo.collider.transform.position, Quaternion.identity );
-                        newTower.GetComponent<Tower>().id = towerCount;
-                        towerCount++;
+                            GameObject newTower = (GameObject) Instantiate( tower, hitInfo.collider.transform.position, Quaternion.identity );
+                            newTower.GetComponent<Tower>().id = towerCount;
+                            towerCount++;
 
-                        // 타워를 타워 관리자의 차일드로 추가
-                        newTower.transform.parent = this.transform;
+                            // 타워를 타워 관리자의 차일드로 추가
+                            newTower.transform.parent = this.transform;
 
-                        towerList.Add( newTower );
+                            towerList.Add( newTower );
 
-                        GameManager.score += newTower.GetComponent<Tower>().GetEarnScore();
+                            GameManager.score += newTower.GetComponent<Tower>().GetEarnScore();
 
-                        isTileBuildMode = false;
+                            isTileBuildMode = false;
 
-                        GameObject.Find( "Map" ).GetComponent<TileMap>().DisplayGridBuildable( false );
-                        newTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+                            GameObject.Find( "Map" ).GetComponent<TileMap>().DisplayGridBuildable( false );
+                            newTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
 
-                        hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.obstacle;
-                        hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
-                        hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = "Tower";
+                            hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.obstacle;
+                            hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
+                            hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = "Tower";
 
-                        //GameObject.Find("GameManager").GetComponent<GameManager>().ResearchPathUnits();
+                            //GameObject.Find("GameManager").GetComponent<GameManager>().ResearchPathUnits();
+                        }
                     }
                 }
             }
-        }
-        else if ( isTileBuildMode == false )
-        {
-            // 타워를 선택하면 메뉴가 열린다
-            if ( Input.GetMouseButtonDown( 0 ) )
+            else if ( isTileBuildMode == false )
             {
-                Ray ray1 = Camera.main.ScreenPointToRay( Input.mousePosition );
-                RaycastHit hitInfo;
-                if ( Physics.Raycast( ray1, out hitInfo, 100.0f ) )
+                // 타워를 선택하면 메뉴가 열린다
+                if ( Input.GetMouseButtonDown( 0 ) )
                 {
-                    if ( hitInfo.transform.tag == "TOWER" )
+                    Ray ray1 = Camera.main.ScreenPointToRay( Input.mousePosition );
+                    RaycastHit hitInfo;
+                    if ( Physics.Raycast( ray1, out hitInfo, 100.0f ) )
                     {
-                        rayCastHit = hitInfo;
-
-                        //사용안함
-                        //대신 selectTower가 눌인지로 판별
-                        //isVisibleMenu = true;
-
-                        if ( selectTower != null )
+                        if ( hitInfo.transform.tag == "TOWER" )
                         {
-                            //범위표시삭제
-                            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+                            rayCastHit = hitInfo;
+
+                            //사용안함
+                            //대신 selectTower가 눌인지로 판별
+                            //isVisibleMenu = true;
+
+                            if ( selectTower != null )
+                            {
+                                //범위표시삭제
+                                selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+                            }
+
+                            //TowerUi 활성화
+                            TowerUI.SetActive( true );
+
+                            //selectTower 설정
+                            selectTower = rayCastHit.collider.gameObject;
+
+                            //anchor를 선택된 tower로 설정
+                            TowerUI.GetComponent<UIWidget>().SetAnchor( rayCastHit.collider.gameObject );
+
+                            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( true );
                         }
 
-                        //TowerUi 활성화
-                        TowerUI.SetActive( true );
-
-                        //selectTower 설정
-                        selectTower = rayCastHit.collider.gameObject;
-
-                        //anchor를 선택된 tower로 설정
-                        TowerUI.GetComponent<UIWidget>().SetAnchor( rayCastHit.collider.gameObject );
-
-                        selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( true );
                     }
-                    
                 }
             }
         }
-    }
 
-    ///타일에 건설모드 - UI에서 호출
-    public void TileBuildMode()
-    {
-        if ( isTileBuildMode == false )
+        ///타일에 건설모드 - UI에서 호출
+        public void TileBuildMode()
         {
-            //건설모드시작
-            isTileBuildMode = true;
-            GameObject.Find( "Map" ).GetComponent<TileMap>().DisplayGridBuildable( true );
+            if ( isTileBuildMode == false )
+            {
+                //건설모드시작
+                isTileBuildMode = true;
+                GameObject.Find( "Map" ).GetComponent<TileMap>().DisplayGridBuildable( true );
 
-            /////////////골드차감구조변경필요할덧
+                /////////////골드차감구조변경필요할덧
+            }
+            else
+            {
+                //건설모드종료
+                isTileBuildMode = false;
+                GameObject.Find( "Map" ).GetComponent<TileMap>().DisplayGridBuildable( false );
+            }
         }
-        else
+
+        //타워UpGrade - UI에서 호출
+        public void UpGrade()
         {
-            //건설모드종료
-            isTileBuildMode = false;
-            GameObject.Find( "Map" ).GetComponent<TileMap>().DisplayGridBuildable( false );
+            selectTower.GetComponent<Tower>().level += 1;
+            selectTower.GetComponent<Tower>().Upgrade();
+
+            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+            selectTower = null;
+            TowerUI.SetActive( false );
         }
+
+        //타워Sell - UI에서 호출
+        public void Sell()
+        {
+            // 골드 증가
+            int sellGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
+            GameManager.gold += sellGold;
+
+            Destroy( rayCastHit.collider.gameObject );
+
+            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+            selectTower = null;
+            TowerUI.SetActive( false );
+        }
+
+        //타워Cancel - UI에서 호출
+        public void Cancel()
+        {
+            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+            selectTower = null;
+            TowerUI.SetActive( false );
+        }
+
     }
-
-    //타워UpGrade - UI에서 호출
-    public void UpGrade()
-    {
-        selectTower.GetComponent<Tower>().level += 1;
-        selectTower.GetComponent<Tower>().Upgrade();
-
-        selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
-        selectTower = null;
-        TowerUI.SetActive( false );
-    }
-
-    //타워Sell - UI에서 호출
-    public void Sell()
-    {
-        // 골드 증가
-        int sellGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
-        GameManager.gold += sellGold;
-        
-        Destroy( rayCastHit.collider.gameObject );
-
-        selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
-        selectTower = null;
-        TowerUI.SetActive( false );
-    }
-
-    //타워Cancel - UI에서 호출
-    public void Cancel()
-    {
-        selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
-        selectTower = null;
-        TowerUI.SetActive( false );
-    }
-    
 }
+
+
