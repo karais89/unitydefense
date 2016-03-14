@@ -11,7 +11,7 @@ using System.Collections;
 
 namespace DefenseFramework
 {
-    public class TileModel
+    public class TileModel : MonoBehaviour
     {
         public enum eTileType
         {
