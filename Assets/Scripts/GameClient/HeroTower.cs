@@ -13,17 +13,16 @@ namespace GameClient
     public class HeroTower : MonoBehaviour
     {
         [HideInInspector]
-        public float HP = 0.0f;     // 현재 체력
-
-        public float HP_Max = 200.0f;
-        private Vector3 pointHP = Vector3.zero;
-        private Rect rectHP;
-        public Texture HP_EmptyTexture;
-        public Texture HP_FullTexture;
+        private float m_fHP = 0.0f;     // 현재 체력
+        private float m_fHP_Max = 200.0f;
+        private Vector3 m_vPointHP = Vector3.zero;
+        private Rect m_rectHP;
+        private Texture m_tHP_Empty;
+        private Texture m_tHP_Full;
 
         private void Awake()
         {
-            HP = HP_Max;
+            m_fHP = m_fHP_Max;
         }
 
         // Use this for initialization
@@ -35,7 +34,7 @@ namespace GameClient
         private void Update()
         {
             // HP가 모두 소모되면 게임 오버 처리
-            if ( HP <= 0 )
+            if ( m_fHP <= 0 )
             {
                 GameManager.isGameOver = true;
 
@@ -50,15 +49,15 @@ namespace GameClient
             pointTransform.x = transform.position.x;
             pointTransform.y = transform.position.y + 1.5f;
             pointTransform.z = transform.position.z;
-            pointHP = Camera.main.WorldToScreenPoint( pointTransform );
-            rectHP.width = 100;
-            rectHP.height = 10;
-            rectHP.x = pointHP.x - ( rectHP.width / 2 );
-            rectHP.y = Screen.height - pointHP.y - ( rectHP.height / 2 );
+            m_vPointHP = Camera.main.WorldToScreenPoint( pointTransform );
+            m_rectHP.width = 100;
+            m_rectHP.height = 10;
+            m_rectHP.x = m_vPointHP.x - ( m_rectHP.width / 2 );
+            m_rectHP.y = Screen.height - m_vPointHP.y - ( m_rectHP.height / 2 );
 
-            GUI.DrawTexture( rectHP, HP_EmptyTexture );
-            GUI.BeginGroup( rectHP, "" );
-            GUI.DrawTexture( new Rect( 0, 0, 100 * ( HP / HP_Max ), rectHP.height ), HP_FullTexture );
+            GUI.DrawTexture( m_rectHP, m_tHP_Empty );
+            GUI.BeginGroup( m_rectHP, "" );
+            GUI.DrawTexture( new Rect( 0, 0, 100 * ( m_fHP / m_fHP_Max ), m_rectHP.height ), m_tHP_Full );
             GUI.EndGroup();
         }
     }
