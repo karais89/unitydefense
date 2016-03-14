@@ -8,6 +8,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneLoading : MonoBehaviour
 {
@@ -54,7 +55,9 @@ public class SceneLoading : MonoBehaviour
     private IEnumerator load()
     {
         //Application.backgroundLoadingPriority = ThreadPriority.Low;
-        async = Application.LoadLevelAsync( "scPlay" );
+        //async = Application.LoadLevelAsync( "scPlay" );
+        async = SceneManager.LoadSceneAsync( "scPlay" );
+
         async.allowSceneActivation = false;//로딩완료후 자동으로넘어가지않도록한다.
         while ( !async.isDone )
         {
