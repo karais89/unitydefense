@@ -8,25 +8,28 @@
 
 using UnityEngine;
 
-public class Spawn : MonoBehaviour
+namespace DefenseFramework
 {
-    public int indexX;
-    public int indexY;
-
-    private void Awake()
+    public class Spawn : MonoBehaviour
     {
-        Color spawnColor = Color.blue;
-        spawnColor.a = 0.5f;
-        GetComponent<Renderer>().material.color = spawnColor;
-    }
+        public int indexX;
+        public int indexY;
 
-    // Use this for initialization
-    private void Start()
-    {
-    }
+        private void Awake()
+        {
+            Color spawnColor = Color.blue;
+            spawnColor.a = 0.5f;
+            GetComponent<Renderer>().material.color = spawnColor;
+        }
 
-    // Update is called once per frame
-    private void Update()
-    {
+        // Use this for initialization
+        private void Start()
+        {
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+        }
     }
 }

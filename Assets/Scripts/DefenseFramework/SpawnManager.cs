@@ -9,23 +9,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnManager : MonoBehaviour
+namespace DefenseFramework
 {
-    static private SpawnManager spawnManager;
-    public List<GameObject> spawnList = new List<GameObject>();
-    
-    private void Awake()
+    public class SpawnManager : MonoBehaviour
     {
-        spawnManager = this;
-    }
+        static private SpawnManager spawnManager;
+        public List<GameObject> spawnList = new List<GameObject>();
 
-    // Use this for initialization
-    private void Start()
-    {
-    }
+        private void Awake()
+        {
+            spawnManager = this;
+        }
 
-    // Update is called once per frame
-    private void Update()
-    {
+        // Use this for initialization
+        private void Start()
+        {
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+        }
     }
 }
+
+
