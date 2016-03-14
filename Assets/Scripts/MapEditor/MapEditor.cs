@@ -38,10 +38,10 @@ namespace MapEditor
         {
             spawnPrefab = (GameObject) Resources.Load( "Prefabs/SpawnSphere" );
 
-            GameObject.Find( "Map" ).GetComponent<TileMap>().LoadResources();
+            GameObject.Find( "Map" ).GetComponent<MapView>().LoadResources();
 
-            GameObject.Find( "Map" ).GetComponent<TileMap>().LoadMapJSON();
-            // GameObject.Find("Map").GetComponent<TileMap>().CreateDefaultTiles();
+            GameObject.Find( "Map" ).GetComponent<MapView>().LoadMapJSON();
+            // GameObject.Find("Map").GetComponent<MapView>().CreateDefaultTiles();
         }
 
         // Update is called once per frame
@@ -64,14 +64,14 @@ namespace MapEditor
                             int y = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexY;
 
                             Destroy( hitInfo.collider.gameObject );
-                            GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ] = null;
+                            GameObject.Find( "Map" ).GetComponent<MapView>().GTileArray[ x, y ] = null;
 
                             Debug.Log( "create new tile" );
 
                             Quaternion rotation = Quaternion.Euler( 90, 0, 0 );
                             GameObject newTile = (GameObject) Instantiate( selectedTile, hitInfo.collider.transform.position, rotation );
                             newTile.transform.parent = GameObject.Find( "Map" ).transform;
-                            GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ] = newTile;
+                            GameObject.Find( "Map" ).GetComponent<MapView>().GTileArray[ x, y ] = newTile;
 
                             newTile.GetComponent<DefenseFramework.TileModel>().IIndexX = x;
                             newTile.GetComponent<DefenseFramework.TileModel>().IIndexY = y;
@@ -79,7 +79,7 @@ namespace MapEditor
 
                             for ( int i = 0; i < 20; i++ )
                             {
-                                if ( selectedTile == GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ i ] )
+                                if ( selectedTile == GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ i ] )
                                 {
                                     newTile.GetComponent<DefenseFramework.TileView>().PrefabName = "PavementTile" + ( i + 1 );
                                     break;
@@ -176,11 +176,11 @@ namespace MapEditor
                             Destroy( hitInfo.collider.gameObject );
 
                             Quaternion rotation = Quaternion.Euler( 90, 0, 0 );
-                            GameObject newTile = (GameObject) Instantiate( GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 1 ], hitInfo.collider.transform.position, rotation );
+                            GameObject newTile = (GameObject) Instantiate( GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 1 ], hitInfo.collider.transform.position, rotation );
 
                             newTile.transform.parent = GameObject.Find( "Map" ).transform;
 
-                            GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ] = newTile;
+                            GameObject.Find( "Map" ).GetComponent<MapView>().GTileArray[ x, y ] = newTile;
 
                             newTile.GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.walkable;
                             newTile.GetComponent<DefenseFramework.TileModel>().IIndexX = x;
@@ -196,7 +196,7 @@ namespace MapEditor
                             int x = hitInfo.collider.gameObject.GetComponent<Spawn>().indexX;
                             int y = hitInfo.collider.gameObject.GetComponent<Spawn>().indexY;
 
-                            GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ].GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.walkable;
+                            GameObject.Find( "Map" ).GetComponent<MapView>().GTileArray[ x, y ].GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.walkable;
 
                             Destroy( hitInfo.collider.gameObject );
                         }
@@ -238,21 +238,21 @@ namespace MapEditor
             // 맵 리셋 버튼
             if ( GUI.Button( new Rect( Screen.width - 300, Screen.height - 30, 100, 30 ), "Reset" ) )
             {
-                GameObject.Find( "Map" ).GetComponent<TileMap>().ClearMap();
-                GameObject.Find( "Map" ).GetComponent<TileMap>().CreateDefaultTiles();
+                GameObject.Find( "Map" ).GetComponent<MapView>().ClearMap();
+                GameObject.Find( "Map" ).GetComponent<MapView>().CreateDefaultTiles();
             }
 
             // 맵 데이터 불러오기 버튼
             if ( GUI.Button( new Rect( Screen.width - 200, Screen.height - 30, 100, 30 ), "Load Map" ) )
             {
-                GameObject.Find( "Map" ).GetComponent<TileMap>().ClearMap();
-                GameObject.Find( "Map" ).GetComponent<TileMap>().LoadMapJSON();
+                GameObject.Find( "Map" ).GetComponent<MapView>().ClearMap();
+                GameObject.Find( "Map" ).GetComponent<MapView>().LoadMapJSON();
             }
 
             // 맵 데이터 저장 버튼
             if ( GUI.Button( new Rect( Screen.width - 100, Screen.height - 30, 100, 30 ), "Save Map" ) )
             {
-                GameObject.Find( "Map" ).GetComponent<TileMap>().WriteMapJSON();
+                GameObject.Find( "Map" ).GetComponent<MapView>().WriteMapJSON();
             }
 
             // 지우기 버튼
@@ -298,7 +298,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 0 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 0 ];
             }
             if ( GUI.Button( new Rect( 70, 10, 60, 60 ), tileButtonTextures[ 1 ] ) )
             {
@@ -307,7 +307,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 1 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 1 ];
             }
             if ( GUI.Button( new Rect( 130, 10, 60, 60 ), tileButtonTextures[ 2 ] ) )
             {
@@ -316,7 +316,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 2 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 2 ];
             }
             if ( GUI.Button( new Rect( 190, 10, 60, 60 ), tileButtonTextures[ 3 ] ) )
             {
@@ -325,7 +325,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 3 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 3 ];
             }
             if ( GUI.Button( new Rect( 250, 10, 60, 60 ), tileButtonTextures[ 4 ] ) )
             {
@@ -334,7 +334,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 4 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 4 ];
             }
             if ( GUI.Button( new Rect( 310, 10, 60, 60 ), tileButtonTextures[ 5 ] ) )
             {
@@ -343,7 +343,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 5 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 5 ];
             }
             if ( GUI.Button( new Rect( 370, 10, 60, 60 ), tileButtonTextures[ 6 ] ) )
             {
@@ -352,7 +352,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 6 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 6 ];
             }
             if ( GUI.Button( new Rect( 430, 10, 60, 60 ), tileButtonTextures[ 7 ] ) )
             {
@@ -361,7 +361,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 7 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 7 ];
             }
             if ( GUI.Button( new Rect( 490, 10, 60, 60 ), tileButtonTextures[ 8 ] ) )
             {
@@ -370,7 +370,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 8 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 8 ];
             }
             if ( GUI.Button( new Rect( 550, 10, 60, 60 ), tileButtonTextures[ 9 ] ) )
             {
@@ -379,7 +379,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 9 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 9 ];
             }
             if ( GUI.Button( new Rect( 610, 10, 60, 60 ), tileButtonTextures[ 10 ] ) )
             {
@@ -388,7 +388,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 10 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 10 ];
             }
             if ( GUI.Button( new Rect( 670, 10, 60, 60 ), tileButtonTextures[ 11 ] ) )
             {
@@ -397,7 +397,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 11 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 11 ];
             }
             if ( GUI.Button( new Rect( 730, 10, 60, 60 ), tileButtonTextures[ 12 ] ) )
             {
@@ -406,7 +406,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 12 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 12 ];
             }
             if ( GUI.Button( new Rect( 790, 10, 60, 60 ), tileButtonTextures[ 13 ] ) )
             {
@@ -415,7 +415,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 13 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 13 ];
             }
             if ( GUI.Button( new Rect( 850, 10, 60, 60 ), tileButtonTextures[ 14 ] ) )
             {
@@ -424,7 +424,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 14 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 14 ];
             }
             if ( GUI.Button( new Rect( 910, 10, 60, 60 ), tileButtonTextures[ 15 ] ) )
             {
@@ -433,7 +433,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 15 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 15 ];
             }
             if ( GUI.Button( new Rect( 970, 10, 60, 60 ), tileButtonTextures[ 16 ] ) )
             {
@@ -442,7 +442,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 16 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 16 ];
             }
             if ( GUI.Button( new Rect( 1030, 10, 60, 60 ), tileButtonTextures[ 17 ] ) )
             {
@@ -451,7 +451,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 17 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 17 ];
             }
             if ( GUI.Button( new Rect( 1090, 10, 60, 60 ), tileButtonTextures[ 18 ] ) )
             {
@@ -460,7 +460,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 18 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 18 ];
             }
             if ( GUI.Button( new Rect( 1150, 10, 60, 60 ), tileButtonTextures[ 19 ] ) )
             {
@@ -469,7 +469,7 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTile = GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ 19 ];
+                selectedTile = GameObject.Find( "Map" ).GetComponent<MapView>().GTilePrefabArray[ 19 ];
             }
 
             // 나무 버튼
@@ -480,8 +480,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 0 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 0 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 0 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 0 ];
             }
             if ( GUI.Button( new Rect( 70, 70, 60, 60 ), treeButtonTextures[ 1 ] ) )
             {
@@ -490,8 +490,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 1 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 1 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 1 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 1 ];
             }
             if ( GUI.Button( new Rect( 130, 70, 60, 60 ), treeButtonTextures[ 2 ] ) )
             {
@@ -500,8 +500,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 2 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 2 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 2 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 2 ];
             }
             if ( GUI.Button( new Rect( 190, 70, 60, 60 ), treeButtonTextures[ 3 ] ) )
             {
@@ -510,8 +510,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 3 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 3 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 3 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 3 ];
             }
             if ( GUI.Button( new Rect( 250, 70, 60, 60 ), treeButtonTextures[ 4 ] ) )
             {
@@ -520,8 +520,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 4 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 4 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 4 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 4 ];
             }
             if ( GUI.Button( new Rect( 310, 70, 60, 60 ), treeButtonTextures[ 5 ] ) )
             {
@@ -530,8 +530,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 5 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 5 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 5 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 5 ];
             }
             if ( GUI.Button( new Rect( 370, 70, 60, 60 ), treeButtonTextures[ 6 ] ) )
             {
@@ -540,8 +540,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 6 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 6 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 6 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 6 ];
             }
             if ( GUI.Button( new Rect( 430, 70, 60, 60 ), treeButtonTextures[ 7 ] ) )
             {
@@ -550,8 +550,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 7 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 7 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 7 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 7 ];
             }
             if ( GUI.Button( new Rect( 490, 70, 60, 60 ), treeButtonTextures[ 8 ] ) )
             {
@@ -560,8 +560,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 8 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 8 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 8 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 8 ];
             }
             if ( GUI.Button( new Rect( 550, 70, 60, 60 ), treeButtonTextures[ 9 ] ) )
             {
@@ -570,8 +570,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 9 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 9 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 9 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 9 ];
             }
             if ( GUI.Button( new Rect( 610, 70, 60, 60 ), treeButtonTextures[ 10 ] ) )
             {
@@ -580,8 +580,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 10 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 10 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 10 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 10 ];
             }
             if ( GUI.Button( new Rect( 670, 70, 60, 60 ), treeButtonTextures[ 11 ] ) )
             {
@@ -590,8 +590,8 @@ namespace MapEditor
                 isRockBuildMode = false;
                 isEraseMode = false;
 
-                selectedTree = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabArray[ 11 ];
-                selectedTreeName = GameObject.Find( "Map" ).GetComponent<TileMap>().treePrefabNameArray[ 11 ];
+                selectedTree = GameObject.Find( "Map" ).GetComponent<MapView>().GTreePrefabArray[ 11 ];
+                selectedTreeName = GameObject.Find( "Map" ).GetComponent<MapView>().STreePrefabNameArray[ 11 ];
             }
 
             // 바위 버튼
@@ -602,8 +602,8 @@ namespace MapEditor
                 isTileBuildMode = false;
                 isEraseMode = false;
 
-                selectedRock = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabArray[ 0 ];
-                selectedRockName = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabNameArray[ 0 ];
+                selectedRock = GameObject.Find( "Map" ).GetComponent<MapView>().GRockPrefabArray[ 0 ];
+                selectedRockName = GameObject.Find( "Map" ).GetComponent<MapView>().SRockPrefabNameArray[ 0 ];
             }
             if ( GUI.Button( new Rect( 70, 130, 60, 60 ), rockButtonTextures[ 1 ] ) )
             {
@@ -612,8 +612,8 @@ namespace MapEditor
                 isTileBuildMode = false;
                 isEraseMode = false;
 
-                selectedRock = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabArray[ 1 ];
-                selectedRockName = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabNameArray[ 1 ];
+                selectedRock = GameObject.Find( "Map" ).GetComponent<MapView>().GRockPrefabArray[ 1 ];
+                selectedRockName = GameObject.Find( "Map" ).GetComponent<MapView>().SRockPrefabNameArray[ 1 ];
             }
             if ( GUI.Button( new Rect( 130, 130, 60, 60 ), rockButtonTextures[ 2 ] ) )
             {
@@ -622,8 +622,8 @@ namespace MapEditor
                 isTileBuildMode = false;
                 isEraseMode = false;
 
-                selectedRock = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabArray[ 2 ];
-                selectedRockName = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabNameArray[ 2 ];
+                selectedRock = GameObject.Find( "Map" ).GetComponent<MapView>().GRockPrefabArray[ 2 ];
+                selectedRockName = GameObject.Find( "Map" ).GetComponent<MapView>().SRockPrefabNameArray[ 2 ];
             }
             if ( GUI.Button( new Rect( 190, 130, 60, 60 ), rockButtonTextures[ 3 ] ) )
             {
@@ -632,8 +632,8 @@ namespace MapEditor
                 isTileBuildMode = false;
                 isEraseMode = false;
 
-                selectedRock = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabArray[ 3 ];
-                selectedRockName = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabNameArray[ 3 ];
+                selectedRock = GameObject.Find( "Map" ).GetComponent<MapView>().GRockPrefabArray[ 3 ];
+                selectedRockName = GameObject.Find( "Map" ).GetComponent<MapView>().SRockPrefabNameArray[ 3 ];
             }
             if ( GUI.Button( new Rect( 250, 130, 60, 60 ), rockButtonTextures[ 4 ] ) )
             {
@@ -642,8 +642,8 @@ namespace MapEditor
                 isTileBuildMode = false;
                 isEraseMode = false;
 
-                selectedRock = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabArray[ 4 ];
-                selectedRockName = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabNameArray[ 4 ];
+                selectedRock = GameObject.Find( "Map" ).GetComponent<MapView>().GRockPrefabArray[ 4 ];
+                selectedRockName = GameObject.Find( "Map" ).GetComponent<MapView>().SRockPrefabNameArray[ 4 ];
             }
             if ( GUI.Button( new Rect( 310, 130, 60, 60 ), rockButtonTextures[ 5 ] ) )
             {
@@ -652,8 +652,8 @@ namespace MapEditor
                 isTileBuildMode = false;
                 isEraseMode = false;
 
-                selectedRock = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabArray[ 5 ];
-                selectedRockName = GameObject.Find( "Map" ).GetComponent<TileMap>().rockPrefabNameArray[ 5 ];
+                selectedRock = GameObject.Find( "Map" ).GetComponent<MapView>().GRockPrefabArray[ 5 ];
+                selectedRockName = GameObject.Find( "Map" ).GetComponent<MapView>().SRockPrefabNameArray[ 5 ];
             }
         }
     }

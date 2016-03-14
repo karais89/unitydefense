@@ -103,9 +103,9 @@ namespace GameClient
             StopPopup.SetActive( false );
             GameObject.Find( "MapFilled" ).SetActive( false );
 
-            GameObject.Find( "Map" ).GetComponent<TileMap>().LoadResources();
+            GameObject.Find( "Map" ).GetComponent<MapView>().LoadResources();
 
-            GameObject.Find( "Map" ).GetComponent<TileMap>().LoadMapJSON();
+            GameObject.Find( "Map" ).GetComponent<MapView>().LoadMapJSON();
 
             //InitPathFinder();
 
