@@ -8,24 +8,27 @@
 
 using UnityEngine;
 
-public class Performance : MonoBehaviour
+namespace Common
 {
-    private LightShadows shadowType = LightShadows.None;
-
-    private void Awake()
+    public class Performance : MonoBehaviour
     {
-        shadowType = LightShadows.Hard;
+        private LightShadows shadowType = LightShadows.None;
 
-        GameObject.Find( "Directional light" ).GetComponent<Light>().shadows = shadowType;
-    }
+        private void Awake()
+        {
+            shadowType = LightShadows.Hard;
 
-    // Use this for initialization
-    private void Start()
-    {
-    }
+            GameObject.Find( "Directional light" ).GetComponent<Light>().shadows = shadowType;
+        }
 
-    // Update is called once per frame
-    private void Update()
-    {
+        // Use this for initialization
+        private void Start()
+        {
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+        }
     }
 }

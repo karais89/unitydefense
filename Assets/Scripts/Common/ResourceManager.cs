@@ -8,31 +8,35 @@
 
 using UnityEngine;
 
-public class ResourceManager : MonoBehaviour
+namespace Common
 {
-    private static ResourceManager resourceManager;
-
-    private void Awake()
+    public class ResourceManager : MonoBehaviour
     {
-        resourceManager = this;
-    }
+        private static ResourceManager resourceManager;
 
-    // Use this for initialization
-    private void Start()
-    {
-    }
+        private void Awake()
+        {
+            resourceManager = this;
+        }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
+        // Use this for initialization
+        private void Start()
+        {
+        }
 
-    public GameObject Load( string prefabName )
-    {
-        GameObject obj = null;
+        // Update is called once per frame
+        private void Update()
+        {
+        }
 
-        obj = (GameObject) Resources.Load( "Prefabs/" + prefabName );
+        public GameObject Load( string prefabName )
+        {
+            GameObject obj = null;
 
-        return obj;
+            obj = (GameObject) Resources.Load( "Prefabs/" + prefabName );
+
+            return obj;
+        }
     }
 }
+

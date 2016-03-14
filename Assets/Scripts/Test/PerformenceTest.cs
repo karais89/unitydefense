@@ -9,46 +9,51 @@
 using System.Collections;
 using UnityEngine;
 
-public class PerformenceTest : MonoBehaviour
+namespace Test
 {
-    private GameObject spherePrefab;
-    private System.Random rand = new System.Random();
-
-    private void Awake()
+    public class PerformenceTest : MonoBehaviour
     {
-        spherePrefab = (GameObject) Resources.Load( "Prefabs/Sphere", typeof( GameObject ) );
+        private GameObject spherePrefab;
+        private System.Random rand = new System.Random();
 
-        StartCoroutine( CreateSphere( 0.1f ) );
-    }
-
-    private IEnumerator CreateSphere( float time )
-    {
-        while ( true )
+        private void Awake()
         {
-            yield return new WaitForSeconds( time );
+            spherePrefab = (GameObject) Resources.Load( "Prefabs/Sphere", typeof( GameObject ) );
 
-            GameObject sphere = (GameObject) Instantiate( spherePrefab, new Vector3( 0, 4, 0 ), Quaternion.identity );
+            StartCoroutine( CreateSphere( 0.1f ) );
+        }
 
-            Color newColor = Color.white;
-            int randomR = rand.Next( 0, 9 );
-            int randomG = rand.Next( 0, 9 );
-            int randomB = rand.Next( 0, 9 );
-            newColor.r = randomR * 0.1f;
-            newColor.g = randomG * 0.1f;
-            newColor.b = randomB * 0.1f;
-            sphere.GetComponent<Renderer>().material.color = newColor;
+        private IEnumerator CreateSphere( float time )
+        {
+            while ( true )
+            {
+                yield return new WaitForSeconds( time );
 
-            //sphere.renderer.material.color = Color.red;
+                GameObject sphere = (GameObject) Instantiate( spherePrefab, new Vector3( 0, 4, 0 ), Quaternion.identity );
+
+                Color newColor = Color.white;
+                int randomR = rand.Next( 0, 9 );
+                int randomG = rand.Next( 0, 9 );
+                int randomB = rand.Next( 0, 9 );
+                newColor.r = randomR * 0.1f;
+                newColor.g = randomG * 0.1f;
+                newColor.b = randomB * 0.1f;
+                sphere.GetComponent<Renderer>().material.color = newColor;
+
+                //sphere.renderer.material.color = Color.red;
+            }
+        }
+
+        // Use this for initialization
+        private void Start()
+        {
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
         }
     }
-
-    // Use this for initialization
-    private void Start()
-    {
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-    }
 }
+
+

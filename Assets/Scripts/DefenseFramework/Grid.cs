@@ -8,30 +8,34 @@
 
 using UnityEngine;
 
-public class Grid : MonoBehaviour
+namespace DefenseFramework
 {
-    public GameObject gridPrefab;
-    public int sizeX = 64;
-    public int sizeY = 64;
-    private GameObject[,] grid = new GameObject[64, 64];
-
-    // Use this for initialization
-    private void Awake()
+    public class Grid : MonoBehaviour
     {
-        for ( int x = 0; x < sizeX; x++ )
+        public GameObject gridPrefab;
+        public int sizeX = 64;
+        public int sizeY = 64;
+        private GameObject[,] grid = new GameObject[ 64, 64 ];
+
+        // Use this for initialization
+        private void Awake()
         {
-            for ( int z = 0; z < sizeY; z++ )
+            for ( int x = 0; x < sizeX; x++ )
             {
-                GameObject gridObject = (GameObject) Instantiate( gridPrefab );
-                gridObject.transform.position = new Vector3( gridObject.transform.position.x + x,
-                                                            gridObject.transform.position.y, gridObject.transform.position.z + z );
-                grid[x, z] = gridObject;
+                for ( int z = 0; z < sizeY; z++ )
+                {
+                    GameObject gridObject = (GameObject) Instantiate( gridPrefab );
+                    gridObject.transform.position = new Vector3( gridObject.transform.position.x + x,
+                                                                gridObject.transform.position.y, gridObject.transform.position.z + z );
+                    grid[ x, z ] = gridObject;
+                }
             }
         }
-    }
 
-    // Update is called once per frame
-    private void Update()
-    {
+        // Update is called once per frame
+        private void Update()
+        {
+        }
     }
 }
+

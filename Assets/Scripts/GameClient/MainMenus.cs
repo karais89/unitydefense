@@ -8,17 +8,22 @@
 
 using UnityEngine;
 
-public class MainMenus : MonoBehaviour
+namespace GameClient
 {
-    public GameObject stageSelect;
-
-    public void StageSelectOn()
+    public class MainMenus : MonoBehaviour
     {
-        stageSelect.SetActive( true );
-    }
+        public GameObject stageSelect;
 
-    public void StageSelectOff()
-    {
-        stageSelect.SetActive( false );
+        public void StageSelectOn()
+        {
+            stageSelect.SetActive( true );
+        }
+
+        public void StageSelectOff()
+        {
+            stageSelect.SetActive( false );
+        }
     }
 }
+
+
