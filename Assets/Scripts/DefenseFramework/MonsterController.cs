@@ -142,7 +142,7 @@ namespace DefenseFramework
             if ( coll.GetComponent<Collider>().tag == "BULLET" )
             {
                 // HP -= Bullet.damage;
-                m_cModel.FHP -= GameObject.Find( "Tower(Clone)" ).GetComponent<Tower>().bulletDamage;
+                m_cModel.FHP -= GameObject.Find( "Tower(Clone)" ).GetComponent<Tower>().m_iBulletDamage;
 
                 CreateBloodEffect( coll.transform.position );
 

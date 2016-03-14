@@ -117,7 +117,7 @@ namespace DefenseFramework
                             Debug.Log( "create new tower" );
 
                             GameObject newTower = (GameObject) Instantiate( tower, hitInfo.collider.transform.position, Quaternion.identity );
-                            newTower.GetComponent<Tower>().id = towerCount;
+                            newTower.GetComponent<Tower>().m_iID = towerCount;
                             towerCount++;
 
                             // 타워를 타워 관리자의 차일드로 추가
@@ -203,7 +203,7 @@ namespace DefenseFramework
         //타워UpGrade - UI에서 호출
         public void UpGrade()
         {
-            selectTower.GetComponent<Tower>().level += 1;
+            selectTower.GetComponent<Tower>().m_iLevel += 1;
             selectTower.GetComponent<Tower>().Upgrade();
 
             selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
