@@ -23,7 +23,9 @@ namespace DefenseFramework
         {
             m_cModel = GetComponent<TowerModel>();
             m_cView = GetComponent<TowerView>();
-            
+
+            m_gFirePos = transform.FindChild( "FirePos" ).gameObject;
+
             StartCoroutine( "CreateBullet" );
         }
 

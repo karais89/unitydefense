@@ -31,6 +31,8 @@ namespace DefenseFramework
         // Use this for initialization
         private void Awake()
         {
+            m_gAttackRangeSphere = transform.FindChild( "AttackRangeSphere" ).gameObject;
+
             // 공격 범위 표시
             m_gAttackRangeSphere.GetComponent<Renderer>().enabled = false;
             Color rangeColor = Color.green;

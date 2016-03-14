@@ -117,7 +117,7 @@ namespace DefenseFramework
                             Debug.Log( "create new tower" );
 
                             GameObject newTower = (GameObject) Instantiate( tower, hitInfo.collider.transform.position, Quaternion.identity );
-                            newTower.GetComponent<Tower>().m_iID = towerCount;
+                            newTower.GetComponent<TowerModel>().IID = towerCount;
                             towerCount++;
 
                             // 타워를 타워 관리자의 차일드로 추가
@@ -125,12 +125,12 @@ namespace DefenseFramework
 
                             towerList.Add( newTower );
 
-                            GameManager.score += newTower.GetComponent<Tower>().GetEarnScore();
+                            GameManager.score += newTower.GetComponent<TowerModel>().IEarnScore;
 
                             isTileBuildMode = false;
 
                             GameObject.Find( "Map" ).GetComponent<MapView>().DisplayGridBuildable( false );
-                            newTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+                            newTower.GetComponent<TowerView>().DisplayAttackRangeSphere( false );
 
                             hitInfo.collider.gameObject.GetComponent<TileModel>().EType = TileModel.eTileType.obstacle;
                             hitInfo.collider.gameObject.GetComponent<TileModel>().BHasObstacle = true;
@@ -161,7 +161,7 @@ namespace DefenseFramework
                             if ( selectTower != null )
                             {
                                 //범위표시삭제
-                                selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+                                selectTower.GetComponent<TowerView>().DisplayAttackRangeSphere( false );
                             }
 
                             //TowerUi 활성화
@@ -173,7 +173,7 @@ namespace DefenseFramework
                             //anchor를 선택된 tower로 설정
                             TowerUI.GetComponent<UIWidget>().SetAnchor( rayCastHit.collider.gameObject );
 
-                            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( true );
+                            selectTower.GetComponent<TowerView>().DisplayAttackRangeSphere( true );
                         }
 
                     }
@@ -203,10 +203,10 @@ namespace DefenseFramework
         //타워UpGrade - UI에서 호출
         public void UpGrade()
         {
-            selectTower.GetComponent<Tower>().m_iLevel += 1;
-            selectTower.GetComponent<Tower>().Upgrade();
+            selectTower.GetComponent<TowerModel>().ILevel += 1;
+            selectTower.GetComponent<TowerController>().Upgrade();
 
-            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+            selectTower.GetComponent<TowerView>().DisplayAttackRangeSphere( false );
             selectTower = null;
             TowerUI.SetActive( false );
         }
@@ -215,12 +215,12 @@ namespace DefenseFramework
         public void Sell()
         {
             // 골드 증가
-            int sellGold = rayCastHit.collider.gameObject.GetComponent<Tower>().GetBuyGold();
+            int sellGold = rayCastHit.collider.gameObject.GetComponent<TowerModel>().IBuyGold;
             GameManager.gold += sellGold;
 
             Destroy( rayCastHit.collider.gameObject );
 
-            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+            selectTower.GetComponent<TowerView>().DisplayAttackRangeSphere( false );
             selectTower = null;
             TowerUI.SetActive( false );
         }
@@ -228,7 +228,7 @@ namespace DefenseFramework
         //타워Cancel - UI에서 호출
         public void Cancel()
         {
-            selectTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
+            selectTower.GetComponent<TowerView>().DisplayAttackRangeSphere( false );
             selectTower = null;
             TowerUI.SetActive( false );
         }
