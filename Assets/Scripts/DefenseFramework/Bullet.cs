@@ -7,6 +7,7 @@
  */
 
 using UnityEngine;
+using GameClient;   // FIXIT 임시 코드
 
 namespace DefenseFramework
 {
@@ -45,10 +46,10 @@ namespace DefenseFramework
             {
                 // FIXIT
                 //총알 삭제처리 버그픽스
-                //GameManager.insertObjet( this.gameObject );
+                GameManager.insertObjet( this.gameObject );
 
                 // 우선은 이렇게 처리
-                gameObject.SetActive( false );
+                //gameObject.SetActive( false );
 
                 //총알연사력0.1에 총알속도0.3으로 테스트 (엄청빠르게쏘고 느리게날라가게해봄)
                 //몹이죽은후 총알이 멈춘채로 대기후에 재사용된몹이 생성되면 그놈한테 날라감

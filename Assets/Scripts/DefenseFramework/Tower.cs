@@ -8,6 +8,7 @@
 
 using System.Collections;
 using UnityEngine;
+using GameClient;   // FIXIT 임시 코드
 
 namespace DefenseFramework
 {

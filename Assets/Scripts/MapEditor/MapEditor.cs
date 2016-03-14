@@ -60,8 +60,8 @@ namespace MapEditor
                         if ( hitInfo.collider.tag == "TILE" )
                         {
                             // 선택된 타일을 먼저 삭제하고 새로운 타일을 그 자리에 생성
-                            int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
-                            int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
+                            int x = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexX;
+                            int y = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexY;
 
                             Destroy( hitInfo.collider.gameObject );
                             GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ] = null;
@@ -73,20 +73,20 @@ namespace MapEditor
                             newTile.transform.parent = GameObject.Find( "Map" ).transform;
                             GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ] = newTile;
 
-                            newTile.GetComponent<Tile>().indexX = x;
-                            newTile.GetComponent<Tile>().indexY = y;
-                            newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
+                            newTile.GetComponent<DefenseFramework.TileModel>().IIndexX = x;
+                            newTile.GetComponent<DefenseFramework.TileModel>().IIndexY = y;
+                            newTile.GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.walkable;
 
                             for ( int i = 0; i < 20; i++ )
                             {
                                 if ( selectedTile == GameObject.Find( "Map" ).GetComponent<TileMap>().tilePrefabArray[ i ] )
                                 {
-                                    newTile.GetComponent<Tile>().prefabName = "PavementTile" + ( i + 1 );
+                                    newTile.GetComponent<DefenseFramework.TileView>().PrefabName = "PavementTile" + ( i + 1 );
                                     break;
                                 }
                             }
-                            newTile.GetComponent<Tile>().hasObstacle = false;
-                            newTile.GetComponent<Tile>().obstacleName = "";
+                            newTile.GetComponent<DefenseFramework.TileModel>().BHasObstacle = false;
+                            newTile.GetComponent<DefenseFramework.TileView>().ObstacleName = "";
                         }
                     }
                 }
@@ -102,7 +102,7 @@ namespace MapEditor
 
                     if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
                     {
-                        if ( hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle == false )
+                        if ( hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().BHasObstacle == false )
                         {
                             Debug.Log( "create new tree" );
 
@@ -110,9 +110,9 @@ namespace MapEditor
 
                             newTree.transform.parent = hitInfo.collider.gameObject.transform;
 
-                            hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.obstacle;
-                            hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
-                            hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = selectedTreeName;
+                            hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.obstacle;
+                            hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().BHasObstacle = true;
+                            hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileView>().ObstacleName = selectedTreeName;
                         }
                     }
                 }
@@ -128,7 +128,7 @@ namespace MapEditor
 
                     if ( Physics.Raycast( ray, out hitInfo, 100.0f ) )
                     {
-                        if ( hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle == false )
+                        if ( hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().BHasObstacle == false )
                         {
                             Debug.Log( "create new rock" );
 
@@ -136,9 +136,9 @@ namespace MapEditor
 
                             newRock.transform.parent = hitInfo.collider.gameObject.transform;
 
-                            hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.obstacle;
-                            hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
-                            hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = selectedRockName;
+                            hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.obstacle;
+                            hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().BHasObstacle = true;
+                            hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileView>().ObstacleName = selectedRockName;
                         }
                     }
                 }
@@ -160,9 +160,9 @@ namespace MapEditor
                         {
                             Debug.Log( "Erase Tree/Rock" );
 
-                            hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().type = Tile.TileType.walkable;
-                            hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().hasObstacle = false;
-                            hitInfo.collider.gameObject.transform.parent.GetComponent<Tile>().obstacleName = "";
+                            hitInfo.collider.gameObject.transform.parent.GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.walkable;
+                            hitInfo.collider.gameObject.transform.parent.GetComponent<DefenseFramework.TileModel>().BHasObstacle = false;
+                            hitInfo.collider.gameObject.transform.parent.GetComponent<DefenseFramework.TileView>().ObstacleName = "";
 
                             Destroy( hitInfo.collider.gameObject );
                         }
@@ -170,8 +170,8 @@ namespace MapEditor
                         {
                             Debug.Log( "Erase Tile" );
 
-                            int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
-                            int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
+                            int x = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexX;
+                            int y = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexY;
 
                             Destroy( hitInfo.collider.gameObject );
 
@@ -182,12 +182,12 @@ namespace MapEditor
 
                             GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ] = newTile;
 
-                            newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
-                            newTile.GetComponent<Tile>().indexX = x;
-                            newTile.GetComponent<Tile>().indexY = y;
-                            newTile.GetComponent<Tile>().prefabName = "PavementTile2";
-                            newTile.GetComponent<Tile>().hasObstacle = false;
-                            newTile.GetComponent<Tile>().obstacleName = "";
+                            newTile.GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.walkable;
+                            newTile.GetComponent<DefenseFramework.TileModel>().IIndexX = x;
+                            newTile.GetComponent<DefenseFramework.TileModel>().IIndexY = y;
+                            newTile.GetComponent<DefenseFramework.TileView>().PrefabName = "PavementTile2";
+                            newTile.GetComponent<DefenseFramework.TileModel>().BHasObstacle = false;
+                            newTile.GetComponent<DefenseFramework.TileView>().ObstacleName = "";
                         }
                         else if ( hitInfo.collider.tag == "SPAWN" )
                         {
@@ -196,7 +196,7 @@ namespace MapEditor
                             int x = hitInfo.collider.gameObject.GetComponent<Spawn>().indexX;
                             int y = hitInfo.collider.gameObject.GetComponent<Spawn>().indexY;
 
-                            GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ].GetComponent<Tile>().type = Tile.TileType.walkable;
+                            GameObject.Find( "Map" ).GetComponent<TileMap>().tileArray[ x, y ].GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.walkable;
 
                             Destroy( hitInfo.collider.gameObject );
                         }
@@ -216,8 +216,8 @@ namespace MapEditor
                     {
                         if ( hitInfo.collider.tag == "TILE" )
                         {
-                            int x = hitInfo.collider.gameObject.GetComponent<Tile>().indexX;
-                            int y = hitInfo.collider.gameObject.GetComponent<Tile>().indexY;
+                            int x = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexX;
+                            int y = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexY;
 
                             GameObject newSpawn = (GameObject) Instantiate( spawnPrefab, hitInfo.collider.transform.position, Quaternion.identity );
                             newSpawn.transform.parent = GameObject.Find( "Map" ).transform;
@@ -226,7 +226,7 @@ namespace MapEditor
 
                             GameObject.Find( "SpawnManager" ).GetComponent<SpawnManager>().spawnList.Add( newSpawn );
 
-                            hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.spawn;
+                            hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.spawn;
                         }
                     }
                 }

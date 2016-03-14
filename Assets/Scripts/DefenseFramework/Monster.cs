@@ -7,6 +7,7 @@
  */
 
 using UnityEngine;
+using GameClient;   // FIXIT 임시
 
 namespace DefenseFramework
 {

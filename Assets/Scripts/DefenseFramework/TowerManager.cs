@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using GameClient;   // FIXIT 임시 코드
 
 namespace DefenseFramework
 {
@@ -131,9 +132,9 @@ namespace DefenseFramework
                             GameObject.Find( "Map" ).GetComponent<TileMap>().DisplayGridBuildable( false );
                             newTower.GetComponent<Tower>().DisplayAttackRangeSphere( false );
 
-                            hitInfo.collider.gameObject.GetComponent<Tile>().type = Tile.TileType.obstacle;
-                            hitInfo.collider.gameObject.GetComponent<Tile>().hasObstacle = true;
-                            hitInfo.collider.gameObject.GetComponent<Tile>().obstacleName = "Tower";
+                            hitInfo.collider.gameObject.GetComponent<TileModel>().EType = TileModel.eTileType.obstacle;
+                            hitInfo.collider.gameObject.GetComponent<TileModel>().BHasObstacle = true;
+                            hitInfo.collider.gameObject.GetComponent<TileView>().ObstacleName = "Tower";
 
                             //GameObject.Find("GameManager").GetComponent<GameManager>().ResearchPathUnits();
                         }

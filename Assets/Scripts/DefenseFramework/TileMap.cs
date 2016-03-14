@@ -114,12 +114,12 @@ namespace DefenseFramework
 
                     tileArray[ x, y ] = newTile;
 
-                    newTile.GetComponent<Tile>().type = Tile.TileType.walkable;
-                    newTile.GetComponent<Tile>().indexX = x;
-                    newTile.GetComponent<Tile>().indexY = y;
-                    newTile.GetComponent<Tile>().prefabName = "PavementTile2";
-                    newTile.GetComponent<Tile>().hasObstacle = false;
-                    newTile.GetComponent<Tile>().obstacleName = "";
+                    newTile.GetComponent<TileModel>().EType = TileModel.eTileType.walkable;
+                    newTile.GetComponent<TileModel>().IIndexX = x;
+                    newTile.GetComponent<TileModel>().IIndexY = y;
+                    newTile.GetComponent<TileView>().PrefabName = "PavementTile2";
+                    newTile.GetComponent<TileModel>().BHasObstacle = false;
+                    newTile.GetComponent<TileView>().ObstacleName = "";
                 }
             }
         }
@@ -137,22 +137,22 @@ namespace DefenseFramework
                 int x = (int) data[ i ][ "indexX" ];
                 int y = (int) data[ i ][ "indexY" ];
 
-                Tile.TileType type;
+                TileModel.eTileType type;
                 if ( data[ i ][ "type" ].ToString().Equals( "walkable" ) == true )
                 {
-                    type = Tile.TileType.walkable;
+                    type = TileModel.eTileType.walkable;
                 }
                 else if ( data[ i ][ "type" ].ToString().Equals( "obstacle" ) == true )
                 {
-                    type = Tile.TileType.obstacle;
+                    type = TileModel.eTileType.obstacle;
                 }
                 else if ( data[ i ][ "type" ].ToString().Equals( "spawn" ) == true )
                 {
-                    type = Tile.TileType.spawn;
+                    type = TileModel.eTileType.spawn;
                 }
                 else
                 {
-                    type = Tile.TileType.walkable;
+                    type = TileModel.eTileType.walkable;
                 }
 
                 GameObject prefab = null;
@@ -176,19 +176,19 @@ namespace DefenseFramework
 
                 tileArray[ x, y ] = newTile;
 
-                newTile.GetComponent<Tile>().indexX = x;
-                newTile.GetComponent<Tile>().indexY = y;
-                newTile.GetComponent<Tile>().type = type;
-                newTile.GetComponent<Tile>().prefabName = prefabName;
-                newTile.GetComponent<Tile>().hasObstacle = false;
-                newTile.GetComponent<Tile>().SetTileLabelAnchor();
+                newTile.GetComponent<TileModel>().IIndexY = x;
+                newTile.GetComponent<TileModel>().IIndexY = y;
+                newTile.GetComponent<TileModel>().EType = type;
+                newTile.GetComponent<TileView>().PrefabName = prefabName;
+                newTile.GetComponent<TileModel>().BHasObstacle = false;
+                newTile.GetComponent<TileView>().SetTileLabelAnchor();
 
                 int iType = (int) type;
                 string strType = iType.ToString();
-                newTile.GetComponent<Tile>().SetTileLabel( strType );
+                newTile.GetComponent<TileView>().SetTileLabel( strType );
 
                 // 몬스터 생성 지점을 표시한다.
-                if ( type == Tile.TileType.spawn )
+                if ( type == TileModel.eTileType.spawn )
                 {
                     GameObject newSpawn = (GameObject) Instantiate( spawnPrefab, pos, Quaternion.identity );
                     newSpawn.transform.parent = GameObject.Find( "Map" ).transform;
@@ -249,8 +249,8 @@ namespace DefenseFramework
                     GameObject newObstacle = (GameObject) Instantiate( obstacle, pos, Quaternion.identity );
                     newObstacle.transform.parent = newTile.transform;
 
-                    newTile.GetComponent<Tile>().hasObstacle = true;
-                    newTile.GetComponent<Tile>().obstacleName = obstacleName;
+                    newTile.GetComponent<TileModel>().BHasObstacle = true;
+                    newTile.GetComponent<TileView>().ObstacleName = obstacleName;
                 }
             }
 
@@ -272,18 +272,18 @@ namespace DefenseFramework
                 {
                     GameObject tile = tileArray[ x, y ];
                     string typeString = null;
-                    Tile.TileType type = tile.GetComponent<Tile>().type;
-                    int indexX = tile.GetComponent<Tile>().indexX;
-                    int indexY = tile.GetComponent<Tile>().indexY;
-                    if ( type == Tile.TileType.walkable )
+                    TileModel.eTileType type = tile.GetComponent<TileModel>().EType;
+                    int indexX = tile.GetComponent<TileModel>().IIndexX;
+                    int indexY = tile.GetComponent<TileModel>().IIndexY;
+                    if ( type == TileModel.eTileType.walkable )
                     {
                         typeString = "walkable";
                     }
-                    else if ( type == Tile.TileType.obstacle )
+                    else if ( type == TileModel.eTileType.obstacle )
                     {
                         typeString = "obstacle";
                     }
-                    else if ( type == Tile.TileType.spawn )
+                    else if ( type == TileModel.eTileType.spawn )
                     {
                         typeString = "spawn";
                     }
@@ -291,8 +291,8 @@ namespace DefenseFramework
                     {
                         typeString = "walkable";
                     }
-                    string prefabString = tile.GetComponent<Tile>().prefabName;
-                    string obstacleName = tile.GetComponent<Tile>().obstacleName;
+                    string prefabString = tile.GetComponent<TileView>().PrefabName;
+                    string obstacleName = tile.GetComponent<TileView>().ObstacleName;
 
                     writer.WriteObjectStart();
                     writer.WritePropertyName( "type" );
@@ -327,14 +327,14 @@ namespace DefenseFramework
                         Debug.Log( "tileArray[" + x + ", " + y + "] is NULL" );
                     }
 
-                    mapData[ x, y ] = (int) tileArray[ x, y ].GetComponent<Tile>().type;
+                    mapData[ x, y ] = (int) tileArray[ x, y ].GetComponent<TileModel>().EType;
                 }
             }
 
             // 임시 코드...
             // 영웅 타워가 최종 목적지이다.
             mapData[ 3, 12 ] = 111;
-            tileArray[ 3, 12 ].GetComponent<Tile>().type = Tile.TileType.hero;
+            tileArray[ 3, 12 ].GetComponent<TileModel>().EType = TileModel.eTileType.hero;
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace DefenseFramework
                 for ( int x = 0; x < sizeX; x++ )
                 {
                     // 장애물이 없는 타일에만 그리드 표시
-                    if ( tileArray[ x, y ].GetComponent<Tile>().hasObstacle == false )
+                    if ( tileArray[ x, y ].GetComponent<TileModel>().BHasObstacle == false )
                     {
                         if ( visible == true )
                         {
@@ -412,7 +412,7 @@ namespace DefenseFramework
                             gridArray[ x, y ].SetActive( false );
                         }
                     }
-                    else if ( tileArray[ x, y ].GetComponent<Tile>().hasObstacle == true )
+                    else if ( tileArray[ x, y ].GetComponent<TileModel>().BHasObstacle == true )
                     {
                         gridArray[ x, y ].SetActive( false );
 
