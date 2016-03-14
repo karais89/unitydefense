@@ -15,5 +15,31 @@ namespace DefenseFramework
     {
         private int m_iIndexX;
         private int m_iIndexY;
+
+        public int IIndexX
+        {
+            get
+            {
+                return m_iIndexX;
+            }
+
+            set
+            {
+                m_iIndexX = value;
+            }
+        }
+
+        public int IIndexY
+        {
+            get
+            {
+                return m_iIndexY;
+            }
+
+            set
+            {
+                m_iIndexY = value;
+            }
+        }
     }
 }

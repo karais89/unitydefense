@@ -271,8 +271,8 @@ namespace DefenseFramework
                 {
                     GameObject newSpawn = (GameObject) Instantiate( m_gSpawnPrefab, pos, Quaternion.identity );
                     newSpawn.transform.parent = GameObject.Find( "Map" ).transform;
-                    newSpawn.GetComponent<Spawn>().m_iIndexX = x;
-                    newSpawn.GetComponent<Spawn>().m_iIndexY = x;
+                    newSpawn.GetComponent<SpawnModel>().IIndexX = x;
+                    newSpawn.GetComponent<SpawnModel>().IIndexY = x;
 
                     GameObject.Find( "SpawnManager" ).GetComponent<SpawnManager>().spawnList.Add( newSpawn );
                 }

@@ -193,8 +193,8 @@ namespace MapEditor
                         {
                             Debug.Log( "Erase Spawn" );
 
-                            int x = hitInfo.collider.gameObject.GetComponent<Spawn>().m_iIndexX;
-                            int y = hitInfo.collider.gameObject.GetComponent<Spawn>().m_iIndexY;
+                            int x = hitInfo.collider.gameObject.GetComponent<SpawnModel>().IIndexX;
+                            int y = hitInfo.collider.gameObject.GetComponent<SpawnModel>().IIndexY;
 
                             GameObject.Find( "Map" ).GetComponent<MapView>().GTileArray[ x, y ].GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.walkable;
 
@@ -221,8 +221,8 @@ namespace MapEditor
 
                             GameObject newSpawn = (GameObject) Instantiate( spawnPrefab, hitInfo.collider.transform.position, Quaternion.identity );
                             newSpawn.transform.parent = GameObject.Find( "Map" ).transform;
-                            newSpawn.GetComponent<Spawn>().m_iIndexX = x;
-                            newSpawn.GetComponent<Spawn>().m_iIndexY = y;
+                            newSpawn.GetComponent<SpawnModel>().IIndexX = x;
+                            newSpawn.GetComponent<SpawnModel>().IIndexY = y;
 
                             GameObject.Find( "SpawnManager" ).GetComponent<SpawnManager>().spawnList.Add( newSpawn );
 
