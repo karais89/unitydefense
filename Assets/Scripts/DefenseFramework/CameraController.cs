@@ -10,16 +10,13 @@ using UnityEngine;
 
 namespace DefenseFramework
 {
-    public class CameraControl : MonoBehaviour
+    public class CameraController : MonoBehaviour
     {
-        public float scrollSpeed = 1.0f;
-        public int scrollDistance = 10;
-        public float zoomSpeed = 1.1f;
+        private CameraModel m_cModel;
 
-        // Use this for initialization
         private void Awake()
         {
-
+            m_cModel = GetComponent<CameraModel>();
         }
 
         // Update is called once per frame
@@ -30,38 +27,43 @@ namespace DefenseFramework
 
             Debug.DrawRay( ray.origin, ray.direction * 100.0f, Color.green );
 
+            Move();
+        }
+
+        private void Move()
+        {
             // 마우스 상하좌우 스크롤
             float mousePosX = Input.mousePosition.x;
             float mousePosY = Input.mousePosition.y;
 
-            if ( mousePosX < scrollDistance )
+            if ( mousePosX < m_cModel.IScrollDistance )
             {
-                transform.Translate( Vector3.right * -scrollSpeed * Time.deltaTime );
+                transform.Translate( Vector3.right * -m_cModel.FScrollSpeed * Time.deltaTime );
             }
 
-            if ( mousePosX >= Screen.width - scrollDistance )
+            if ( mousePosX >= Screen.width - m_cModel.IScrollDistance )
             {
-                transform.Translate( Vector3.right * scrollSpeed * Time.deltaTime );
+                transform.Translate( Vector3.right * m_cModel.FScrollSpeed * Time.deltaTime );
             }
 
-            if ( mousePosY < scrollDistance )
+            if ( mousePosY < m_cModel.IScrollDistance )
             {
-                transform.Translate( Vector3.up * -scrollSpeed * Time.deltaTime );
+                transform.Translate( Vector3.up * -m_cModel.FScrollSpeed * Time.deltaTime );
             }
 
-            if ( mousePosY >= Screen.height - scrollDistance )
+            if ( mousePosY >= Screen.height - m_cModel.IScrollDistance )
             {
-                transform.Translate( Vector3.up * scrollSpeed * Time.deltaTime );
+                transform.Translate( Vector3.up * m_cModel.FScrollSpeed * Time.deltaTime );
             }
 
             // 마우스 스크롤 휠로 확대 축소
             if ( Input.GetAxis( "Mouse ScrollWheel" ) > 0 )
             {
-                transform.Translate( Vector3.forward * -zoomSpeed * Time.deltaTime );
+                transform.Translate( Vector3.forward * -m_cModel.FZoomSpeed * Time.deltaTime );
             }
             if ( Input.GetAxis( "Mouse ScrollWheel" ) < 0 )
             {
-                transform.Translate( Vector3.forward * zoomSpeed * Time.deltaTime );
+                transform.Translate( Vector3.forward * m_cModel.FZoomSpeed * Time.deltaTime );
             }
         }
     }

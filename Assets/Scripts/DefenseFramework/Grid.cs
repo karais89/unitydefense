@@ -6,6 +6,9 @@
  * @date 2014-10-29
  */
 
+ // TODO
+ // 현재 안 쓰이므로 삭제 가능
+
 using UnityEngine;
 
 namespace DefenseFramework
