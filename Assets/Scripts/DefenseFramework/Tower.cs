@@ -121,7 +121,7 @@ namespace DefenseFramework
             {
                 return;
             }
-            if ( targetMonster.GetComponent<Monster>().monsterState == Monster.MonsterState.die )
+            if ( targetMonster.GetComponent<MonsterModel>().EState == MonsterModel.eMonsterState.die )
             {
                 targetMonster = null;
                 return;
@@ -148,7 +148,7 @@ namespace DefenseFramework
             {
                 if ( Vector3.Distance( monster.transform.position, transform.position ) < attackRange )
                 {
-                    if ( monster.GetComponent<Monster>().monsterState == Monster.MonsterState.die )
+                    if ( monster.GetComponent<MonsterModel>().EState == MonsterModel.eMonsterState.die )
                     {
                         continue;
                     }

@@ -271,7 +271,7 @@ namespace GameClient
                 newMonster.transform.position = spawnTransform[ random ].position;
                 //newMonster.transform.position = new Vector3(0, 0, 0);
                 newMonster.transform.rotation = Quaternion.identity;
-                newMonster.GetComponent<Monster>().id = monsterCount;
+                newMonster.GetComponent<MonsterModel>().IID = monsterCount;
             }
         }
 
