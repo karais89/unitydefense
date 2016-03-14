@@ -106,8 +106,8 @@ namespace DefenseFramework
                     GameObject newBullet = GameManager.createObjet( GameManager.bullet_PrefabName );
                     newBullet.transform.position = firePos.transform.position;
                     newBullet.transform.rotation = Quaternion.identity;
-                    newBullet.GetComponent<Bullet>().id = bulletCount;
-                    newBullet.GetComponent<Bullet>().nearMonster = targetMonster;
+                    newBullet.GetComponent<ProjectileModel>().IID = bulletCount;
+                    newBullet.GetComponent<ProjectileController>().GNearMonster = targetMonster;
                 }
             }
         }
