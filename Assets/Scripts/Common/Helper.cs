@@ -8,11 +8,23 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Common
 {
-    public class Helper : MonoBehaviour
+    static public class Helper
     {
+        static public void ClearEx<T>( List<T> _list ) where T : List<T> 
+        {
+            if (_list.Count > 0)
+            {
+                _list.Clear();
+            }
+            else
+            {
+                Debug.LogError( "_list.Count = " + _list.Count );
 
+            }
+        }
     }
 }
