@@ -15,6 +15,7 @@ namespace DefenseFramework
 {
     public class Grid : MonoBehaviour
     {
+        //
         public GameObject gridPrefab;
         public int sizeX = 64;
         public int sizeY = 64;
