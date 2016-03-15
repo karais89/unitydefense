@@ -75,5 +75,10 @@ namespace DefenseFramework
                 m_iMapDataArray = value;
             }
         }
+
+        private void Awake()
+        {
+            Debug.Log( "TileMapModel" );
+        }
     }
 }

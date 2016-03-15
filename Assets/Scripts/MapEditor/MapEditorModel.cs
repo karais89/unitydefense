@@ -38,5 +38,10 @@ namespace MapEditor
                 m_eMode = value;
             }
         }
+
+        private void Awake()
+        {
+            Debug.Log( "MapEditorModel" );
+        }
     }
 }

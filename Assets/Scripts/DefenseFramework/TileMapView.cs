@@ -112,17 +112,23 @@ namespace DefenseFramework
 
         private void Awake()
         {
+            Debug.Log( "TileMapView" );
+
             m_cModel = GetComponent<TileMapModel>();
             m_gGridPrefab = (GameObject) Resources.Load( "Prefabs/GridQuad", typeof( GameObject ) );
             m_gGridDisablePrefab = (GameObject) Resources.Load( "Prefabs/GridDisable", typeof( GameObject ) );
 
             CreateGrids();
+
+            LoadResources();
+
+            LoadMapJSON();
         }
 
         /// <summary>
         /// 리소스 프리팹들을 불러들인다.
         /// </summary>
-        public void LoadResources()
+        private void LoadResources()
         {
             // 프리팹 미리 불러들인다
             for ( int i = 0; i < 20; i++ )
@@ -189,7 +195,7 @@ namespace DefenseFramework
                     GameObject newTile = (GameObject) Instantiate( GTilePrefabArray[ 1 ], pos, rotation );
 
                     // Map 게임오브젝트를 부모로 둔다
-                    newTile.transform.parent = GameObject.Find( "Map" ).transform;
+                    newTile.transform.parent = GameObject.Find( "TileMap" ).transform;
 
                     m_gTileArray[ x, y ] = newTile;
 
@@ -251,7 +257,7 @@ namespace DefenseFramework
                 Quaternion rotation = Quaternion.Euler( 90, 0, 0 );
                 GameObject newTile = (GameObject) Instantiate( prefab, pos, rotation );
 
-                newTile.transform.parent = GameObject.Find( "Map" ).transform;
+                newTile.transform.parent = GameObject.Find( "TileMap" ).transform;
 
                 m_gTileArray[ x, y ] = newTile;
 
@@ -270,7 +276,7 @@ namespace DefenseFramework
                 if ( type == TileModel.eTileType.Spawn )
                 {
                     GameObject newSpawn = (GameObject) Instantiate( m_gSpawnPrefab, pos, Quaternion.identity );
-                    newSpawn.transform.parent = GameObject.Find( "Map" ).transform;
+                    newSpawn.transform.parent = GameObject.Find( "TileMap" ).transform;
                     newSpawn.GetComponent<SpawnModel>().IIndexX = x;
                     newSpawn.GetComponent<SpawnModel>().IIndexY = x;
 
@@ -456,7 +462,7 @@ namespace DefenseFramework
                     m_gGridArray[ x, y ] = newGrid;
 
                     // Map 게임오브젝트를 부모로 둔다
-                    newGrid.transform.parent = GameObject.Find( "Map" ).transform;
+                    newGrid.transform.parent = GameObject.Find( "TileMap" ).transform;
 
                     // 건설 불가능한 영역의 그리드를 생성한다.
                     GameObject newGridDisable = (GameObject) Instantiate( m_gGridDisablePrefab, pos, rotation );
@@ -464,7 +470,7 @@ namespace DefenseFramework
                     m_gGridDisableArray[ x, y ] = newGridDisable;
 
                     // Map 게임오브젝트를 부모로 둔다
-                    newGridDisable.transform.parent = GameObject.Find( "Map" ).transform;
+                    newGridDisable.transform.parent = GameObject.Find( "TileMap" ).transform;
                 }
             }
         }

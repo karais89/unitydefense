@@ -17,15 +17,29 @@ namespace MapEditor
         private MapEditorModel m_cModel;
         private MapEditorView m_cView;
         private GameObject m_gSpawnPrefab;
-        
+        private GameObject m_gMap;
+
         private void Awake()
         {
+            Debug.Log( "MapEditorController" );
             m_cModel = GetComponent<MapEditorModel>();
             m_cView = GetComponent<MapEditorView>();
 
-            m_gSpawnPrefab = (GameObject) Resources.Load( "Prefabs/SpawnSphere" );
+            Init();
         }
 
+        private void Init()
+        {
+            m_gSpawnPrefab = (GameObject) Resources.Load( "Prefabs/SpawnSphere" );
+            //m_gMap = Resources.Load<GameObject>( "Prefabs/TileMap" );
+
+            //if (m_gMap == null)
+            //{
+            //    Debug.LogError( "m_gMap = " + m_gMap );
+            //    return;
+            //}
+        }
+        
         // Update is called once per frame
         private void Update()
         {
@@ -54,14 +68,14 @@ namespace MapEditor
                                 int y = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexY;
 
                                 Destroy( hitInfo.collider.gameObject );
-                                GameObject.Find( "Map" ).GetComponent<TileMapView>().GTileArray[ x, y ] = null;
+                                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().GTileArray[ x, y ] = null;
 
                                 Debug.Log( "create new tile" );
 
                                 Quaternion rotation = Quaternion.Euler( 90, 0, 0 );
                                 GameObject newTile = (GameObject) Instantiate( m_cView.GSelectedTile, hitInfo.collider.transform.position, rotation );
-                                newTile.transform.parent = GameObject.Find( "Map" ).transform;
-                                GameObject.Find( "Map" ).GetComponent<TileMapView>().GTileArray[ x, y ] = newTile;
+                                newTile.transform.parent = GameObject.Find( "TileMap" ).transform;
+                                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().GTileArray[ x, y ] = newTile;
 
                                 newTile.GetComponent<DefenseFramework.TileModel>().IIndexX = x;
                                 newTile.GetComponent<DefenseFramework.TileModel>().IIndexY = y;
@@ -69,7 +83,7 @@ namespace MapEditor
 
                                 for ( int i = 0; i < 20; i++ )
                                 {
-                                    if ( m_cView.GSelectedTile == GameObject.Find( "Map" ).GetComponent<TileMapView>().GTilePrefabArray[ i ] )
+                                    if ( m_cView.GSelectedTile == GameObject.Find( "TileMap" ).GetComponent<TileMapView>().GTilePrefabArray[ i ] )
                                     {
                                         newTile.GetComponent<DefenseFramework.TileView>().PrefabName = "PavementTile" + ( i + 1 );
                                         break;
@@ -160,11 +174,11 @@ namespace MapEditor
                                 Destroy( hitInfo.collider.gameObject );
 
                                 Quaternion rotation = Quaternion.Euler( 90, 0, 0 );
-                                GameObject newTile = (GameObject) Instantiate( GameObject.Find( "Map" ).GetComponent<TileMapView>().GTilePrefabArray[ 1 ], hitInfo.collider.transform.position, rotation );
+                                GameObject newTile = (GameObject) Instantiate( GameObject.Find( "TileMap" ).GetComponent<TileMapView>().GTilePrefabArray[ 1 ], hitInfo.collider.transform.position, rotation );
 
-                                newTile.transform.parent = GameObject.Find( "Map" ).transform;
+                                newTile.transform.parent = GameObject.Find( "TileMap" ).transform;
 
-                                GameObject.Find( "Map" ).GetComponent<TileMapView>().GTileArray[ x, y ] = newTile;
+                                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().GTileArray[ x, y ] = newTile;
 
                                 newTile.GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.Walkable;
                                 newTile.GetComponent<DefenseFramework.TileModel>().IIndexX = x;
@@ -180,7 +194,7 @@ namespace MapEditor
                                 int x = hitInfo.collider.gameObject.GetComponent<SpawnModel>().IIndexX;
                                 int y = hitInfo.collider.gameObject.GetComponent<SpawnModel>().IIndexY;
 
-                                GameObject.Find( "Map" ).GetComponent<TileMapView>().GTileArray[ x, y ].GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.Walkable;
+                                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().GTileArray[ x, y ].GetComponent<DefenseFramework.TileModel>().EType = DefenseFramework.TileModel.eTileType.Walkable;
 
                                 Destroy( hitInfo.collider.gameObject );
                             }
@@ -202,7 +216,7 @@ namespace MapEditor
                                 int y = hitInfo.collider.gameObject.GetComponent<DefenseFramework.TileModel>().IIndexY;
 
                                 GameObject newSpawn = (GameObject) Instantiate( m_gSpawnPrefab, hitInfo.collider.transform.position, Quaternion.identity );
-                                newSpawn.transform.parent = GameObject.Find( "Map" ).transform;
+                                newSpawn.transform.parent = GameObject.Find( "TileMap" ).transform;
                                 newSpawn.GetComponent<SpawnModel>().IIndexX = x;
                                 newSpawn.GetComponent<SpawnModel>().IIndexY = y;
 

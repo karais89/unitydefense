@@ -14,5 +14,9 @@ namespace DefenseFramework
 {
     public class TileMapController : MonoBehaviour
     {
+        private void Awake()
+        {
+            Debug.Log( "TileMapController" );
+        }
     }
 }
