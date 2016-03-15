@@ -1,15 +1,18 @@
-﻿using UnityEngine;
+﻿/**
+ * @file GoldController.cs
+ * @brief
+ * @details
+ * @author ddayin
+ * @date 2016-03-15
+ */
+
+using UnityEngine;
 using System.Collections;
 
-public class GoldController : MonoBehaviour {
+namespace GameClient
+{
+    public class GoldController : MonoBehaviour
+    {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    }
 }
