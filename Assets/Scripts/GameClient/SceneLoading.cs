@@ -81,10 +81,7 @@ namespace GameClient
             }
             yield return null;
         }
-
-        private void UpDate()
-        {
-        }
+        
     }
 }
 
