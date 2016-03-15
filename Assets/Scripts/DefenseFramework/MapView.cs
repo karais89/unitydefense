@@ -193,7 +193,7 @@ namespace DefenseFramework
 
                     m_gTileArray[ x, y ] = newTile;
 
-                    newTile.GetComponent<TileModel>().EType = TileModel.eTileType.walkable;
+                    newTile.GetComponent<TileModel>().EType = TileModel.eTileType.Walkable;
                     newTile.GetComponent<TileModel>().IIndexX = x;
                     newTile.GetComponent<TileModel>().IIndexY = y;
                     newTile.GetComponent<TileView>().PrefabName = "PavementTile2";
@@ -219,19 +219,19 @@ namespace DefenseFramework
                 TileModel.eTileType type;
                 if ( data[ i ][ "type" ].ToString().Equals( "walkable" ) == true )
                 {
-                    type = TileModel.eTileType.walkable;
+                    type = TileModel.eTileType.Walkable;
                 }
                 else if ( data[ i ][ "type" ].ToString().Equals( "obstacle" ) == true )
                 {
-                    type = TileModel.eTileType.obstacle;
+                    type = TileModel.eTileType.Obstacle;
                 }
                 else if ( data[ i ][ "type" ].ToString().Equals( "spawn" ) == true )
                 {
-                    type = TileModel.eTileType.spawn;
+                    type = TileModel.eTileType.Spawn;
                 }
                 else
                 {
-                    type = TileModel.eTileType.walkable;
+                    type = TileModel.eTileType.Walkable;
                 }
 
                 GameObject prefab = null;
@@ -267,7 +267,7 @@ namespace DefenseFramework
                 newTile.GetComponent<TileView>().SetTileLabel( strType );
 
                 // 몬스터 생성 지점을 표시한다.
-                if ( type == TileModel.eTileType.spawn )
+                if ( type == TileModel.eTileType.Spawn )
                 {
                     GameObject newSpawn = (GameObject) Instantiate( m_gSpawnPrefab, pos, Quaternion.identity );
                     newSpawn.transform.parent = GameObject.Find( "Map" ).transform;
@@ -354,15 +354,15 @@ namespace DefenseFramework
                     TileModel.eTileType type = tile.GetComponent<TileModel>().EType;
                     int indexX = tile.GetComponent<TileModel>().IIndexX;
                     int indexY = tile.GetComponent<TileModel>().IIndexY;
-                    if ( type == TileModel.eTileType.walkable )
+                    if ( type == TileModel.eTileType.Walkable )
                     {
                         typeString = "walkable";
                     }
-                    else if ( type == TileModel.eTileType.obstacle )
+                    else if ( type == TileModel.eTileType.Obstacle )
                     {
                         typeString = "obstacle";
                     }
-                    else if ( type == TileModel.eTileType.spawn )
+                    else if ( type == TileModel.eTileType.Spawn )
                     {
                         typeString = "spawn";
                     }
@@ -413,7 +413,7 @@ namespace DefenseFramework
             // 임시 코드...
             // 영웅 타워가 최종 목적지이다.
             m_cModel.IMapDataArray[ 3, 12 ] = 111;
-            m_gTileArray[ 3, 12 ].GetComponent<TileModel>().EType = TileModel.eTileType.hero;
+            m_gTileArray[ 3, 12 ].GetComponent<TileModel>().EType = TileModel.eTileType.HeroTower;
         }
 
         /// <summary>

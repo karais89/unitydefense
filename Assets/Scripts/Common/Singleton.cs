@@ -1,4 +1,4 @@
-﻿http://wiki.unity3d.com/index.php/Singleton
+﻿// http://wiki.unity3d.com/index.php/Singleton
 /*
 The advantage of using singletons, in Unity, rather than static parameters and methods, are basically:
 (1) Static classes are lazy-loaded when they are first referenced, but must have an empty static constructor (or one is generated for you). This means it's easier to mess up and break code if you're not careful and know what you're doing. As for using the Singleton Pattern, you automatically already do lots of neat stuff, such as creating them with a static initialization method and making them immutable.

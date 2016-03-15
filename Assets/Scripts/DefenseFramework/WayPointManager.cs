@@ -35,7 +35,7 @@ namespace DefenseFramework
 
         public void Clear()
         {
-            m_gWayPointList.ClearEx();
+            m_gWayPointList.Clear();
         }
     }
 }

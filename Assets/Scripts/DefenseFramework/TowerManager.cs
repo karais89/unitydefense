@@ -132,7 +132,7 @@ namespace DefenseFramework
                             GameObject.Find( "Map" ).GetComponent<MapView>().DisplayGridBuildable( false );
                             newTower.GetComponent<TowerView>().DisplayAttackRangeSphere( false );
 
-                            hitInfo.collider.gameObject.GetComponent<TileModel>().EType = TileModel.eTileType.obstacle;
+                            hitInfo.collider.gameObject.GetComponent<TileModel>().EType = TileModel.eTileType.Obstacle;
                             hitInfo.collider.gameObject.GetComponent<TileModel>().BHasObstacle = true;
                             hitInfo.collider.gameObject.GetComponent<TileView>().ObstacleName = "Tower";
 

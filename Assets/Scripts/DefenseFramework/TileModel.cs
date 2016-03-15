@@ -15,13 +15,15 @@ namespace DefenseFramework
     {
         public enum eTileType
         {
-            walkable = 0,
-            obstacle = 1,
-            spawn = 11,
-            hero = 111
+            None = -1,
+            Walkable = 0,
+            Obstacle = 1,
+            Spawn = 11,
+            HeroTower = 111,
+            Waypoint = 1111
         };
 
-        private eTileType m_eType = eTileType.walkable;
+        private eTileType m_eType = eTileType.Walkable;
         private int m_iIndexX = 0;
         private int m_iIndexY = 0;
         private bool m_bHasObstacle = false;

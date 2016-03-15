@@ -1,4 +1,4 @@
-﻿http://wiki.unity3d.com/index.php/Singleton
+﻿// http://wiki.unity3d.com/index.php/Singleton
 
 using UnityEngine;
 

@@ -14,6 +14,8 @@ namespace Common
 {
     static public class Helper
     {
+        // FIXIT
+        // 현재 제대로 작동 안함...
         static public void ClearEx<T>( List<T> _list ) where T : List<T> 
         {
             if (_list.Count > 0)

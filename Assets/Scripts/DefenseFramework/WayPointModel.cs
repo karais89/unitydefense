@@ -15,15 +15,15 @@ namespace DefenseFramework
 
         public enum eWayPointState
         {
-            None,
+            None = 0,
             Entered,
             Escaped
         }
 
 
-        private enum eWayPointType
+        public enum eWayPointType
         {
-            None,
+            None = 0,
             Start,
             End,
             Goal,
