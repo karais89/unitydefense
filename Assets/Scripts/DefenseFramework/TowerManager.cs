@@ -129,7 +129,7 @@ namespace DefenseFramework
 
                             isTileBuildMode = false;
 
-                            GameObject.Find( "Map" ).GetComponent<MapView>().DisplayGridBuildable( false );
+                            GameObject.Find( "Map" ).GetComponent<TileMapView>().DisplayGridBuildable( false );
                             newTower.GetComponent<TowerView>().DisplayAttackRangeSphere( false );
 
                             hitInfo.collider.gameObject.GetComponent<TileModel>().EType = TileModel.eTileType.Obstacle;
@@ -188,7 +188,7 @@ namespace DefenseFramework
             {
                 //건설모드시작
                 isTileBuildMode = true;
-                GameObject.Find( "Map" ).GetComponent<MapView>().DisplayGridBuildable( true );
+                GameObject.Find( "Map" ).GetComponent<TileMapView>().DisplayGridBuildable( true );
 
                 /////////////골드차감구조변경필요할덧
             }
@@ -196,7 +196,7 @@ namespace DefenseFramework
             {
                 //건설모드종료
                 isTileBuildMode = false;
-                GameObject.Find( "Map" ).GetComponent<MapView>().DisplayGridBuildable( false );
+                GameObject.Find( "Map" ).GetComponent<TileMapView>().DisplayGridBuildable( false );
             }
         }
 

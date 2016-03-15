@@ -1,5 +1,5 @@
 ﻿/**
- * @file MapModel.cs
+ * @file TileMapModel.cs
  * @brief
  * @details
  * @author ddayin
@@ -12,7 +12,7 @@ using System.Collections;
 
 namespace DefenseFramework
 {
-    public class MapModel : MonoBehaviour
+    public class TileMapModel : MonoBehaviour
     {
         private const int m_iSizeX = 64;
         private const int m_iSizeY = 64;

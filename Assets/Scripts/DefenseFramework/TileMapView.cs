@@ -1,5 +1,5 @@
 ﻿/**
- * @file MapView.cs
+ * @file TileTileMapView.cs
  * @brief
  * @details
  * @author ddayin
@@ -12,15 +12,15 @@ using System.Text;
 
 namespace DefenseFramework
 {
-    public class MapView : MonoBehaviour
+    public class TileMapView : MonoBehaviour
     {
-        private MapModel m_cModel;
+        private TileMapModel m_cModel;
 
-        private GameObject[,] m_gTileArray = new GameObject[ MapModel.ISizeX, MapModel.ISizeY ];
+        private GameObject[,] m_gTileArray = new GameObject[ TileMapModel.ISizeX, TileMapModel.ISizeY ];
         private GameObject m_gGridPrefab;
-        private GameObject[,] m_gGridArray = new GameObject[ MapModel.ISizeX, MapModel.ISizeY ];
+        private GameObject[,] m_gGridArray = new GameObject[ TileMapModel.ISizeX, TileMapModel.ISizeY ];
         private GameObject m_gGridDisablePrefab;
-        private GameObject[,] m_gGridDisableArray = new GameObject[ MapModel.ISizeX, MapModel.ISizeY ];
+        private GameObject[,] m_gGridDisableArray = new GameObject[ TileMapModel.ISizeX, TileMapModel.ISizeY ];
         public TextAsset m_tJsonData;
         private GameObject[] m_gTilePrefabArray = new GameObject[ 20 ];
         private GameObject[] m_gTreePrefabArray = new GameObject[ 12 ];
@@ -112,7 +112,7 @@ namespace DefenseFramework
 
         private void Awake()
         {
-            m_cModel = GetComponent<MapModel>();
+            m_cModel = GetComponent<TileMapModel>();
             m_gGridPrefab = (GameObject) Resources.Load( "Prefabs/GridQuad", typeof( GameObject ) );
             m_gGridDisablePrefab = (GameObject) Resources.Load( "Prefabs/GridDisable", typeof( GameObject ) );
 
@@ -180,9 +180,9 @@ namespace DefenseFramework
         /// </summary>
         public void CreateDefaultTiles()
         {
-            for ( int y = 0; y < MapModel.ISizeY; y++ )
+            for ( int y = 0; y < TileMapModel.ISizeY; y++ )
             {
-                for ( int x = 0; x < MapModel.ISizeX; x++ )
+                for ( int x = 0; x < TileMapModel.ISizeX; x++ )
                 {
                     Vector3 pos = new Vector3( x, 0, y );
                     Quaternion rotation = Quaternion.Euler( 90, 0, 0 );
@@ -345,9 +345,9 @@ namespace DefenseFramework
             LitJson.JsonWriter writer = new LitJson.JsonWriter( sb );
 
             writer.WriteArrayStart();
-            for ( int y = 0; y < MapModel.ISizeY; y++ )
+            for ( int y = 0; y < TileMapModel.ISizeY; y++ )
             {
-                for ( int x = 0; x < MapModel.ISizeX; x++ )
+                for ( int x = 0; x < TileMapModel.ISizeX; x++ )
                 {
                     GameObject tile = m_gTileArray[ x, y ];
                     string typeString = null;
@@ -397,9 +397,9 @@ namespace DefenseFramework
 
         private void CreateMapData()
         {
-            for ( int y = 0; y < MapModel.ISizeY; y++ )
+            for ( int y = 0; y < TileMapModel.ISizeY; y++ )
             {
-                for ( int x = 0; x < MapModel.ISizeX; x++ )
+                for ( int x = 0; x < TileMapModel.ISizeX; x++ )
                 {
                     if ( m_gTileArray[ x, y ] == null )
                     {
@@ -421,9 +421,9 @@ namespace DefenseFramework
         /// </summary>
         public void ClearMap()
         {
-            for ( int y = 0; y < MapModel.ISizeY; y++ )
+            for ( int y = 0; y < TileMapModel.ISizeY; y++ )
             {
-                for ( int x = 0; x < MapModel.ISizeX; x++ )
+                for ( int x = 0; x < TileMapModel.ISizeX; x++ )
                 {
                     Destroy( m_gTileArray[ x, y ].gameObject );
                     m_gTileArray[ x, y ] = null;
@@ -445,9 +445,9 @@ namespace DefenseFramework
         /// </summary>
         private void CreateGrids()
         {
-            for ( int y = 0; y < MapModel.ISizeY; y++ )
+            for ( int y = 0; y < TileMapModel.ISizeY; y++ )
             {
-                for ( int x = 0; x < MapModel.ISizeX; x++ )
+                for ( int x = 0; x < TileMapModel.ISizeX; x++ )
                 {
                     Vector3 pos = new Vector3( x, 0.01f, y );
                     Quaternion rotation = Quaternion.Euler( 90, 0, 0 );
@@ -475,9 +475,9 @@ namespace DefenseFramework
         /// <param name="visible"></param>
         public void DisplayGridBuildable( bool visible )
         {
-            for ( int y = 0; y < MapModel.ISizeY; y++ )
+            for ( int y = 0; y < TileMapModel.ISizeY; y++ )
             {
-                for ( int x = 0; x < MapModel.ISizeX; x++ )
+                for ( int x = 0; x < TileMapModel.ISizeX; x++ )
                 {
                     // 장애물이 없는 타일에만 그리드 표시
                     if ( m_gTileArray[ x, y ].GetComponent<TileModel>().BHasObstacle == false )
