@@ -1,5 +1,5 @@
 ﻿/**
- * @file MapEditorScene.cs
+ * @file MapEditorCameraController.cs
  * @brief
  * @details
  * @author ddayin
@@ -8,16 +8,22 @@
 
 using UnityEngine;
 using System.Collections;
+using RTS_Cam;
 
 namespace MapEditor
 {
-    public class MapEditorScene : MonoBehaviour
+    public class MapEditorCameraController : RTS_Camera
     {
-        private MapEditorView m_cView;
-
         private void Awake()
         {
-            m_cView = GetComponent<MapEditorView>();
+
+        }
+
+        private void Update()
+        {
+
         }
     }
 }
+
+
