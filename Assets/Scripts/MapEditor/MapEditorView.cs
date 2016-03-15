@@ -110,52 +110,6 @@ namespace MapEditor
 
         private void OnGUI()
         {
-            // 맵 리셋 버튼
-            if ( GUI.Button( new Rect( Screen.width - 300, Screen.height - 30, 100, 30 ), "Reset" ) )
-            {
-                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().ClearMap();
-                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().CreateDefaultTiles();
-            }
-
-            // 맵 데이터 불러오기 버튼
-            if ( GUI.Button( new Rect( Screen.width - 200, Screen.height - 30, 100, 30 ), "Load Map" ) )
-            {
-                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().ClearMap();
-                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().LoadMapJSON();
-            }
-
-            // 맵 데이터 저장 버튼
-            if ( GUI.Button( new Rect( Screen.width - 100, Screen.height - 30, 100, 30 ), "Save Map" ) )
-            {
-                GameObject.Find( "TileMap" ).GetComponent<TileMapView>().WriteMapJSON();
-            }
-
-            // 지우기 버튼
-            if ( GUI.Button( new Rect( 10, Screen.height - 30, 100, 30 ), "Erase" ) )
-            {
-                if ( m_cModel.EMode == MapEditorModel.eEditorMode.Erase )
-                {
-                    m_cModel.EMode = MapEditorModel.eEditorMode.None;
-                }
-                else if ( m_cModel.EMode != MapEditorModel.eEditorMode.Erase )
-                {
-                    m_cModel.EMode = MapEditorModel.eEditorMode.Erase;
-                }
-            }
-
-            // Spwan 생성 버튼
-            if ( GUI.Button( new Rect( 110, Screen.height - 30, 100, 30 ), "Spawn Point" ) )
-            {
-                if ( m_cModel.EMode == MapEditorModel.eEditorMode.Spawn )
-                {
-                    m_cModel.EMode = MapEditorModel.eEditorMode.None;
-                }
-                else if ( m_cModel.EMode != MapEditorModel.eEditorMode.Spawn )
-                {
-                    m_cModel.EMode = MapEditorModel.eEditorMode.Spawn;
-                }
-            }
-
             // 타일 버튼
             if ( GUI.Button( new Rect( 10, 10, 60, 60 ), m_tTileButtonArray[ 0 ] ) )
             {

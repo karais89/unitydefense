@@ -7,6 +7,7 @@
  */
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using DefenseFramework;
 
@@ -15,9 +16,17 @@ namespace MapEditor
     public class MapEditorController : MonoBehaviour
     {
         private MapEditorModel m_cModel;
-        private MapEditorView m_cView;
-        private GameObject m_gSpawnPrefab;
-        private GameObject m_gMap;
+        private MapEditorView m_cView = null;
+        private GameObject m_gSpawnPrefab = null;
+        private GameObject m_gMap = null;
+        private Button m_buttonReset = null;
+        private Button m_buttonLoad = null;
+        private Button m_buttonSave = null;
+
+        private Button m_buttonSpawn = null;
+        private Button m_buttonWayPoint = null;
+        private Button m_buttonErase = null;
+
 
         private void Awake()
         {
@@ -25,20 +34,86 @@ namespace MapEditor
             m_cModel = GetComponent<MapEditorModel>();
             m_cView = GetComponent<MapEditorView>();
 
+            m_gMap = GameObject.Find( "TileMap" );
+
+            // add button handler
+            GameObject objCanvas = GameObject.Find( "Canvas" );
+            m_buttonReset = objCanvas.transform.FindChild( "Button - Reset" ).GetComponent<Button>();
+            m_buttonReset.onClick.AddListener( OnClickReset );
+            m_buttonLoad = objCanvas.transform.FindChild( "Button - Load" ).GetComponent<Button>();
+            m_buttonLoad.onClick.AddListener( OnClickLoad );
+            m_buttonSave = objCanvas.transform.FindChild( "Button - Save" ).GetComponent<Button>();
+            m_buttonSave.onClick.AddListener( OnClickSave );
+
+            m_buttonSpawn = objCanvas.transform.FindChild( "Button - Spawn" ).GetComponent<Button>();
+            m_buttonSpawn.onClick.AddListener( OnClickSpawn );
+            m_buttonWayPoint = objCanvas.transform.FindChild( "Button - WayPoint" ).GetComponent<Button>();
+            m_buttonWayPoint.onClick.AddListener( OnClickWayPoint );
+            m_buttonErase = objCanvas.transform.FindChild( "Button - Erase" ).GetComponent<Button>();
+            m_buttonErase.onClick.AddListener( OnClickErase );
+
             Init();
         }
 
         private void Init()
         {
             m_gSpawnPrefab = (GameObject) Resources.Load( "Prefabs/SpawnSphere" );
-            //m_gMap = Resources.Load<GameObject>( "Prefabs/TileMap" );
 
-            //if (m_gMap == null)
-            //{
-            //    Debug.LogError( "m_gMap = " + m_gMap );
-            //    return;
-            //}
         }
+
+        private void OnClickReset()
+        {
+            m_gMap.GetComponent<TileMapView>().ClearMap();
+            m_gMap.GetComponent<TileMapView>().CreateDefaultTiles();
+        }
+
+        private void OnClickLoad()
+        {
+            m_gMap.GetComponent<TileMapView>().ClearMap();
+            m_gMap.GetComponent<TileMapView>().LoadMapJSON();
+        }
+
+        private void OnClickSave()
+        {
+            m_gMap.GetComponent<TileMapView>().WriteMapJSON();
+        }
+
+        private void OnClickSpawn()
+        {
+            if ( m_cModel.EMode == MapEditorModel.eEditorMode.Spawn )
+            {
+                m_cModel.EMode = MapEditorModel.eEditorMode.None;
+            }
+            else if ( m_cModel.EMode != MapEditorModel.eEditorMode.Spawn )
+            {
+                m_cModel.EMode = MapEditorModel.eEditorMode.Spawn;
+            }
+        }
+
+        private void OnClickWayPoint()
+        {
+            if ( m_cModel.EMode == MapEditorModel.eEditorMode.WayPoint )
+            {
+                m_cModel.EMode = MapEditorModel.eEditorMode.None;
+            }
+            else if ( m_cModel.EMode != MapEditorModel.eEditorMode.WayPoint )
+            {
+                m_cModel.EMode = MapEditorModel.eEditorMode.WayPoint;
+            }
+        }
+
+        private void OnClickErase()
+        {
+            if ( m_cModel.EMode == MapEditorModel.eEditorMode.Erase )
+            {
+                m_cModel.EMode = MapEditorModel.eEditorMode.None;
+            }
+            else if ( m_cModel.EMode != MapEditorModel.eEditorMode.Erase )
+            {
+                m_cModel.EMode = MapEditorModel.eEditorMode.Erase;
+            }
+        }
+
         
         // Update is called once per frame
         private void Update()
