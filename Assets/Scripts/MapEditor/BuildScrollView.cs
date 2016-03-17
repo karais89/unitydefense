@@ -21,7 +21,8 @@ public class BuildScrollView : MonoBehaviour {
         m_scrollRect = transform.GetComponent<ScrollRect>();
 
 
-        ResourceManager.Instance.LoadAllTilesPreview();
+        ResourceManager.Instance.LoadAllTilesPreviewSprite();
+        ResourceManager.Instance.LoadAllTilePreviewMaterails();
 
         InstantiateTileItems();
     }
@@ -40,18 +41,31 @@ public class BuildScrollView : MonoBehaviour {
         const string sPrefabName = "Item - MapBuild";
         GameObject itemPrefab = ResourceManager.Instance.LoadPrefab( sPrefabName ) as GameObject;
 
+        float initialX = -355f;
         for (int i = 0; i < (int)ResourceManager.ePrefabTile.Max; i++ )
         {
-            GameObject newItem = GameObjectFactory.Instantite( itemPrefab );
+            GameObject newItem = GameObjectFactory.InstantiateUI( itemPrefab );
 
             ResourceManager.ePrefabTile tile = (ResourceManager.ePrefabTile)i;
             string sName = sPrefabName + "_" + tile.ToString();
             newItem.name = sName;
-            newItem.transform.parent = m_tContent;
+            newItem.transform.SetParentEx( m_tContent );
 
+            float width = newItem.GetComponent<RectTransform>().rect.width;
+            Vector3 newPos = Vector3.zero;
+            float x = initialX + (float)(i * width);
+            newPos.x = x;
+            newPos.y = 0;
+            newItem.GetComponent<RectTransform>().localPosition = newPos;
+            
             m_gItemList.Add( newItem );
         }
-        
-        //m_scrollRect.horizontalNormalizedPosition
+
+        //for (int i = 0; i < m_gItemList.Count; i++ )
+        //{
+        //    Vector3 newPos = m_gItemList[ i ].GetComponent<RectTransform>().localPosition;
+        //    newPos.y = 0f;
+        //    m_gItemList[ i ].GetComponent<RectTransform>().localPosition = newPos;
+        //}
     }
 }

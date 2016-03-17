@@ -50,9 +50,11 @@ namespace Common
         }
 
         private List<GameObject> m_gTilesList = new List<GameObject>();
-        private const string m_sPreviewPath = "Images/Pavement textures pack/";
+        private const string m_sPreviewPath = "Images/PavementTextures/";
         private const string m_sPreviewName = "preview";
+        private const string m_sPreviewMaterialName = "MaterialPreview_";
         private List<Sprite> m_sPreviewList = new List<Sprite>();
+        private List<Material> m_mPreviewList = new List<Material>();
 
         public List<GameObject> GTilesList
         {
@@ -70,11 +72,13 @@ namespace Common
             }
         }
 
+        
+
         public GameObject LoadPrefab( string name )
         {
             GameObject obj = null;
 
-            obj = (GameObject) Resources.Load( "Prefabs/" + name );
+            obj = Resources.Load<GameObject>( "Prefabs/" + name );
             if (obj == null)
             {
                 Debug.LogError( "obj null, prefabName = " + name );
@@ -82,13 +86,13 @@ namespace Common
             return obj;
         }
 
-        public GameObject Load(string pathAndName)
+        public GameObject Load(string fullPathAndName)
         {
             GameObject obj = null;
-            obj = (GameObject) Resources.Load( pathAndName );
+            obj = Resources.Load<GameObject>( fullPathAndName );
             if ( obj == null )
             {
-                Debug.LogError( "obj null, pathAndName = " + pathAndName );
+                Debug.LogError( "obj null, pathAndName = " + fullPathAndName );
             }
             return obj;
         }
@@ -97,22 +101,22 @@ namespace Common
         {
             if (m_gTilesList.Count > 0)
             {
-                Debug.LogWarning( "m_gTilesList.Count = " + m_gTilesList.Count );
-                m_gTilesList.Clear();
+                Debug.Log( "all tiles are already loaded" );
+                return m_gTilesList;
             }
 
             for (int i = 0; i < (int)ePrefabTile.Max; i++ )
             {
                 ePrefabTile tile = (ePrefabTile) i;
                 string prefabName = tile.ToString();
-                GameObject newObject = Load( prefabName );
+                GameObject newObject = LoadPrefab( prefabName );
                 m_gTilesList.Add(newObject);
             }
 
             return m_gTilesList;
         }
         
-        public List<Sprite> LoadAllTilesPreview()
+        public List<Sprite> LoadAllTilesPreviewSprite()
         {
             if (m_sPreviewList.Count > 0)
             {
@@ -125,7 +129,7 @@ namespace Common
                 ePrefabTile eTile = (ePrefabTile) i;
                 string sTileName = eTile.ToString();
                 string fullPathName = m_sPreviewPath + sTileName + "/" + m_sPreviewName;
-                Sprite newSprite = Resources.Load( fullPathName ) as Sprite;
+                Sprite newSprite = Resources.Load<Sprite>( fullPathName );
                 if (newSprite == null)
                 {
                     Debug.LogError( "newSprite == null, fullPathName = " + fullPathName );
@@ -137,7 +141,7 @@ namespace Common
             return m_sPreviewList;
         }
 
-        public Sprite GetTilePreview(ePrefabTile tile)
+        public Sprite GetTilePreviewSprite(ePrefabTile tile)
         {
             int index = (int) tile;
             if (m_sPreviewList.Count <= 0)
@@ -146,6 +150,43 @@ namespace Common
                 return null;
             }
             return m_sPreviewList[ index ];
+        }
+
+        public List<Material> LoadAllTilePreviewMaterails()
+        {
+            if ( m_mPreviewList.Count > 0 )
+            {
+                Debug.LogWarning( "m_mPreviewList.Count = " + m_mPreviewList.Count );
+                m_mPreviewList.Clear();
+            }
+
+            for ( int i = 0; i < (int) ePrefabTile.Max; i++ )
+            {
+                ePrefabTile eTile = (ePrefabTile) i;
+                string sTileName = eTile.ToString();
+                int index = i + 1;
+                string fullPathName = m_sPreviewPath + sTileName + "/" + m_sPreviewMaterialName + index.ToString("D2");
+                Material newMaterial = Resources.Load<Material>( fullPathName );
+                if ( newMaterial == null )
+                {
+                    Debug.LogError( "newMaterial == null, fullPathName = " + fullPathName );
+                    continue;
+                }
+                m_mPreviewList.Add( newMaterial );
+            }
+
+            return m_mPreviewList;
+        }
+
+        public Material GetTilePreviewMaterial(ePrefabTile tile)
+        {
+            int index = (int) tile;
+            if ( m_mPreviewList.Count <= 0 )
+            {
+                Debug.LogError( "m_mPreviewList.Count = " + m_mPreviewList.Count );
+                return null;
+            }
+            return m_mPreviewList[ index ];
         }
     }
 }

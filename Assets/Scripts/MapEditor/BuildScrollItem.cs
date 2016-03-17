@@ -32,6 +32,7 @@ public class BuildScrollItem : MonoBehaviour
 
     private void SetImage()
     {
-        m_image.sprite = ResourceManager.Instance.GetTilePreview( m_tileIndex );
+        m_image.sprite = ResourceManager.Instance.GetTilePreviewSprite( m_tileIndex );
+        m_image.material = ResourceManager.Instance.GetTilePreviewMaterial( m_tileIndex );
     }
 }

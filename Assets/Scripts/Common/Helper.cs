@@ -12,11 +12,11 @@ using System.Collections.Generic;
 
 namespace Common
 {
-    static public class Helper
+    public static class Helper
     {
         // FIXIT
-        // 현재 제대로 작동 안함...
-        static public void ClearEx<T>( List<T> _list ) where T : List<T> 
+        // not working yet
+        public static void ClearEx<T>( List<T> _list ) where T : List<T> 
         {
             if (_list.Count > 0)
             {
@@ -28,5 +28,16 @@ namespace Common
 
             }
         }
+        
+        public static void SetParentEx(this Transform transform, Transform parent)
+        {
+            transform.SetParent( parent );
+            if (transform.GetComponent<RectTransform>() != null)
+            {
+                //transform.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                transform.GetComponent<RectTransform>().localScale = Vector3.one;
+            }
+        }
     }
+    
 }

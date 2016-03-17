@@ -8,7 +8,9 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
+using Common;
 
 namespace DefenseFramework
 {
@@ -124,19 +126,10 @@ namespace DefenseFramework
 
             LoadMapJSON();
         }
-
-        /// <summary>
-        /// 리소스 프리팹들을 불러들인다.
-        /// </summary>
+        
         private void LoadResources()
         {
-            // 프리팹 미리 불러들인다
-            for ( int i = 0; i < 20; i++ )
-            {
-                string prefabName = "Prefabs/PavementTile" + ( i + 1 );
-                GTilePrefabArray[ i ] = (GameObject) Resources.Load( prefabName, typeof( GameObject ) );
-                // Debug.Log("Loading prefab: " + prefabName);
-            }
+            LoadAllTiles();
 
             GTreePrefabArray[ 0 ] = (GameObject) Resources.Load( "Models/CactusPack/Prefabs/Tree_Leafy_01", typeof( GameObject ) );
             GTreePrefabArray[ 1 ] = (GameObject) Resources.Load( "Models/CactusPack/Prefabs/Tree_Leafy_02", typeof( GameObject ) );
@@ -181,6 +174,15 @@ namespace DefenseFramework
             m_gSpawnPrefab = (GameObject) Resources.Load( "Prefabs/SpawnSphere", typeof( GameObject ) );
         }
 
+        private void LoadAllTiles()
+        {
+            List<GameObject> newList = ResourceManager.Instance.LoadAllTiles();
+            for ( int i = 0; i < newList.Count; i++ )
+            {
+                m_gTilePrefabArray[ i ] = newList[ i ];
+            }
+        }
+
         /// <summary>
         /// 나무와 바위가 없는 다수의 디폴트 타일 생성
         /// </summary>
@@ -192,7 +194,7 @@ namespace DefenseFramework
                 {
                     Vector3 pos = new Vector3( x, 0, y );
                     Quaternion rotation = Quaternion.Euler( 90, 0, 0 );
-                    GameObject newTile = (GameObject) Instantiate( GTilePrefabArray[ 1 ], pos, rotation );
+                    GameObject newTile = (GameObject) Instantiate( m_gTilePrefabArray[ 1 ], pos, rotation );
 
                     // Map 게임오브젝트를 부모로 둔다
                     newTile.transform.parent = GameObject.Find( "TileMap" ).transform;
@@ -242,14 +244,27 @@ namespace DefenseFramework
 
                 GameObject prefab = null;
                 string prefabName = null;
+
+                if (m_gTilePrefabArray[0] ==null)
+                {
+                    LoadAllTiles();
+                }
+
                 for ( int j = 0; j < 20; j++ )
                 {
-                    if ( data[ i ][ "prefabName" ].ToString().Equals( "PavementTile" + ( j + 1 ) ) == true )
+                    int index = j + 1;
+                    if ( data[ i ][ "prefabName" ].ToString().Equals( "PavementTile" + index.ToString() ) == true )
                     {
-                        prefab = GTilePrefabArray[ j ];
+                        prefab = m_gTilePrefabArray[ j ];
+                        
                         prefabName = "PavementTile" + ( j + 1 );
                         break;
                     }
+                }
+
+                if ( prefab == null)
+                {
+                    Debug.LogError( "prefab == null" );
                 }
 
                 // 가져온 정보를 바탕으로 타일을 생성한다
