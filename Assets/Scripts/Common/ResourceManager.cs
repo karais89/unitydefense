@@ -48,7 +48,28 @@ namespace Common
             PavementTile_20,
             Max
         }
+
+        private List<GameObject> m_gTilesList = new List<GameObject>();
+        private const string m_sPreviewPath = "Images/Pavement textures pack/";
+        private const string m_sPreviewName = "preview";
+        private List<Sprite> m_sPreviewList = new List<Sprite>();
+
+        public List<GameObject> GTilesList
+        {
+            get
+            {
+                return m_gTilesList;
+            }
+        }
         
+        public List<Sprite> SPreviewList
+        {
+            get
+            {
+                return m_sPreviewList;
+            }
+        }
+
         public GameObject LoadPrefab( string name )
         {
             GameObject obj = null;
@@ -71,17 +92,7 @@ namespace Common
             }
             return obj;
         }
-
-        private List<GameObject> m_gTilesList = new List<GameObject>();
-
-        public List<GameObject> GTilesList
-        {
-            get
-            {
-                return m_gTilesList;
-            }
-        }
-
+        
         public List<GameObject> LoadAllTiles()
         {
             if (m_gTilesList.Count > 0)
@@ -100,14 +111,42 @@ namespace Common
 
             return m_gTilesList;
         }
-
-
-        private const string m_sPath = "Images/Pavement textures pack/";
-        //public List<Sprite> LoadAllTilesPreview()
-        //{
         
-        //    return;
-        //}
+        public List<Sprite> LoadAllTilesPreview()
+        {
+            if (m_sPreviewList.Count > 0)
+            {
+                Debug.LogWarning( "m_sPreviewList.Count = " + m_sPreviewList.Count );
+                m_sPreviewList.Clear();
+            }
+
+            for (int i = 0; i < (int)ePrefabTile.Max; i++ )
+            {
+                ePrefabTile eTile = (ePrefabTile) i;
+                string sTileName = eTile.ToString();
+                string fullPathName = m_sPreviewPath + sTileName + "/" + m_sPreviewName;
+                Sprite newSprite = Resources.Load( fullPathName ) as Sprite;
+                if (newSprite == null)
+                {
+                    Debug.LogError( "newSprite == null, fullPathName = " + fullPathName );
+                    continue;
+                }
+                m_sPreviewList.Add( newSprite );
+            }
+
+            return m_sPreviewList;
+        }
+
+        public Sprite GetTilePreview(ePrefabTile tile)
+        {
+            int index = (int) tile;
+            if (m_sPreviewList.Count <= 0)
+            {
+                Debug.LogError( "m_sPreviewList.Count = " + m_sPreviewList.Count );
+                return null;
+            }
+            return m_sPreviewList[ index ];
+        }
     }
 }
 

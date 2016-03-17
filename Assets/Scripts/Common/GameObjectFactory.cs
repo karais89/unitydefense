@@ -1,25 +1,29 @@
 ﻿/**
- * @file CameraControl.cs
+ * @file GameObjectFactory.cs
  * @brief
  * @details
  * @author ddayin
- * @date 2014-11-12
+ * @date 2016-03-17
  */
 
 using UnityEngine;
 
 namespace Common
 {
-    public class GameObjectFactory : MonoBehaviour
+    public static class GameObjectFactory
     {
-        // Use this for initialization
-        private void Start()
+        public static GameObject Instantite(GameObject original)
         {
-        }
+            GameObject newObj = Instantite( original ) as GameObject;
+            if (newObj == null)
+            {
+                Debug.LogError( "newObj == null, original name = " + original.name );
+                return null;
+            }
+            newObj.transform.localPosition = Vector3.zero;
+            newObj.transform.localScale = Vector3.one;
 
-        // Update is called once per frame
-        private void Update()
-        {
+            return newObj;
         }
     }
 }
