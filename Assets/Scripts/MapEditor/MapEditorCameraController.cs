@@ -12,6 +12,8 @@ using RTS_Cam;
 
 namespace MapEditor
 {
+    // TODO
+    // not used yet
     public class MapEditorCameraController : RTS_Camera
     {
         private void Awake()

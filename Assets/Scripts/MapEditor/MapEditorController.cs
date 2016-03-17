@@ -36,6 +36,13 @@ namespace MapEditor
 
             m_gMap = GameObject.Find( "TileMap" );
 
+            AddListenerToButtons();
+
+            Init();
+        }
+
+        private void AddListenerToButtons()
+        {
             // add button handler
             GameObject objCanvas = GameObject.Find( "Canvas" );
             m_buttonReset = objCanvas.transform.FindChild( "Button - Reset" ).GetComponent<Button>();
@@ -51,8 +58,6 @@ namespace MapEditor
             m_buttonWayPoint.onClick.AddListener( OnClickWayPoint );
             m_buttonErase = objCanvas.transform.FindChild( "Button - Erase" ).GetComponent<Button>();
             m_buttonErase.onClick.AddListener( OnClickErase );
-
-            Init();
         }
 
         private void Init()
@@ -80,37 +85,37 @@ namespace MapEditor
 
         private void OnClickSpawn()
         {
-            if ( m_cModel.EMode == MapEditorModel.eEditorMode.Spawn )
+            if ( m_cModel.EMode == MapEditorModel.eBuildMode.Spawn )
             {
-                m_cModel.EMode = MapEditorModel.eEditorMode.None;
+                m_cModel.EMode = MapEditorModel.eBuildMode.None;
             }
-            else if ( m_cModel.EMode != MapEditorModel.eEditorMode.Spawn )
+            else if ( m_cModel.EMode != MapEditorModel.eBuildMode.Spawn )
             {
-                m_cModel.EMode = MapEditorModel.eEditorMode.Spawn;
+                m_cModel.EMode = MapEditorModel.eBuildMode.Spawn;
             }
         }
 
         private void OnClickWayPoint()
         {
-            if ( m_cModel.EMode == MapEditorModel.eEditorMode.WayPoint )
+            if ( m_cModel.EMode == MapEditorModel.eBuildMode.WayPoint )
             {
-                m_cModel.EMode = MapEditorModel.eEditorMode.None;
+                m_cModel.EMode = MapEditorModel.eBuildMode.None;
             }
-            else if ( m_cModel.EMode != MapEditorModel.eEditorMode.WayPoint )
+            else if ( m_cModel.EMode != MapEditorModel.eBuildMode.WayPoint )
             {
-                m_cModel.EMode = MapEditorModel.eEditorMode.WayPoint;
+                m_cModel.EMode = MapEditorModel.eBuildMode.WayPoint;
             }
         }
 
         private void OnClickErase()
         {
-            if ( m_cModel.EMode == MapEditorModel.eEditorMode.Erase )
+            if ( m_cModel.EMode == MapEditorModel.eBuildMode.Erase )
             {
-                m_cModel.EMode = MapEditorModel.eEditorMode.None;
+                m_cModel.EMode = MapEditorModel.eBuildMode.None;
             }
-            else if ( m_cModel.EMode != MapEditorModel.eEditorMode.Erase )
+            else if ( m_cModel.EMode != MapEditorModel.eBuildMode.Erase )
             {
-                m_cModel.EMode = MapEditorModel.eEditorMode.Erase;
+                m_cModel.EMode = MapEditorModel.eBuildMode.Erase;
             }
         }
 
@@ -125,9 +130,9 @@ namespace MapEditor
         {
             switch ( m_cModel.EMode )
             {
-                case MapEditorModel.eEditorMode.None:
+                case MapEditorModel.eBuildMode.None:
                     break;
-                case MapEditorModel.eEditorMode.Tile:
+                case MapEditorModel.eBuildMode.Tile:
                     // 마우스 클릭한 지점에 타일 생성
                     if ( Input.GetMouseButtonDown( 0 ) )
                     {
@@ -170,7 +175,7 @@ namespace MapEditor
                         }
                     }
                     break;
-                case MapEditorModel.eEditorMode.Tree:
+                case MapEditorModel.eBuildMode.Tree:
                     // 마우스 클릭한 지점에 나무 생성
                     if ( Input.GetMouseButtonDown( 0 ) )
                     {
@@ -194,7 +199,7 @@ namespace MapEditor
                         }
                     }
                     break;
-                case MapEditorModel.eEditorMode.Rock:
+                case MapEditorModel.eBuildMode.Rock:
                     // 마우스 클릭한 지점에 바위 생성
                     if ( Input.GetMouseButtonDown( 0 ) )
                     {
@@ -218,7 +223,7 @@ namespace MapEditor
                         }
                     }
                     break;
-                case MapEditorModel.eEditorMode.Erase:
+                case MapEditorModel.eBuildMode.Erase:
                     // 마우스 클릭한 지점의 오브젝트 삭제
                     if ( Input.GetMouseButtonDown( 0 ) )
                     {
@@ -276,7 +281,7 @@ namespace MapEditor
                         }
                     }
                     break;
-                case MapEditorModel.eEditorMode.Spawn:
+                case MapEditorModel.eBuildMode.Spawn:
                     // 마우스 클릭한 지점에 몬스터 생성 지점을 심는다
                     if ( Input.GetMouseButtonDown( 0 ) )
                     {
@@ -302,9 +307,10 @@ namespace MapEditor
                         }
                     }
                     break;
-                case MapEditorModel.eEditorMode.WayPoint:
+                case MapEditorModel.eBuildMode.WayPoint:
                     break;
                 default:
+                    Debug.LogError( "m_cModel.EMode = " + m_cModel.EMode );
                     break;
             }
         }
