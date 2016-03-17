@@ -1303,7 +1303,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22458836, guid: e4041ca7fa4193946bd01a8e52f13e67, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 22458836, guid: e4041ca7fa4193946bd01a8e52f13e67, type: 2}
       propertyPath: m_AnchorMin.x
@@ -1328,6 +1328,18 @@ Prefab:
     - target: {fileID: 22458836, guid: e4041ca7fa4193946bd01a8e52f13e67, type: 2}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11402964, guid: e4041ca7fa4193946bd01a8e52f13e67, type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11402964, guid: e4041ca7fa4193946bd01a8e52f13e67, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 11402964, guid: e4041ca7fa4193946bd01a8e52f13e67, type: 2}
+      propertyPath: m_Type
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e4041ca7fa4193946bd01a8e52f13e67, type: 2}
