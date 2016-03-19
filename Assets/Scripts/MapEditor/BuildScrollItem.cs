@@ -6,35 +6,60 @@ public class BuildScrollItem : MonoBehaviour
 {
     private UIButton m_button;
     private UISprite m_sprite;
-    private ResourceManager.ePrefabTile m_eTileIndex;
-    private ResourceManager.ePrefabTilePreview m_eTilePreviewIndex;
-
-    public ResourceManager.ePrefabTile ETileIndex
+    private BuildScrollModel.eBuildType m_eBuildType;
+    private ResourceManager.eTilePreview m_eTilePreview = ResourceManager.eTilePreview.None;
+    private ResourceManager.eRockPreview m_eRockPreview = ResourceManager.eRockPreview.None;
+    private ResourceManager.eTreePreview m_eTreePreview = ResourceManager.eTreePreview.None;
+    
+    public BuildScrollModel.eBuildType EBuildType
     {
         get
         {
-            return m_eTileIndex;
+            return m_eBuildType;
         }
 
         set
         {
-            m_eTileIndex = value;
-            ResourceManager.ePrefabTilePreview ePreview = (ResourceManager.ePrefabTilePreview) m_eTileIndex;
-            m_eTilePreviewIndex = ePreview;
+            m_eBuildType = value;
         }
     }
 
-    public ResourceManager.ePrefabTilePreview ETilePreviewIndex
+    public ResourceManager.eTilePreview ETilePreview
     {
         get
         {
-            return m_eTilePreviewIndex;
+            return m_eTilePreview;
         }
 
         set
         {
-            m_eTilePreviewIndex = value;
-            m_eTileIndex = (ResourceManager.ePrefabTile) m_eTilePreviewIndex;
+            m_eTilePreview = value;
+        }
+    }
+
+    public ResourceManager.eRockPreview ERockPreview
+    {
+        get
+        {
+            return m_eRockPreview;
+        }
+
+        set
+        {
+            m_eRockPreview = value;
+        }
+    }
+
+    public ResourceManager.eTreePreview ETreePreview
+    {
+        get
+        {
+            return m_eTreePreview;
+        }
+
+        set
+        {
+            m_eTreePreview = value;
         }
     }
 
@@ -47,13 +72,38 @@ public class BuildScrollItem : MonoBehaviour
 
     private void OnClickItem()
     {
-        Debug.Log( "OnClickItem() called! " + m_eTileIndex.ToString() );
+        
     }
 
     public void SetSprite()
     {
-        m_sprite.spriteName = m_eTilePreviewIndex.ToString();
-        m_button.normalSprite = m_eTilePreviewIndex.ToString();
+        switch ( m_eBuildType )
+        {
+            case BuildScrollModel.eBuildType.None:
+                break;
+
+            case BuildScrollModel.eBuildType.Tile:
+                m_sprite.spriteName = m_eTilePreview.ToString();
+                m_button.normalSprite = m_eTilePreview.ToString();
+                break;
+
+            case BuildScrollModel.eBuildType.Rock:
+                m_sprite.spriteName = m_eRockPreview.ToString();
+                m_button.normalSprite = m_eRockPreview.ToString();
+                break;
+
+            case BuildScrollModel.eBuildType.Tree:
+                m_sprite.spriteName = m_eTreePreview.ToString();
+                m_button.normalSprite = m_eTreePreview.ToString();
+                break;
+
+            case BuildScrollModel.eBuildType.Max:
+                break;
+            default:
+                break;
+        }
+        
+        
     }
     
 }

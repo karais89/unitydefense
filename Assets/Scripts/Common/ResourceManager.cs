@@ -49,7 +49,7 @@ namespace Common
             Max
         }
 
-        public enum ePrefabTilePreview
+        public enum eTilePreview
         {
             None = -1,
             PavementTilePreview_01,
@@ -75,6 +75,66 @@ namespace Common
             Max
         }
 
+        public enum ePrefabRock
+        {
+            None = -1,
+            Rock_Cone,
+            Rock_Heavy,
+            Rock_Large,
+            Rock_Medium,
+            Rock_Small_01,
+            Rock_Small_02,
+            Max
+        }
+        
+        public enum eRockPreview
+        {
+            None = -1,
+            rock_cone,
+            rock_heavy,
+            rock_large,
+            rock_medium,
+            rock_small_1,
+            rock_small_2,
+            Max
+        }
+        
+        public enum ePrefabTree
+        {
+            None = -1,
+            Tree_Leafy_01,
+            Tree_Leafy_02,
+            Tree_Leafy_03,
+            Tree_Leafy_04,
+            Tree_Leafy_05,
+            Tree_Short_01,
+            Tree_Short_02,
+            Tree_Short_03,
+            Tree_Tall_01,
+            Tree_Tall_02,
+            Tree_Tall_03,
+            Tree_Tall_04,
+            Max
+        }
+        
+        public enum eTreePreview
+        {
+            None = -1,
+            tree_leafy_1,
+            tree_leafy_2,
+            tree_leafy_3,
+            tree_leafy_4,
+            tree_leafy_5,
+            tree_short_1,
+            tree_short_2,
+            tree_short_3,
+            tree_tall_1,
+            tree_tall_2,
+            tree_tall_3,
+            tree_tall_4,
+            Max
+        }
+
         private List<GameObject> m_gTilesList = new List<GameObject>();
 
         
@@ -93,6 +153,18 @@ namespace Common
 
             obj = Resources.Load<GameObject>( "Prefabs/" + name );
             if (obj == null)
+            {
+                Debug.LogError( "obj null, prefabName = " + name );
+            }
+            return obj;
+        }
+
+        public GameObject LoadAtlas( string name )
+        {
+            GameObject obj = null;
+
+            obj = Resources.Load<GameObject>( "Atlas/" + name );
+            if ( obj == null )
             {
                 Debug.LogError( "obj null, prefabName = " + name );
             }
