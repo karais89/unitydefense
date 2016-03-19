@@ -32,11 +32,8 @@ namespace Common
         public static void SetParentEx(this Transform transform, Transform parent)
         {
             transform.SetParent( parent );
-            if (transform.GetComponent<RectTransform>() != null)
-            {
-                //transform.GetComponent<RectTransform>().localPosition = Vector3.zero;
-                transform.GetComponent<RectTransform>().localScale = Vector3.one;
-            }
+            transform.localPosition = Vector3.zero;
+            transform.localScale = Vector3.one;
         }
     }
     

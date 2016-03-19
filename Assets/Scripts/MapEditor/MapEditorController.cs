@@ -18,13 +18,6 @@ namespace MapEditor
         private MapEditorView m_cView = null;
         private GameObject m_gSpawnPrefab = null;
         private GameObject m_gMap = null;
-        //private Button m_buttonReset = null;
-        //private Button m_buttonLoad = null;
-        //private Button m_buttonSave = null;
-
-        //private Button m_buttonSpawn = null;
-        //private Button m_buttonWayPoint = null;
-        //private Button m_buttonErase = null;
         private UIButton m_buttonReset = null;
         private UIButton m_buttonLoad = null;
         private UIButton m_buttonSave = null;

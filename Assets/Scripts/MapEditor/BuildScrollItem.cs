@@ -1,38 +1,59 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using Common;
 
 public class BuildScrollItem : MonoBehaviour
 {
-    private Button m_button;
-    private Image m_image;
-    private ResourceManager.ePrefabTile m_tileIndex;
+    private UIButton m_button;
+    private UISprite m_sprite;
+    private ResourceManager.ePrefabTile m_eTileIndex;
+    private ResourceManager.ePrefabTilePreview m_eTilePreviewIndex;
 
-    public ResourceManager.ePrefabTile TileIndex
+    public ResourceManager.ePrefabTile ETileIndex
     {
         get
         {
-            return m_tileIndex;
+            return m_eTileIndex;
         }
 
         set
         {
-            m_tileIndex = value;
+            m_eTileIndex = value;
+            ResourceManager.ePrefabTilePreview ePreview = (ResourceManager.ePrefabTilePreview) m_eTileIndex;
+            m_eTilePreviewIndex = ePreview;
+        }
+    }
+
+    public ResourceManager.ePrefabTilePreview ETilePreviewIndex
+    {
+        get
+        {
+            return m_eTilePreviewIndex;
+        }
+
+        set
+        {
+            m_eTilePreviewIndex = value;
+            m_eTileIndex = (ResourceManager.ePrefabTile) m_eTilePreviewIndex;
         }
     }
 
     private void Awake()
     {
-        m_button = GetComponent<Button>();
-        m_image = GetComponent<Image>();
-
-        SetImage();
+        m_button = GetComponent<UIButton>();
+        m_button.onClick.Add( new EventDelegate( OnClickItem ) );
+        m_sprite = GetComponent<UISprite>();
     }
 
-    private void SetImage()
+    private void OnClickItem()
     {
-        m_image.sprite = ResourceManager.Instance.GetTilePreviewSprite( m_tileIndex );
-        m_image.material = ResourceManager.Instance.GetTilePreviewMaterial( m_tileIndex );
+        Debug.Log( "OnClickItem() called! " + m_eTileIndex.ToString() );
     }
+
+    public void SetSprite()
+    {
+        m_sprite.spriteName = m_eTilePreviewIndex.ToString();
+        m_button.normalSprite = m_eTilePreviewIndex.ToString();
+    }
+    
 }
