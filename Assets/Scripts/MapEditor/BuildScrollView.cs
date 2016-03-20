@@ -16,6 +16,8 @@ public class BuildScrollView : MonoBehaviour {
         m_tGrid = transform.FindChild( "Grid" );
         m_grid = m_tGrid.GetComponent<UIGrid>();
         m_scrollView = GetComponent<UIScrollView>();
+
+        ResourceManager.Instance.LoadAllAtlas();
         
         InstantiateItems(BuildScrollModel.eBuildType.Tile);
     }

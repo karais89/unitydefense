@@ -83,16 +83,19 @@ public class BuildScrollItem : MonoBehaviour
                 break;
 
             case BuildScrollModel.eBuildType.Tile:
+                m_sprite.atlas = ResourceManager.Instance.GetAtlas( ResourceManager.eAtlasName.Tile );
                 m_sprite.spriteName = m_eTilePreview.ToString();
                 m_button.normalSprite = m_eTilePreview.ToString();
                 break;
 
             case BuildScrollModel.eBuildType.Rock:
+                m_sprite.atlas = ResourceManager.Instance.GetAtlas( ResourceManager.eAtlasName.Tree );
                 m_sprite.spriteName = m_eRockPreview.ToString();
                 m_button.normalSprite = m_eRockPreview.ToString();
                 break;
 
             case BuildScrollModel.eBuildType.Tree:
+                m_sprite.atlas = ResourceManager.Instance.GetAtlas( ResourceManager.eAtlasName.Tree );
                 m_sprite.spriteName = m_eTreePreview.ToString();
                 m_button.normalSprite = m_eTreePreview.ToString();
                 break;

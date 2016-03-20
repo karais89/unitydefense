@@ -135,8 +135,17 @@ namespace Common
             Max
         }
 
-        private List<GameObject> m_gTilesList = new List<GameObject>();
+        public enum eAtlasName
+        {
+            None = -1,
+            Tile,
+            Tree,
+            Max
+        }
 
+
+        private List<GameObject> m_gTilesList = new List<GameObject>();
+        private Dictionary<eAtlasName, UIAtlas> m_atlasDictionary = new Dictionary<eAtlasName, UIAtlas>();
         
         public List<GameObject> GTilesList
         {
@@ -159,16 +168,33 @@ namespace Common
             return obj;
         }
 
-        public GameObject LoadAtlas( string name )
+        public UIAtlas LoadAtlas( string name )
         {
-            GameObject obj = null;
+            UIAtlas atlas = null;
 
-            obj = Resources.Load<GameObject>( "Atlas/" + name );
-            if ( obj == null )
+            atlas = Resources.Load<UIAtlas>( "Atlas/" + name );
+            if ( atlas == null )
             {
-                Debug.LogError( "obj null, prefabName = " + name );
+                Debug.LogError( "atlas null, name = " + name );
             }
-            return obj;
+            return atlas;
+        }
+
+        public Dictionary<eAtlasName, UIAtlas> LoadAllAtlas()
+        {
+            for (int i = 0; i < (int)eAtlasName.Max; i++ )
+            {
+                eAtlasName name = (eAtlasName) i;
+                UIAtlas newAtlas = LoadAtlas(name.ToString());
+
+                m_atlasDictionary.Add( name, newAtlas );
+            }
+            return m_atlasDictionary;
+        }
+
+        public UIAtlas GetAtlas( eAtlasName name )
+        {
+            return m_atlasDictionary[name];
         }
 
         public GameObject Load(string fullPathAndName)
