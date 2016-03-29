@@ -1,29 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BuildScrollModel : MonoBehaviour
+namespace MapEditor
 {
-    public enum eBuildType
+    public class BuildScrollModel : MonoBehaviour
     {
-        None = 0,
-        Tile,
-        Rock,
-        Tree,
-        Max
-    }
-
-    private eBuildType m_eBuildType;
-
-    public eBuildType EBuildType
-    {
-        get
+        public enum eBuildType
         {
-            return m_eBuildType;
+            None = 0,
+            Tile,
+            Rock,
+            Tree,
+            Max
         }
 
-        set
+        private eBuildType m_eBuildType;
+
+        public eBuildType EBuildType
         {
-            m_eBuildType = value;
+            get
+            {
+                return m_eBuildType;
+            }
+
+            set
+            {
+                m_eBuildType = value;
+            }
         }
     }
 }
+
