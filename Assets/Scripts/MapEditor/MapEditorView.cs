@@ -25,16 +25,7 @@ namespace MapEditor
     {
         /** @brief   The model. */
         private MapEditorModel m_cModel;
-
-        /** @brief   The default tile. */
-        public GameObject m_gDefaultTile;
-        /** @brief   Array of rock buttons. */
-        public Texture[] m_tRockButtonArray = new Texture[ 6 ];
-        /** @brief   Array of tree buttons. */
-        public Texture[] m_tTreeButtonArray = new Texture[ 12 ];
-        /** @brief   Array of tile buttons. */
-        public Texture[] m_tTileButtonArray = new Texture[ 20 ];
-
+        
         /** @brief   The selected tree. */
         private GameObject m_gSelectedTree = null;
         /** @brief   The selected rock. */
@@ -167,11 +158,6 @@ namespace MapEditor
         {
             Debug.Log( "MapEditorView" );
             m_cModel = GetComponent<MapEditorModel>();
-
-        }
-
-        public void OnClickBuilItem()
-        {
 
         }
         

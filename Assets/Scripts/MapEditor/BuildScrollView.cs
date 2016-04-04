@@ -7,7 +7,6 @@ namespace MapEditor
 {
     public class BuildScrollView : MonoBehaviour
     {
-
         private List<BuildScrollItem> m_itemsList = new List<BuildScrollItem>();
         private List<GameObject> m_gItemList = new List<GameObject>();
         private UIScrollView m_scrollView = null;
@@ -22,10 +21,10 @@ namespace MapEditor
 
             ResourceManager.Instance.LoadAllAtlas();
 
-            InstantiateItems( BuildScrollModel.eBuildType.Tile );
+            InstantiateItems( MapEditorModel.eBuildMode.Tile );
         }
 
-        public void InstantiateItems( BuildScrollModel.eBuildType type )
+        public void InstantiateItems( MapEditorModel.eBuildMode type )
         {
             if ( m_gItemList.Count > 0 )
             {
@@ -41,9 +40,9 @@ namespace MapEditor
 
             switch ( type )
             {
-                case BuildScrollModel.eBuildType.None:
+                case MapEditorModel.eBuildMode.None:
                     break;
-                case BuildScrollModel.eBuildType.Tile:
+                case MapEditorModel.eBuildMode.Tile:
                     {
                         for ( int i = 0; i < (int) ResourceManager.ePrefabTile.Max; i++ )
                         {
@@ -54,7 +53,7 @@ namespace MapEditor
                             newItem.name = sName;
                             newItem.transform.SetParentEx( m_tGrid );
 
-                            newItem.GetComponent<BuildScrollItem>().EBuildType = type;
+                            newItem.GetComponent<BuildScrollItem>().EBuildMode = type;
                             newItem.GetComponent<BuildScrollItem>().ETilePreview = (ResourceManager.eTilePreview) tile;
                             newItem.GetComponent<BuildScrollItem>().SetSprite();
 
@@ -62,28 +61,7 @@ namespace MapEditor
                         }
                     }
                     break;
-
-                case BuildScrollModel.eBuildType.Rock:
-                    {
-                        for ( int i = 0; i < (int) ResourceManager.ePrefabRock.Max; i++ )
-                        {
-                            GameObject newItem = GameObjectFactory.Instantiate( itemPrefab );
-
-                            ResourceManager.ePrefabRock rock = (ResourceManager.ePrefabRock) i;
-                            string sName = sPrefabName + "_" + rock.ToString();
-                            newItem.name = sName;
-                            newItem.transform.SetParentEx( m_tGrid );
-
-                            newItem.GetComponent<BuildScrollItem>().EBuildType = type;
-                            newItem.GetComponent<BuildScrollItem>().ERockPreview = (ResourceManager.eRockPreview) rock;
-                            newItem.GetComponent<BuildScrollItem>().SetSprite();
-
-                            m_gItemList.Add( newItem );
-                        }
-                    }
-                    break;
-
-                case BuildScrollModel.eBuildType.Tree:
+                case MapEditorModel.eBuildMode.Tree:
                     {
                         for ( int i = 0; i < (int) ResourceManager.ePrefabTree.Max; i++ )
                         {
@@ -94,7 +72,7 @@ namespace MapEditor
                             newItem.name = sName;
                             newItem.transform.SetParentEx( m_tGrid );
 
-                            newItem.GetComponent<BuildScrollItem>().EBuildType = type;
+                            newItem.GetComponent<BuildScrollItem>().EBuildMode = type;
                             newItem.GetComponent<BuildScrollItem>().ETreePreview = (ResourceManager.eTreePreview) tree;
                             newItem.GetComponent<BuildScrollItem>().SetSprite();
 
@@ -102,13 +80,35 @@ namespace MapEditor
                         }
                     }
                     break;
+                case MapEditorModel.eBuildMode.Rock:
+                    {
+                        for ( int i = 0; i < (int) ResourceManager.ePrefabRock.Max; i++ )
+                        {
+                            GameObject newItem = GameObjectFactory.Instantiate( itemPrefab );
 
-                case BuildScrollModel.eBuildType.Max:
+                            ResourceManager.ePrefabRock rock = (ResourceManager.ePrefabRock) i;
+                            string sName = sPrefabName + "_" + rock.ToString();
+                            newItem.name = sName;
+                            newItem.transform.SetParentEx( m_tGrid );
+
+                            newItem.GetComponent<BuildScrollItem>().EBuildMode = type;
+                            newItem.GetComponent<BuildScrollItem>().ERockPreview = (ResourceManager.eRockPreview) rock;
+                            newItem.GetComponent<BuildScrollItem>().SetSprite();
+
+                            m_gItemList.Add( newItem );
+                        }
+                    }
+                    break;
+                case MapEditorModel.eBuildMode.Erase:
+                    break;
+                case MapEditorModel.eBuildMode.Spawn:
+                    break;
+                case MapEditorModel.eBuildMode.WayPoint:
                     break;
                 default:
                     break;
             }
-
+            
             m_grid.repositionNow = true;
         }
     }

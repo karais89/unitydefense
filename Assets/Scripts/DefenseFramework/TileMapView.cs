@@ -24,6 +24,7 @@ namespace DefenseFramework
         private GameObject m_gGridDisablePrefab;
         private GameObject[,] m_gGridDisableArray = new GameObject[ TileMapModel.ISizeX, TileMapModel.ISizeY ];
         public TextAsset m_tJsonData;
+        
         private GameObject[] m_gTilePrefabArray = new GameObject[ 20 ];
         private GameObject[] m_gTreePrefabArray = new GameObject[ 12 ];
         private GameObject[] m_gRockPrefabArray = new GameObject[ 6 ];
@@ -176,12 +177,21 @@ namespace DefenseFramework
 
         private void LoadAllTiles()
         {
-            List<GameObject> newList = ResourceManager.Instance.LoadAllTiles();
-            for ( int i = 0; i < newList.Count; i++ )
+            Dictionary<ResourceManager.ePrefabTile, GameObject> dic = ResourceManager.Instance.LoadAllTiles();
+
+            for (int i = 0; i < dic.Count; i++)
             {
-                m_gTilePrefabArray[ i ] = newList[ i ];
+                ResourceManager.ePrefabTile eTile = (ResourceManager.ePrefabTile)i;
+
+                GameObject newObj = null;
+                if ( dic.TryGetValue( eTile, out newObj ) == true )
+                {
+                    m_gTilePrefabArray[ i ] = newObj;
+                }
+
             }
         }
+
 
         /// <summary>
         /// 나무와 바위가 없는 다수의 디폴트 타일 생성

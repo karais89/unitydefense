@@ -142,20 +142,10 @@ namespace Common
             Tree,
             Max
         }
-
-
-        private List<GameObject> m_gTilesList = new List<GameObject>();
+        
+        private Dictionary<ePrefabTile, GameObject> m_tileObjectDictionary = new Dictionary<ePrefabTile, GameObject>();
         private Dictionary<eAtlasName, UIAtlas> m_atlasDictionary = new Dictionary<eAtlasName, UIAtlas>();
         
-        public List<GameObject> GTilesList
-        {
-            get
-            {
-                return m_gTilesList;
-            }
-        }
-        
-
         public GameObject LoadPrefab( string name )
         {
             GameObject obj = null;
@@ -208,23 +198,23 @@ namespace Common
             return obj;
         }
         
-        public List<GameObject> LoadAllTiles()
+        public Dictionary<ePrefabTile, GameObject> LoadAllTiles()
         {
-            if (m_gTilesList.Count > 0)
+            if ( m_tileObjectDictionary.Count > 0 )
             {
                 Debug.Log( "all tiles are already loaded" );
-                return m_gTilesList;
+                return m_tileObjectDictionary;
             }
 
-            for (int i = 0; i < (int)ePrefabTile.Max; i++ )
+            for ( int i = 0; i < (int) ePrefabTile.Max; i++ )
             {
                 ePrefabTile tile = (ePrefabTile) i;
                 string prefabName = tile.ToString();
                 GameObject newObject = LoadPrefab( prefabName );
-                m_gTilesList.Add(newObject);
+                m_tileObjectDictionary.Add( tile, newObject );
             }
 
-            return m_gTilesList;
+            return m_tileObjectDictionary;
         }
         
     }

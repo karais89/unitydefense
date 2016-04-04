@@ -120,6 +120,29 @@ namespace MapEditor
             }
         }
 
+        public void OnClickBuildItem()
+        {
+            switch ( m_cModel.EMode )
+            {
+                case MapEditorModel.eBuildMode.None:
+                    break;
+                case MapEditorModel.eBuildMode.Tile:
+                    break;
+                case MapEditorModel.eBuildMode.Tree:
+                    break;
+                case MapEditorModel.eBuildMode.Rock:
+                    break;
+                case MapEditorModel.eBuildMode.Erase:
+                    break;
+                case MapEditorModel.eBuildMode.Spawn:
+                    break;
+                case MapEditorModel.eBuildMode.WayPoint:
+                    break;
+                default:
+                    break;
+            }
+        }
+
         
         // Update is called once per frame
         private void Update()
