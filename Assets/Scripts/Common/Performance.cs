@@ -20,15 +20,6 @@ namespace Common
 
             GameObject.Find( "Directional light" ).GetComponent<Light>().shadows = shadowType;
         }
-
-        // Use this for initialization
-        private void Start()
-        {
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-        }
+        
     }
 }

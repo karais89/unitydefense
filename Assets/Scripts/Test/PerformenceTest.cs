@@ -43,16 +43,6 @@ namespace Test
                 //sphere.renderer.material.color = Color.red;
             }
         }
-
-        // Use this for initialization
-        private void Start()
-        {
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-        }
     }
 }
 
