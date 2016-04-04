@@ -5,7 +5,6 @@ namespace MapEditor
 {
     public class BuildScrollController : MonoBehaviour
     {
-        //private BuildScrollModel m_cModel = null;
         private MapEditorModel m_cModel = null;
         private BuildScrollView m_cView = null;
 
@@ -16,7 +15,8 @@ namespace MapEditor
         private void Awake()
         {
             m_cModel = GameObject.Find( "MapEditor" ).GetComponent<MapEditorModel>();
-            
+            m_cModel.EMode = MapEditorModel.eBuildMode.Tile;
+
             m_cView = GetComponent<BuildScrollView>();
 
             m_buttonTile = transform.parent.FindChild( "Button - Tile" ).GetComponent<UIButton>();

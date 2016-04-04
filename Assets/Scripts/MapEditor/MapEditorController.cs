@@ -9,6 +9,7 @@
 using UnityEngine;
 using System.Collections;
 using DefenseFramework;
+using Common;
 
 namespace MapEditor
 {
@@ -25,6 +26,8 @@ namespace MapEditor
         private UIButton m_buttonSpawn = null;
         private UIButton m_buttonWayPoint = null;
         private UIButton m_buttonErase = null;
+
+        private ResourceManager.ePrefabTile m_eSelectedTile;
 
         private void Awake()
         {
@@ -120,13 +123,38 @@ namespace MapEditor
             }
         }
 
-        public void OnClickBuildItem()
+        public void SetSelectedItem( ResourceManager.ePrefabTile eTile )
         {
             switch ( m_cModel.EMode )
             {
                 case MapEditorModel.eBuildMode.None:
                     break;
                 case MapEditorModel.eBuildMode.Tile:
+                    m_eSelectedTile = eTile;
+                    break;
+                case MapEditorModel.eBuildMode.Tree:
+                    break;
+                case MapEditorModel.eBuildMode.Rock:
+                    break;
+                case MapEditorModel.eBuildMode.Erase:
+                    break;
+                case MapEditorModel.eBuildMode.Spawn:
+                    break;
+                case MapEditorModel.eBuildMode.WayPoint:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void OnClickBuildItem()
+        {
+            switch ( m_cModel.EMode )
+            {
+                case MapEditorModel.eBuildMode.None:
+                    break;
+                case MapEditorModel.eBuildMode.Tile:                    
+                    m_cView.GSelectedTile = ResourceManager.Instance.GetTile( m_eSelectedTile );
                     break;
                 case MapEditorModel.eBuildMode.Tree:
                     break;

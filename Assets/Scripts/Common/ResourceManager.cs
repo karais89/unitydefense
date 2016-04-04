@@ -216,6 +216,26 @@ namespace Common
 
             return m_tileObjectDictionary;
         }
+
+        public GameObject GetTile( ePrefabTile eTile )
+        {
+            if ( m_tileObjectDictionary.Count <= 0 )
+            {
+                Debug.Log( "Tiles are not loaded yet, so about to load all tiles" );
+                LoadAllTiles();
+            }
+
+            GameObject tileObj = null;
+            if ( m_tileObjectDictionary.TryGetValue(eTile, out tileObj ) == true )
+            {
+                return tileObj;
+            }
+            else
+            {
+                Debug.LogError( "eTile = " + eTile + " does not exist" );
+                return null;
+            }
+        }
         
     }
 }

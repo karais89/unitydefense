@@ -80,7 +80,9 @@ namespace MapEditor
 
         private void OnClickItem()
         {
-            
+            ResourceManager.ePrefabTile eTile = (ResourceManager.ePrefabTile) m_eTilePreview;
+
+            m_cMapEditorController.SetSelectedItem( eTile );
         }
 
         public void SetSprite()
